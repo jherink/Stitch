@@ -86,14 +86,14 @@ namespace HydraDoc.Graph
 
             foreach (var pt in ScatterPoints)
             {
-                if (minX != maxX)
-                {
-                    x = GraphWidth - (((pt.X - minX) * (GraphHeight - minX)) / (maxX - minX));
-                }
-                if (minY != maxY)
-                {
-                    y = GraphHeight - (((pt.Y - minY) * (GraphHeight - minY)) / (maxY - minY));
-                }
+                //if (minX != maxX)
+                //{
+                //    x = GraphWidth - (((pt.X - minX) * (GraphHeight - minX)) / (maxX - minX));
+                //}
+                //if (minY != maxY)
+                //{
+                //    y = GraphHeight - (((pt.Y - minY) * (GraphHeight - minY)) / (maxY - minY));
+                //}
 
                 pt.Circle.Cx = (int)x;
                 pt.Circle.Cy = (int)y;

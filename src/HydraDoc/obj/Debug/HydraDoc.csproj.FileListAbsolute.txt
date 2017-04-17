@@ -1,0 +1,5 @@
+C:\Github Src\src\HydraDoc\bin\Debug\HydraDoc.dll
+C:\Github Src\src\HydraDoc\bin\Debug\HydraDoc.pdb
+C:\Github Src\src\HydraDoc\obj\Debug\HydraDoc.csprojResolveAssemblyReference.cache
+C:\Github Src\src\HydraDoc\obj\Debug\HydraDoc.dll
+C:\Github Src\src\HydraDoc\obj\Debug\HydraDoc.pdb
