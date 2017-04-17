@@ -1,0 +1,43 @@
+Stuff To Do
+-------------------------------------------------------------------------
+
+1)  Import CSS style sheets from a URL. - DONE
+2)  Tables rows can be added to but they don't belong to a body. - DONE
+3)  Clones should remove Element IDs - DONE
+4)  Deep clone for TableRow doesn't seem to be working. - DONE
+5)  Download and embed local URL sources from remote style sheet. -DONE
+6)  Embed local URL sources from relative path style sheets - DONE
+
+7)  Create unit test framework that allows for assertions between HydraDocs/individual elements excluding IDs classes ect. as options. - SCRATCH THIS.  Users can do hash regressions removing ids.
+8)  Give credit to ExCSS parser in a README if I have not done it - DONE
+9)  Create interface for classes to implement when exporting from HydraDoc to other formats.
+10) Create graphs for complex data representation. See Chart.js, canvas.js, amcharts, highcharts.  Do they also need to be exportable???
+11) Test different byte codes in HTML render? UTF-8, UTF-16, UTF-32. (See 12 as well)
+12) Charset testing in both CSS rule set renders and HTML renders.
+13) Alex proposed data imports? Ask more about this. He also mentioned data mapping??  
+	This could work similar to Windows Report Viewer? Could this be done with XML transformations?
+14) Change element ids to use a, b,...,aa, ab, ac,...,ba, bb instead of GUIDs for smaller html files. Like Google :) - DONE
+15) Add factory methods that let user specify element ids.
+16) Add factory methods that let automatically assign an id to an element.
+17) Develop some way to parse out formatted elements like <i> and <b>. 
+18) Add support for "style" - DONE
+19) Add comments :<>
+20) Test head class
+21) Move CSS resources for Hydradoc out of CSS/Themes folder.
+22) Scatter plot show average line.
+23) Bar graphs use SVG instead of CSS.
+
+https://css-tricks.com/making-charts-with-css/
+https://css-tricks.com/how-to-make-charts-with-svg/
+
+
+
+----- EXPORT NOTES -----
+
+For conversions from HTML to *x formats I think Open XML should be used. However,
+CSS formatting should not be maintained.  
+
+
+HTML -> Word, https://weblogs.asp.net/dixin/convert-html-to-well-formatted-microsoft-word-document, http://pandoc.org/
+HTML -> PDF,  https://www.msweet.org/roadmap.php?Z1, https://wkhtmltopdf.org/
+HTML -> Excel,
