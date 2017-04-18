@@ -88,7 +88,13 @@ namespace HydraDoc.Graph
 
                 foreach (var pt in gLine.Values)
                 {
-                    y = GraphHeight - (((pt.Item1 - minMax) * (GraphHeight - Start)) / (maxMax - minMax)) + Start;
+                    if (maxMax == minMax)
+                    {
+                        y = GraphHeight - ((pt.Item1 - minMax) * (GraphHeight - Start)) + Start;
+                    }
+                    else {
+                        y = GraphHeight - (((pt.Item1 - minMax) * (GraphHeight - Start)) / (maxMax - minMax)) + Start;
+                    }
 
                     gLine.Polyline.Add( new SVGPoint( (int)x, (int)y ) );
 

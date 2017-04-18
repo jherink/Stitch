@@ -1,4 +1,5 @@
 ﻿using HydraDoc.Elements;
+using HydraDoc.Elements.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace HydraDoc.Graph
 {
     public class ScatterPlot : SVG
     {
-        private const string DEFAULT_FILL_COLOR = "black";
-        private const int DEFAULT_PLOT_SIZE = 4;
+        private string FillColor = "black";
+        private int PlotSize = 4;
 
         private class ScatterPoint
         {
@@ -36,10 +37,11 @@ namespace HydraDoc.Graph
         {
             get
             {
-                return ScatterPoints.Any() ? ScatterPoints[0].Color : DEFAULT_FILL_COLOR;
+                return ScatterPoints.Any() ? ScatterPoints[0].Color : FillColor;
             }
             set
             {
+                FillColor = value;
                 foreach (var pt in ScatterPoints) pt.Color = value;
             }
         }
@@ -48,14 +50,16 @@ namespace HydraDoc.Graph
         {
             get
             {
-                return ScatterPoints.Any() ? ScatterPoints[0].Radius : DEFAULT_PLOT_SIZE;
+                return ScatterPoints.Any() ? ScatterPoints[0].Radius : PlotSize;
             }
-            set { foreach (var pt in ScatterPoints) pt.Radius = value; }
+            set {
+                PlotSize = value;
+                foreach (var pt in ScatterPoints) pt.Radius = value; }
         }
 
         public int GraphHeight { get { return (int)Height; } set { Height = value; } }
         public int GraphWidth { get { return (int)Width; } set { Width = value; } }
-
+        public int Start { get; set; }
 
         public ScatterPlot() : base( 600, 800 ) { }
 
@@ -76,8 +80,8 @@ namespace HydraDoc.Graph
         private void CalculateScatterPoints()
         {
             // max Y value of all lines.  Use this to figure a scale.
-            var maxY = ScatterPoints.Max( t => t.Y );
-            var minY = ScatterPoints.Min( t => t.Y );
+            var maxY = ScatterPoints.Max( t => t.Y ) * 1.1;
+            var minY = ScatterPoints.Min( t => t.Y ) * .9;
             var maxX = ScatterPoints.Max( t => t.X );
             var minX = ScatterPoints.Min( t => t.X );
             var fill = Color;
@@ -86,17 +90,24 @@ namespace HydraDoc.Graph
 
             foreach (var pt in ScatterPoints)
             {
-                //if (minX != maxX)
-                //{
-                //    x = GraphWidth - (((pt.X - minX) * (GraphHeight - minX)) / (maxX - minX));
-                //}
-                //if (minY != maxY)
-                //{
-                //    y = GraphHeight - (((pt.Y - minY) * (GraphHeight - minY)) / (maxY - minY));
-                //}
+                if (maxY == minY)
+                {
+                    y =  ((pt.Y - minY) * (GraphHeight - Start)) + Start;
+                }
+                else {
+                    y =  (((pt.Y - minY) * (GraphHeight - Start)) / (maxY - minY)) + Start;
+                }
+
+                if (maxX == minX)
+                {
+                    x = ((pt.X - minX) * (GraphHeight - Start)) + Start;
+                }
+                else {
+                    x = (((pt.X - minX) * (GraphHeight - Start)) / (maxX - minX)) + Start;
+                }
 
                 pt.Circle.Cx = (int)x;
-                pt.Circle.Cy = (int)y;
+                pt.Circle.Cy = GraphHeight - (int)y;
             }
         }
 
@@ -104,6 +115,42 @@ namespace HydraDoc.Graph
         {
             CalculateScatterPoints();
             return base.Render();
+        }
+
+        public ISVGGroup CreateAxis()
+        {
+            var g = new SVGGroup();
+
+
+
+            return g;
+        }
+
+        private double RoundAxisValue( double axisValue )
+        {
+            var aAxisValue = Math.Abs( axisValue );
+            if (aAxisValue <= 1)
+            {
+                return axisValue;
+            }
+
+            if (aAxisValue <= 10)
+            {
+                return (int)axisValue;
+            }
+
+            var power = Math.Ceiling( Math.Log10( axisValue / 10 ) );
+            var p2 = axisValue;
+            while (p2 > 10) p2 /= 10;
+            var number = (int)((p2 + 1)) * Math.Pow( 10, power );
+            if (number < aAxisValue)
+            {
+                number *= 2;
+            }
+
+            if (axisValue < 0) number *= -1;
+
+            return number;
         }
     }
 }
