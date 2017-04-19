@@ -192,6 +192,7 @@ namespace HydraDoc.Tests
         {
             var doc = new HydraDocument();
             var graph = new ScatterPlot();
+            graph.GraphHeight = 500;
             graph.Color = "red";
             graph.AddData( 2008, 7.2 );
             graph.AddData( 2009, 8.1 );

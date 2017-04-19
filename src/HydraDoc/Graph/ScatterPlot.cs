@@ -34,10 +34,59 @@ namespace HydraDoc.Graph
 
             public int Radius { get { return Circle.R; } set { Circle.R = value; } }
 
-            public int X { get; set; }
-            public int Y { get; set; }
+            public int X
+            {
+                get
+                {
+                    if (Circle.Attributes.ContainsKey( "x-val" ))
+                    {
+                        return int.Parse( Circle.Attributes["x-val"] );
+                    }
+                    return 0;
+                }
+                set
+                {
+                    if (Circle.Attributes.ContainsKey( "x-val" ))
+                    {
+                        Circle.Attributes.Add( "x-val", value.ToString() );
+                    }
+                    else
+                    {
+                        Circle.Attributes["x-val"] = value.ToString();
+                    }
+                }
+            }
+
+            public int Y
+            {
+                get
+                {
+                    if (Circle.Attributes.ContainsKey( "y-val" ))
+                    {
+                        return int.Parse( Circle.Attributes["y-val"] );
+                    }
+                    return 0;
+                }
+                set
+                {
+                    if (Circle.Attributes.ContainsKey( "y-val" ))
+                    {
+                        Circle.Attributes.Add( "y-val", value.ToString() );
+                    }
+                    else
+                    {
+                        Circle.Attributes["y-val"] = value.ToString();
+                    }
+                }
+            }
 
         };
+
+        private readonly SVGGroup Data = new SVGGroup();
+        private readonly SVGGroup YAxis = new SVGGroup();
+        private readonly SVGGroup XAxis = new SVGGroup();
+        private readonly SVGGroup XLabels = new SVGGroup();
+        private readonly SVGGroup YLabels = new SVGGroup();
 
         private readonly List<ScatterPoint> ScatterPoints = new List<ScatterPoint>();
 
@@ -60,9 +109,11 @@ namespace HydraDoc.Graph
             {
                 return ScatterPoints.Any() ? ScatterPoints[0].Radius : PlotSize;
             }
-            set {
+            set
+            {
                 PlotSize = value;
-                foreach (var pt in ScatterPoints) pt.Radius = value; }
+                foreach (var pt in ScatterPoints) pt.Radius = value;
+            }
         }
 
         public int AxisIntervals { get; set; }
@@ -71,8 +122,20 @@ namespace HydraDoc.Graph
         public int GraphWidth { get { return (int)Width; } set { Width = value; } }
         public int Start { get; set; }
 
-        public ScatterPlot() : base( 600, 800 ) {
+        public ScatterPlot() : base( 600, 800 )
+        {
             AxisIntervals = (GraphHeight / 200) + 1;
+            ClassList.Add( "graph" );
+            Children.Add( XAxis );
+            Children.Add( YAxis );
+            Children.Add( XLabels );
+            Children.Add( YLabels );
+            Children.Add( Data );
+
+            YLabels.ClassList.Add( "labels", "y-labels" );
+            XLabels.ClassList.Add( "labels", "x-labels" );
+            XAxis.ClassList.Add( "grid", "x-grid" );
+            YAxis.ClassList.Add( "grid", "y-grid" );
         }
 
         public void AddData( double xAxisValue, double yAxisValue )
@@ -85,7 +148,7 @@ namespace HydraDoc.Graph
                 Y = (int)yAxisValue
             };
             ScatterPoints.Add( pt );
-            Children.Add( pt.Circle );
+            Data.Add( pt.Circle );
             CalculateScatterPoints();
         }
 
@@ -104,18 +167,20 @@ namespace HydraDoc.Graph
             {
                 if (maxY == minY)
                 {
-                    y =  ((pt.Y - minY) * (GraphHeight - Start)) + Start;
+                    y = ((pt.Y - minY) * (GraphHeight - Start)) + Start;
                 }
-                else {
-                    y =  (((pt.Y - minY) * (GraphHeight - Start)) / (maxY - minY)) + Start;
+                else
+                {
+                    y = (((pt.Y - minY) * (GraphHeight - Start)) / (maxY - minY)) + Start;
                 }
 
                 if (maxX == minX)
                 {
-                    x = ((pt.X - minX) * (GraphHeight - Start)) + Start;
+                    x = ((pt.X - minX) * (GraphWidth)) + Start;
                 }
-                else {
-                    x = (((pt.X - minX) * (GraphHeight - Start)) / (maxX - minX)) + Start;
+                else
+                {
+                    x = (((pt.X - minX) * (GraphWidth)) / (maxX - minX)) + Start;
                 }
 
                 pt.Circle.Cx = (int)x;
@@ -126,13 +191,17 @@ namespace HydraDoc.Graph
         public override string Render()
         {
             CalculateScatterPoints();
-            Children.Add( CreateAxis() );
+            PopulateYAxis();
             return base.Render();
         }
 
-        public ISVGGroup CreateAxis()
+        public void PopulateYAxis()
         {
-            var g = new SVGGroup();
+            YLabels.Children.Clear();           
+
+            var startX = (int)(.1 * GraphWidth);
+
+            YAxis.Add( new SVGLine( startX, 5, startX, GraphHeight ) );
 
             var max = AxisLimit;
             var interval = max / AxisIntervals;
@@ -140,13 +209,32 @@ namespace HydraDoc.Graph
             for (int i = 0; i < AxisIntervals; i++)
             {
                 var text = new SVGText();
-                text.X = (int)(.10 * GraphWidth);
-                text.Y = (AxisIntervals - i - 1 )* (GraphHeight / AxisIntervals);
+                text.X = startX;
+                text.Y = (AxisIntervals - i) * (GraphHeight / AxisIntervals);
                 text.Text.Append( (interval * i).ToString() );
-                g.Add( text );
+                YLabels.Add( text );
             }
+        }
 
-            return g;
+        private void PopulateXAxis()
+        {
+            YLabels.Children.Clear();
+
+            var startX = (int)(.1 * GraphWidth);
+
+            YAxis.Add( new SVGLine( startX, 5, startX, GraphHeight ) );
+
+            var max = AxisLimit;
+            var interval = max / AxisIntervals;
+
+            for (int i = 0; i < AxisIntervals; i++)
+            {
+                var text = new SVGText();
+                text.X = startX;
+                text.Y = (AxisIntervals - i) * (GraphHeight / AxisIntervals);
+                text.Text.Append( (interval * i).ToString() );
+                YLabels.Add( text );
+            }
         }
 
         private double RoundAxisValue( double axisValue )

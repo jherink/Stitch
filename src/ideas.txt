@@ -25,7 +25,7 @@ Stuff To Do
 20) Test head class
 21) Move CSS resources for Hydradoc out of CSS/Themes folder.
 22) Scatter plot show average line.
-23) Bar graphs use SVG instead of CSS.
+23) Bar graphs use SVG instead of CSS. ( Use Google chart as reference https://google-developers.appspot.com/chart/interactive/docs/gallery) 
 
 https://css-tricks.com/making-charts-with-css/
 https://css-tricks.com/how-to-make-charts-with-svg/
