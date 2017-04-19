@@ -454,55 +454,55 @@ namespace HydraDoc.Elements
             _path.Append( " Z" );
         }
 
-        public void CurveTo( int xTo, int yTo, bool absolute = true )
+        public void CurveTo( double xTo, double yTo, bool absolute = true )
         {
             Append( "C", xTo, yTo, absolute );
         }
 
-        public void EllipticalArc( int xTo, int yTo, bool absolute = true )
+        public void EllipticalArc( double xTo, double yTo, bool absolute = true )
         {
             Append( "A", xTo, yTo, absolute );
         }
 
-        public void EllipticalArc( int arcXRadius, int arcYRadius, bool largeArcFlag, bool sweepFlag, int arcDirection, int xTo, int yTo )
+        public void EllipticalArc( double arcXRadius, double arcYRadius, bool largeArcFlag, bool sweepFlag, double arcDirection, double xTo, double yTo )
         {
-            _path.Append( $" A{arcXRadius} {arcYRadius} {Convert.ToInt32( sweepFlag )} {Convert.ToInt32( sweepFlag )} {arcDirection} {xTo} {yTo}" );
+            _path.Append( $" A{arcXRadius} {arcYRadius} {Convert.ToDouble( sweepFlag )} {Convert.ToDouble( sweepFlag )} {arcDirection} {xTo} {yTo}" );
         }
 
-        public void HorizontalLineTo( int xTo, int yTo, bool absolute = true )
+        public void HorizontalLineTo( double xTo, double yTo, bool absolute = true )
         {
             Append( "H", xTo, yTo, absolute );
         }
 
-        public void LineTo( int xTo, int yTo, bool absolute = true )
+        public void LineTo( double xTo, double yTo, bool absolute = true )
         {
             Append( "L", xTo, yTo, absolute );
         }
 
-        public void MoveTo( int xTo, int yTo, bool absolute = true )
+        public void MoveTo( double xTo, double yTo, bool absolute = true )
         {
             Append( "M", xTo, yTo, absolute );
         }
 
-        public void QuadraticBezierCurve( int xFrom, int yFrom, int xTo, int yTo, bool absolute = true )
+        public void QuadraticBezierCurve( double xFrom, double yFrom, double xTo, double yTo, bool absolute = true )
         {
             Append( "Q", xFrom, yFrom, absolute );
             _path.Append( $" {xTo} {yTo}" );
         }
 
-        public void SmoothCurveTo( int xFrom, int yFrom, int xTo, int yTo, bool absolute = true )
+        public void SmoothCurveTo( double xFrom, double yFrom, double xTo, double yTo, bool absolute = true )
         {
             Append( "S", xFrom, yFrom, absolute );
             _path.Append( $" {xTo} {yTo}" );
         }
 
-        public void SmoothQuadraticBezierCurve( int xFrom, int yFrom, int xTo, int yTo, bool absolute = true )
+        public void SmoothQuadraticBezierCurve( double xFrom, double yFrom, double xTo, double yTo, bool absolute = true )
         {
             Append( "T", xFrom, yFrom, absolute );
             _path.Append( $" {xTo} {yTo}" );
         }
 
-        public void VerticalLineTo( int xTo, int yTo, bool absolute = true )
+        public void VerticalLineTo( double xTo, double yTo, bool absolute = true )
         {
             Append( "V", xTo, yTo, absolute );
         }
@@ -517,7 +517,7 @@ namespace HydraDoc.Elements
             return baseAttempt;
         }
 
-        private void Append( string command, int xTo, int yTo, bool absolute )
+        private void Append( string command, double xTo, double yTo, bool absolute )
         {
             if (_path.Length > 0) command = " " + command;
             command = (absolute ? command.ToUpper() : command.ToLower());

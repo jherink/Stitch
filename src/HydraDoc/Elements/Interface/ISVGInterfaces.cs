@@ -161,15 +161,15 @@ namespace HydraDoc.Elements.Interface
 
     public interface ISVGPath : ISVGElement
     {
-        void MoveTo( int xTo, int yTo, bool absolute = true );
-        void LineTo( int xTo, int yTo, bool absolute = true );
-        void HorizontalLineTo( int xTo, int yTo, bool absolute = true );
-        void VerticalLineTo( int xTo, int yTo, bool absolute = true );
-        void CurveTo( int xTo, int yTo, bool absolute = true );
-        void SmoothCurveTo( int xFrom, int yFrom, int xTo, int yTo, bool absolute = true );
-        void QuadraticBezierCurve( int xFrom, int yFrom, int xTo, int yTo, bool absolute = true );
-        void SmoothQuadraticBezierCurve( int xFrom, int yFrom, int xTo, int yTo, bool absolute = true );
-        void EllipticalArc( int xTo, int yTo, bool absolute = true );
+        void MoveTo( double xTo, double yTo, bool absolute = true );
+        void LineTo( double xTo, double yTo, bool absolute = true );
+        void HorizontalLineTo( double xTo, double yTo, bool absolute = true );
+        void VerticalLineTo( double xTo, double yTo, bool absolute = true );
+        void CurveTo( double xTo, double yTo, bool absolute = true );
+        void SmoothCurveTo( double xFrom, double yFrom, double xTo, double yTo, bool absolute = true );
+        void QuadraticBezierCurve( double xFrom, double yFrom, double xTo, double yTo, bool absolute = true );
+        void SmoothQuadraticBezierCurve( double xFrom, double yFrom, double xTo, double yTo, bool absolute = true );
+        void EllipticalArc( double xTo, double yTo, bool absolute = true );
         void Clear();
         void ClosePath();
     }

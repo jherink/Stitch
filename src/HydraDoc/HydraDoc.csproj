@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chart\ChartTitle.cs" />
+    <Compile Include="Chart\HSLColor.cs" />
+    <Compile Include="Chart\Interface\IChartArea.cs" />
+    <Compile Include="Chart\Interface\ILegend.cs" />
+    <Compile Include="Chart\PieChart.cs" />
+    <Compile Include="Chart\TextStyle.cs" />
     <Compile Include="CSS\CSSResourceResolver.cs" />
     <Compile Include="CSS\CssThemeResourceLoader.cs" />
     <Compile Include="CSS\Extensions\CharacterExtensions.cs" />
@@ -157,6 +163,7 @@
     <Compile Include="Elements\SVGSupport.cs" />
     <Compile Include="Elements\TableElements.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Chart\Interface\IChart.cs" />
     <Compile Include="Graph\BarGraph.cs" />
     <Compile Include="Graph\Graph.cs" />
     <Compile Include="Graph\HorizontalBarChart.cs" />
