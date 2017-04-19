@@ -13,6 +13,14 @@ namespace HydraDoc.Graph
         private string FillColor = "black";
         private int PlotSize = 4;
 
+        private double AxisLimit
+        {
+            get
+            {
+                return RoundAxisValue( ScatterPoints.Max( t => t.Y ) );
+            }
+        }
+
         private class ScatterPoint
         {
             public SVGCircle Circle { get; set; } = new SVGCircle();
@@ -57,11 +65,15 @@ namespace HydraDoc.Graph
                 foreach (var pt in ScatterPoints) pt.Radius = value; }
         }
 
+        public int AxisIntervals { get; set; }
+
         public int GraphHeight { get { return (int)Height; } set { Height = value; } }
         public int GraphWidth { get { return (int)Width; } set { Width = value; } }
         public int Start { get; set; }
 
-        public ScatterPlot() : base( 600, 800 ) { }
+        public ScatterPlot() : base( 600, 800 ) {
+            AxisIntervals = (GraphHeight / 200) + 1;
+        }
 
         public void AddData( double xAxisValue, double yAxisValue )
         {
@@ -80,7 +92,7 @@ namespace HydraDoc.Graph
         private void CalculateScatterPoints()
         {
             // max Y value of all lines.  Use this to figure a scale.
-            var maxY = ScatterPoints.Max( t => t.Y ) * 1.1;
+            var maxY = AxisLimit;//ScatterPoints.Max( t => t.Y ) * 1.1;
             var minY = ScatterPoints.Min( t => t.Y ) * .9;
             var maxX = ScatterPoints.Max( t => t.X );
             var minX = ScatterPoints.Min( t => t.X );
@@ -114,6 +126,7 @@ namespace HydraDoc.Graph
         public override string Render()
         {
             CalculateScatterPoints();
+            Children.Add( CreateAxis() );
             return base.Render();
         }
 
@@ -121,7 +134,17 @@ namespace HydraDoc.Graph
         {
             var g = new SVGGroup();
 
+            var max = AxisLimit;
+            var interval = max / AxisIntervals;
 
+            for (int i = 0; i < AxisIntervals; i++)
+            {
+                var text = new SVGText();
+                text.X = (int)(.10 * GraphWidth);
+                text.Y = (AxisIntervals - i - 1 )* (GraphHeight / AxisIntervals);
+                text.Text.Append( (interval * i).ToString() );
+                g.Add( text );
+            }
 
             return g;
         }

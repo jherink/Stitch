@@ -200,6 +200,7 @@ namespace HydraDoc.Tests
             graph.AddData( 2012, 11.7 );
 
             doc.Add( graph );
+            //doc.Add( graph.CreateAxis() );
 
             IntegrationHelpers.SaveToTemp( "ScatterPlotTest", doc );
         }
