@@ -164,11 +164,11 @@ namespace HydraDoc.Elements
 
     public class SVGRectangle : SVGBaseElement, ISVGRectangle
     {
-        public int Height { get; set; }
+        public double Height { get; set; }
 
-        public int Rx { get; set; }
+        public double Rx { get; set; }
 
-        public int Ry { get; set; }
+        public double Ry { get; set; }
 
         public override string Tag
         {
@@ -178,11 +178,11 @@ namespace HydraDoc.Elements
             }
         }
 
-        public int Width { get; set; }
+        public double Width { get; set; }
 
-        public int X { get; set; }
+        public double X { get; set; }
 
-        public int Y { get; set; }
+        public double Y { get; set; }
 
         public override string Render()
         {
@@ -206,11 +206,11 @@ namespace HydraDoc.Elements
 
     public class SVGCircle : SVGBaseElement, ISVGCircle
     {
-        public int Cx { get; set; } = 0;
+        public double Cx { get; set; } = 0;
 
-        public int Cy { get; set; } = 0;
+        public double Cy { get; set; } = 0;
 
-        public int R { get; set; }
+        public double R { get; set; }
 
         public override string Tag
         {
@@ -243,13 +243,13 @@ namespace HydraDoc.Elements
     public class SVGEllipse : SVGBaseElement, ISVGEllipse
     {
 
-        public int Rx { get; set; } = 0;
+        public double Rx { get; set; } = 0;
 
-        public int Ry { get; set; } = 0;
+        public double Ry { get; set; } = 0;
 
-        public int Cx { get; set; } = 0;
+        public double Cx { get; set; } = 0;
 
-        public int Cy { get; set; } = 0;
+        public double Cy { get; set; } = 0;
 
         public override string Tag
         {
@@ -295,13 +295,13 @@ namespace HydraDoc.Elements
             }
         }
 
-        public int X1 { get; set; }
+        public double X1 { get; set; }
 
-        public int Y1 { get; set; }
+        public double Y1 { get; set; }
 
-        public int X2 { get; set; }
+        public double X2 { get; set; }
 
-        public int Y2 { get; set; }
+        public double Y2 { get; set; }
 
         public override string Render()
         {
@@ -545,13 +545,13 @@ namespace HydraDoc.Elements
             }
         }
 
-        public int X { get; set; }
+        public double X { get; set; }
 
-        public int Y { get; set; }
+        public double Y { get; set; }
 
-        public int Dx { get; set; }
+        public double Dx { get; set; }
 
-        public int Dy { get; set; }
+        public double Dy { get; set; }
 
         public DOMString Text { get; set; } = new DOMString();
 
@@ -581,7 +581,7 @@ namespace HydraDoc.Elements
             return tspan;
         }
 
-        public ISVGTspan AppendLine( int x, int y, string text )
+        public ISVGTspan AppendLine( double x, double y, string text )
         {
             var tspan = AppendLine( text );
             tspan.X = x;
@@ -610,7 +610,7 @@ namespace HydraDoc.Elements
             }
         }
 
-        public SVGText( int x, int y, params string[] text ) : this( text )
+        public SVGText( double x, double y, params string[] text ) : this( text )
         {
             X = x;
             Y = y;
@@ -629,9 +629,9 @@ namespace HydraDoc.Elements
 
         public DOMString Text { get; set; }
 
-        public int X { get; set; }
+        public double X { get; set; }
 
-        public int Y { get; set; }
+        public double Y { get; set; }
 
         public override string Render()
         {
@@ -652,7 +652,7 @@ namespace HydraDoc.Elements
             Text = new DOMString( text );
         }
 
-        public SVGTspan( int x, int y, string text ) : this( text )
+        public SVGTspan( double x, double y, string text ) : this( text )
         {
             X = x;
             Y = y;

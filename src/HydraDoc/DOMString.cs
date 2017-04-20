@@ -77,6 +77,11 @@ namespace HydraDoc
             Elements.Add( content );
         }
 
+        public void Clear()
+        {
+            Elements.Clear();
+
+        }
 
         #region Implicit Operators With string
 

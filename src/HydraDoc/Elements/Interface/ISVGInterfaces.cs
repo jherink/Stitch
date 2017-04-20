@@ -80,12 +80,12 @@ namespace HydraDoc.Elements.Interface
 
     public interface ISVGRectangle : ISVGElement
     {
-        int X { get; set; }
-        int Y { get; set; }
-        int Height { get; set; }
-        int Width { get; set; }
-        int Rx { get; set; }
-        int Ry { get; set; }
+        double X { get; set; }
+        double Y { get; set; }
+        double Height { get; set; }
+        double Width { get; set; }
+        double Rx { get; set; }
+        double Ry { get; set; }
     }
 
     public interface ISVGEllipse : ISVGElement
@@ -93,19 +93,19 @@ namespace HydraDoc.Elements.Interface
         /// <summary>
         /// Horizontal Radius
         /// </summary>
-        int Rx { get; set; }
+        double Rx { get; set; }
         /// <summary>
         /// Vertical Radius.
         /// </summary>
-        int Ry { get; set; }
+        double Ry { get; set; }
         /// <summary>
         /// Center X coordinate of ellipse.
         /// </summary>
-        int Cx { get; set; }
+        double Cx { get; set; }
         /// <summary>
         /// Center Y coordinate of ellipse.
         /// </summary>
-        int Cy { get; set; }
+        double Cy { get; set; }
     }
 
     public interface ISVGCircle : ISVGElement
@@ -113,15 +113,15 @@ namespace HydraDoc.Elements.Interface
         /// <summary>
         /// Center X coordinate of circle.
         /// </summary>
-        int Cx { get; set; }
+        double Cx { get; set; }
         /// <summary>
         /// Center Y coordinate of circle.
         /// </summary>
-        int Cy { get; set; }
+        double Cy { get; set; }
         /// <summary>
         /// Radius of circle.
         /// </summary>
-        int R { get; set; }
+        double R { get; set; }
     }
 
     public interface ISVGLine : ISVGElement
@@ -129,19 +129,19 @@ namespace HydraDoc.Elements.Interface
         /// <summary>
         /// The start of the line on the x-axis.
         /// </summary>
-        int X1 { get; set; }
+        double X1 { get; set; }
         /// <summary>
         /// The start of the line on the y-axis.
         /// </summary>
-        int Y1 { get; set; }
+        double Y1 { get; set; }
         /// <summary>
         /// The end of the line on the x-axis.
         /// </summary>
-        int X2 { get; set; }
+        double X2 { get; set; }
         /// <summary>
         /// The end of the line on the y-axis.
         /// </summary>
-        int Y2 { get; set; }
+        double Y2 { get; set; }
     }
 
     public interface ISVGPolyItem : ISVGElement
@@ -179,18 +179,18 @@ namespace HydraDoc.Elements.Interface
     /// </summary>
     public interface ISVGText : ISVGElement
     {
-        int X { get; set; }
-        int Y { get; set; }  
-        int Dx { get; set; }
-        int Dy { get; set; }
+        double X { get; set; }
+        double Y { get; set; }
+        double Dx { get; set; }
+        double Dy { get; set; }
         void Append( string text );
         ISVGTspan AppendLine( string text );
-        ISVGTspan AppendLine( int x, int y, string text );
+        ISVGTspan AppendLine( double x, double y, string text );
     }
 
     public interface ISVGTspan : ISVGElement
     {
-        int X { get; set; }
-        int Y { get; set; }
+        double X { get; set; }
+        double Y { get; set; }
     }
 }

@@ -36,8 +36,29 @@ namespace HydraDoc.Chart
 
         internal SVGPath Path { get; set; } = new SVGPath();
 
+        internal SVGGroup CreateLegendLine( string colorOverride = "" )
+        {
+            var g = new SVGGroup();
+
+            var text = new SVGText() { Text = Label };
+
+            var circle = new SVGCircle()
+            {
+                R = 7,
+                Fill = !string.IsNullOrWhiteSpace( colorOverride ) ? colorOverride : Color,
+                Stroke = "none"
+            };
+
+            g.Children.Add( circle );
+            g.Children.Add( text );
+
+            return g;
+        }
+
         public PieSlice()
         {
+            Path.Stroke = "white";
+            Path.StrokeWidth = 1;
             Children.Add( Path );
             Children.Add( Text );
         }
@@ -47,7 +68,7 @@ namespace HydraDoc.Chart
     {
         #region IChart Implementation
 
-        public AdvancedTextStyle TitleTextStyle { get; set; }
+        public AdvancedTextStyle TitleTextStyle { get; set; } = new AdvancedTextStyle();
 
         int IChart.Width
         {
@@ -75,7 +96,7 @@ namespace HydraDoc.Chart
             }
         }
 
-        public string ChartTitle { get { return _chartTitle.Text.Text; } set { _chartTitle.Text.Text = value; } }
+        public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
 
         public List<string> Colors { get; private set; } = new List<string>()
         {
@@ -133,17 +154,28 @@ namespace HydraDoc.Chart
 
         #endregion
 
+        #region LegendPosition
+
+        private LegendPosition _legendPosition = LegendPosition.Right;
+
+        public LegendPosition LegendPosition
+        {
+
+            get { return _legendPosition; }
+            set { _legendPosition = value; CalculateSliceSizes(); }
+        }
+
+        #endregion
+
         public string BackgroundColor { get; set; }
 
         public IChartArea ChartArea { get; set; }
 
         public bool Is3D { get; set; }
 
-        public ILegend Legend { get; set; }
-
         public string FontName { get; set; }
 
-        public int FontSize { get; set; }
+        public int FontSize { get; set; } = 14;
 
         public string PieResidueSliceLabel { get; set; } = "Other";
 
@@ -153,7 +185,17 @@ namespace HydraDoc.Chart
 
         public TextStyle PieSliceTextStyle { get; set; }
 
-        public PieSliceText PieSliceText { get; set; } = PieSliceText.Percentage;
+        #region PieSliceText
+
+        private PieSliceText _pieSliceText = PieSliceText.Percentage;
+
+        public PieSliceText PieSliceText
+        {
+            get { return _pieSliceText; }
+            set { _pieSliceText = value; CalculateSliceSizes(); }
+        }
+
+        #endregion
 
         private readonly List<PieSlice> Slices = new List<PieSlice>();
 
@@ -163,7 +205,7 @@ namespace HydraDoc.Chart
 
         public void AddSlice( string label, double value, string color = "", double offset = 0 )
         {
-            AddSlice( new PieSlice { Label = label, Color = color, Offset = offset, Value = value });
+            AddSlice( new PieSlice { Label = label, Color = color, Offset = offset, Value = value } );
         }
 
         public void AddSlice( PieSlice slice )
@@ -180,64 +222,224 @@ namespace HydraDoc.Chart
                 slice.Offset = offset;
             }
         }
-        
+
         #endregion
 
         #region Constructor
 
-        public PieChart() : this(600,600)
-        {           
+        public PieChart() : this( 900, 500 )
+        {
         }
 
-        public PieChart( int width, int height ) : base( height, width ) {
+        public PieChart( int width, int height ) : base( height, width )
+        {
             StyleList.Add( "overflow: hidden;" );
-            StyleList.Add( "transform", "rotate(-90deg)" );
-            Children.Add( _chartTitle );
+            //StyleList.Add( "transform", "rotate(-90deg)" );
+            Children.Add( TitleGroup );
+            Children.Add( Legend );
+
+            SvgTitle = new SVGText();
+
+            TitleGroup.Add( SvgTitle );
         }
 
         #endregion
 
         #region SVG Members 
 
-        private readonly ChartTitle _chartTitle = new ChartTitle();
+        private readonly SVGGroup TitleGroup = new SVGGroup();
+        private readonly SVGText SvgTitle = new SVGText();
+        private readonly SVGGroup Legend = new SVGGroup();
 
         #endregion
 
-        private string GetColor(int index) {
+        private double CalculateSlicePercentage( PieSlice slice )
+        {
+            return (slice.Value / Slices.Sum( t => t.Value )) * 100;
+        }
+
+        private string GetColor( int index )
+        {
             return Colors[index % (Colors.Count - 1)];
+        }
+
+        private void RenderTitle()
+        {
+            if (!string.IsNullOrWhiteSpace( ChartTitle ))
+            {
+                SvgTitle.StyleList.Add( "font-family", TitleTextStyle.FontName );
+                SvgTitle.StyleList.Add( "font-weight", TitleTextStyle.Bold ? "bold" : string.Empty );
+                SvgTitle.StyleList.Add( "font-style", TitleTextStyle.Italic ? "italic" : string.Empty );
+                SvgTitle.X = ((Width - ChartTitle.Length * (FontSize / 2)) / 4);
+                SvgTitle.Y = (.05 * Height);
+                SvgTitle.Fill = TitleTextStyle.Color;
+            }
+        }
+
+        private void RenderLegend()
+        {
+            Legend.Children.Clear();
+            if (LegendPosition != LegendPosition.None)
+            {
+                var i = 0;
+
+                double _cx = 0, _cy = 0;
+
+                switch (LegendPosition)
+                {
+                    case LegendPosition.Top:
+                        _cx = Width / 8;
+                        _cy = (.05 * Height) + 1.75 * FontSize;
+                        break;
+                    case LegendPosition.Bottom:
+                        _cx = Width / 8;
+                        _cy = (.95 * Height);
+                        break;
+                    case LegendPosition.Left:
+                        _cx = .05 * Width;
+                        _cy = .15 * Height;
+                        break;
+                    case LegendPosition.Right:
+                        _cx = (Width / 1.75);
+                        _cy = .15 * Height;
+                        break;
+                }
+
+
+                foreach (var slice in Slices)
+                {
+                    var item = slice.CreateLegendLine( string.IsNullOrWhiteSpace( slice.Color ) ? GetColor( i++ ) : slice.Color );
+                    var circle = item.Children[0] as SVGCircle;
+                    var text = item.Children[1] as SVGText;
+
+                    switch (LegendPosition)
+                    {
+                        case LegendPosition.Bottom:
+                        case LegendPosition.Top:
+                            circle.Cx = _cx;
+                            text.X = _cx + 2 * circle.R;
+                            circle.Cy = _cy;
+                            text.Y = _cy + FontSize / 3.0;
+                            _cx += (1.75 + text.Text.Text.Length) * FontSize;
+                            break;
+                        case LegendPosition.Right:
+                        case LegendPosition.Left:
+                            circle.Cx = _cx;
+                            text.X = _cx + 2 * circle.R;
+                            circle.Cy = _cy;
+                            text.Y = _cy + FontSize / 3.0;
+                            _cy += 1.75 * FontSize;
+                            break;
+
+                    }
+
+                    Legend.Children.Add( item );
+                }
+
+                switch (LegendPosition)
+                {
+                    case LegendPosition.Right:
+
+                        break;
+                }
+            }
         }
 
         private void CalculateSliceSizes()
         {
-            var startAngle = 0.0;
-            var endAngle = 0.0;
-            var _cx = Width / 2;
-            var _cy = Height / 2;
+            var radius = .4 * Math.Min( Width, Height );
+            var startAngle = PieStartAngle - 90.0;
+            var endAngle = PieStartAngle - 90.0;
+            var _cx = Width / 4;
+            var _cy = (1.05 * Height) / 2;
+            if (LegendPosition == LegendPosition.Left)
+            {
+                _cx += Slices.Max( t => t.Text.Text.Text.Length ) * FontSize + .15 * Width;
+            }
+            var margin = .05 * Height;
             var total = Slices.Sum( t => t.Value );
             var i = 0;
             foreach (var slice in Slices)
             {
                 startAngle = endAngle;
                 endAngle += Math.Ceiling( 360 * slice.Value / total );
-                var x1 = _cx + 180 * Math.Cos( Math.PI * startAngle / 180 );
-                var y1 = _cy + 180 * Math.Sin( Math.PI * startAngle / 180 );
+                var x1 = _cx + radius * Math.Cos( Math.PI * startAngle / 180 );
+                var y1 = _cy + radius * Math.Sin( Math.PI * startAngle / 180 );
 
-                var x2 = _cx + 180 * Math.Cos( Math.PI * endAngle / 180 );
-                var y2 = _cy + 180 * Math.Sin( Math.PI * endAngle / 180 );
+                var x2 = _cx + radius * Math.Cos( Math.PI * endAngle / 180 );
+                var y2 = _cy + radius * Math.Sin( Math.PI * endAngle / 180 );
 
                 var path = slice.Path;
                 path.Clear();
                 path.MoveTo( _cx, _cy );
-                path.LineTo( x1, y1 );
-                path.EllipticalArc( 180, 180, false, false, 1, x2, y2 );
+
+                if (PieHole >= 0)
+                {
+                    // TODO
+                }
+                else {
+                    path.LineTo( x1, y1 );
+                    path.EllipticalArc( radius, radius, false, false, 1, x2, y2 );
+                }
                 path.ClosePath();
                 path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? GetColor( i++ ) : slice.Color;
+
+                var text = slice.Text;
+                text.Text.Clear();
+
+                var _tAngle = (endAngle + startAngle) / 2;
+                text.X = _cx + radius * Math.Cos( Math.PI * _tAngle / 180 );
+                text.Y = _cy + radius * Math.Sin( Math.PI * _tAngle / 180 );
+                switch (PieSliceText)
+                {
+                    case PieSliceText.Label:
+                        text.Text.Append( slice.Label );
+                        break;
+                    case PieSliceText.Percentage:
+                        text.Text.Append( $"{CalculateSlicePercentage( slice ).ToString( "0.0" )}%" );
+                        break;
+                    case PieSliceText.Value:
+                        text.Text.Append( $"{slice.Value.ToString( "0.0" )}" );
+                        break;
+                }
             }
+        }
+
+        private Tuple<double, double> CalculateTextPostion( string text, double x, double y, double angle )
+        {
+            var rAngle = angle * Math.PI / 180;
+            var _x = ((text.Length * 2) * FontSize) * Math.Cos( rAngle );
+            var _y = ((text.Length * 2) * FontSize) * Math.Sin( rAngle );
+            if (rAngle >= 0 && rAngle <= Math.PI)
+            { // quadrant 1
+
+            }
+            else if (rAngle > Math.PI && rAngle <= 2 * Math.PI)
+            { // quadrant 2
+
+            }
+            else if (rAngle > 2 * Math.PI && rAngle <= 3 * Math.PI / 2)
+            { // quadrant 3
+
+            }
+            else
+            { // quadrant 4
+                //_x *= -1;
+                //_y *= -1;
+            }
+            return new Tuple<double, double>( x + _x, y + _y );
         }
 
         private static double Quantative0To1Check( double newValue, double oldValue )
         {
             return (newValue >= 0 && newValue <= 1) ? newValue : oldValue;
+        }
+
+        public override string Render()
+        {
+            RenderTitle();
+            RenderLegend();
+            return base.Render();
         }
     }
 }
