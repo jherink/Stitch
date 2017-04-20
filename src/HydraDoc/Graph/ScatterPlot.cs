@@ -11,7 +11,7 @@ namespace HydraDoc.Graph
     public class ScatterPlot : SVG
     {
         private string FillColor = "black";
-        private int PlotSize = 4;
+        private double PlotSize = 4;
 
         private double AxisLimit
         {
@@ -32,7 +32,7 @@ namespace HydraDoc.Graph
                 set { Circle.Fill = value; }
             }
 
-            public int Radius { get { return Circle.R; } set { Circle.R = value; } }
+            public double Radius { get { return Circle.R; } set { Circle.R = value; } }
 
             public int X
             {
@@ -103,7 +103,7 @@ namespace HydraDoc.Graph
             }
         }
 
-        public int PointRadius
+        public double PointRadius
         {
             get
             {
