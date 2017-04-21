@@ -150,7 +150,14 @@ namespace HydraDoc.Chart
         /// <summary>
         /// If between 0 and 1, displays a donut chart. The hole with have a radius equal to number times the radius of the chart.
         /// </summary>
-        public double PieHole { get { return _pieHole; } set { _pieHole = Quantative0To1Check( value, _pieHole ); } }
+        public double PieHole
+        {
+            get { return _pieHole; }
+            set
+            {
+                _pieHole = Quantative0To1Check( value, _pieHole );
+            }
+        }
 
         #endregion
 
@@ -162,7 +169,7 @@ namespace HydraDoc.Chart
         {
 
             get { return _legendPosition; }
-            set { _legendPosition = value; CalculateSliceSizes(); }
+            set { _legendPosition = value; }
         }
 
         #endregion
@@ -192,7 +199,7 @@ namespace HydraDoc.Chart
         public PieSliceText PieSliceText
         {
             get { return _pieSliceText; }
-            set { _pieSliceText = value; CalculateSliceSizes(); }
+            set { _pieSliceText = value; }
         }
 
         #endregion
@@ -363,22 +370,62 @@ namespace HydraDoc.Chart
             {
                 startAngle = endAngle;
                 endAngle += Math.Ceiling( 360 * slice.Value / total );
+                var angleDifference = endAngle - startAngle;
+
                 var x1 = _cx + radius * Math.Cos( Math.PI * startAngle / 180 );
                 var y1 = _cy + radius * Math.Sin( Math.PI * startAngle / 180 );
 
                 var x2 = _cx + radius * Math.Cos( Math.PI * endAngle / 180 );
                 var y2 = _cy + radius * Math.Sin( Math.PI * endAngle / 180 );
 
+                double x5 = 0, y5 = 0;
+                if (angleDifference >= 180)
+                {
+                    x5 = _cx + radius * Math.Cos( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
+                    y5 = _cy + radius * Math.Sin( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
+                }
+
                 var path = slice.Path;
                 path.Clear();
-                path.MoveTo( _cx, _cy );
-
-                if (PieHole >= 0)
+                if (PieHole > 0)
                 {
-                    // TODO
+                    var r2 = (1 - PieHole) * radius;
+
+                    var x3 = x1 - r2 * Math.Cos( Math.PI * startAngle / 180 );
+                    var y3 = y1 - r2 * Math.Sin( Math.PI * startAngle / 180 );
+
+                    var x4 = x2 - r2 * Math.Cos( Math.PI * endAngle / 180 );
+                    var y4 = y2 - r2 * Math.Sin( Math.PI * endAngle / 180 );
+
+                    path.MoveTo( x3, y3 );
+
+                    if (angleDifference >= 180)
+                    {
+                        var x6 = x5 - r2 * Math.Cos( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
+                        var y6 = y5 - r2 * Math.Sin( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
+                        path.EllipticalArc( radius - r2, radius - r2, false, false, 1, x6, y6 );
+                    }
+
+                    path.EllipticalArc( radius - r2, radius - r2, false, false, 1, x4, y4 );
+                    path.LineTo( x2, y2 );
+
+                    if (angleDifference >= 180)
+                    {
+                        path.EllipticalArc( radius, radius, false, false, 0, x5, y5 );
+                    }
+
+                    path.EllipticalArc( radius, radius, false, false, 0, x1, y1 );
                 }
-                else {
+                else
+                {
+                    path.MoveTo( _cx, _cy );
                     path.LineTo( x1, y1 );
+
+                    if (angleDifference >= 180)
+                    {
+                        path.EllipticalArc( radius, radius, false, false, 1, x5, y5 );
+                    }
+
                     path.EllipticalArc( radius, radius, false, false, 1, x2, y2 );
                 }
                 path.ClosePath();
@@ -437,6 +484,7 @@ namespace HydraDoc.Chart
 
         public override string Render()
         {
+            CalculateSliceSizes();
             RenderTitle();
             RenderLegend();
             return base.Render();
