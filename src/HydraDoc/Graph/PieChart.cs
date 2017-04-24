@@ -25,6 +25,7 @@ namespace HydraDoc.Graph
         private List<PieSlice> Slices = new List<PieSlice>();
 
         public int GraphHeight { get { return (int)Height; } set { Height = Width = value; } }
+
         public int GraphWidth { get { return (int)Width; } set { Width = Height = value; } }
 
         public double Total { get { return Slices.Sum( t => t.Value ); } }
