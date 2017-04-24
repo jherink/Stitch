@@ -378,13 +378,17 @@ namespace HydraDoc.Chart
 
         private void CalculateSliceSizes()
         {
+            /** NOTE: "left-most & right-most refer to if you were looking at the slice
+             * facing the tip.
+             */
+
             var radius = .4 * Math.Min( Width, Height );
             var startAngle = PieStartAngle - 90.0;
             var endAngle = PieStartAngle - 90.0;
             var cx = 2 * radius;
             var cy = (1.05 * Height) / 2;
             if (LegendPosition == LegendPosition.Left)
-            {
+            { // If the legend is on the left then we need to move the graph right so it will fit.
                 cx += Slices.Max( t => t.Text.Text.Text.Length ) * FontSize + .15 * Width;
             }
             var margin = .05 * Height;
@@ -392,81 +396,94 @@ namespace HydraDoc.Chart
             var i = 0;
             foreach (var slice in Slices)
             {
-                startAngle = endAngle;
-                endAngle += Math.Ceiling( 360 * slice.Value / total );
+                startAngle = endAngle; // start angle becomes the old end angle.
+                endAngle += Math.Ceiling( 360 * slice.Value / total ); // calculate new end angle for slice.
                 var angleDifference = endAngle - startAngle;
 
                 var _cx = cx;
                 var _cy = cy;
                 if (slice.Offset > 0)
-                {
+                {   // if offsetting slice then we need to calculate the angle between
+                    // the start and end angle and calculate a new origin for the slice's tip.
                     var midAngle = startAngle + ((endAngle - startAngle) / 2);
                     _cx += slice.Offset * radius * Math.Cos( Math.PI * midAngle / 180 );
                     _cy += slice.Offset * radius * Math.Sin( Math.PI * midAngle / 180 );
                 }
 
+                // Calculate the left-most point of the slice.
                 var x1 = _cx + radius * Math.Cos( Math.PI * startAngle / 180 );
                 var y1 = _cy + radius * Math.Sin( Math.PI * startAngle / 180 );
 
+                // Calculate the right-most point of the slice.
                 var x2 = _cx + radius * Math.Cos( Math.PI * endAngle / 180 );
                 var y2 = _cy + radius * Math.Sin( Math.PI * endAngle / 180 );
 
                 double x5 = 0, y5 = 0;
                 if (angleDifference >= 180)
-                {
+                {   // If the angle difference is greater than or equal to 50% of the graph then 
+                    // it will render incorrectly.  Add two points at the midpoint of the circle so it
+                    // will render correctly.
                     x5 = _cx + radius * Math.Cos( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
                     y5 = _cy + radius * Math.Sin( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
                 }
 
                 var path = slice.Path;
-                path.Clear();
+                path.Clear(); // Clear old path renderings.
                 if (PieHole > 0)
                 {
-                    var r2 = (1 - PieHole) * radius;
+                    var r2 = (1 - PieHole) * radius; // r2 is the new radius with the pie hole factored in.
 
+                    // Calculate a point for the left-most inner pie hole point.
                     var x3 = x1 - r2 * Math.Cos( Math.PI * startAngle / 180 );
                     var y3 = y1 - r2 * Math.Sin( Math.PI * startAngle / 180 );
 
+                    // Calculate a point for the right-most inner pie hole point.
                     var x4 = x2 - r2 * Math.Cos( Math.PI * endAngle / 180 );
                     var y4 = y2 - r2 * Math.Sin( Math.PI * endAngle / 180 );
 
+                    // move to the left-most inner pie hole point instead of the radius.
                     path.MoveTo( x3, y3 );
 
                     if (angleDifference >= 180)
-                    {
+                    {   // See note above about case where slice is 50% or more of graph.
                         var x6 = x5 - r2 * Math.Cos( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
                         var y6 = y5 - r2 * Math.Sin( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
                         path.EllipticalArc( radius - r2, radius - r2, false, false, 1, x6, y6 );
                     }
 
+                    // Close the inner pie hole arc by moving to the right-most point.
                     path.EllipticalArc( radius - r2, radius - r2, false, false, 1, x4, y4 );
-                    path.LineTo( x2, y2 );
+                    path.LineTo( x2, y2 ); // move to right-most slice point.
 
                     if (angleDifference >= 180)
-                    {
+                    { // See note above about case where slice is 50% or more of graph.
                         path.EllipticalArc( radius, radius, false, false, 0, x5, y5 );
                     }
 
+                    // Move to left-most slice point.
                     path.EllipticalArc( radius, radius, false, false, 0, x1, y1 );
                 }
                 else
-                {
-                    path.MoveTo( _cx, _cy );
-                    path.LineTo( x1, y1 );
+                { // No pie hole.
+                    path.MoveTo( _cx, _cy ); // move to graph origin.
+                    path.LineTo( x1, y1 ); // move to left-most slice point.
 
                     if (angleDifference >= 180)
-                    {
+                    { // See note above about case where slice is 50% or more of graph.
                         path.EllipticalArc( radius, radius, false, false, 1, x5, y5 );
                     }
 
+                    // Arc to right-most slice point.
                     path.EllipticalArc( radius, radius, false, false, 1, x2, y2 );
                 }
-                path.ClosePath();
+                path.ClosePath(); // Complete the slice.
                 path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? GetColor( i++ ) : slice.Color;
 
                 var text = slice.Text;
                 text.Text.Clear();
 
+                // TODO: Calculate more precise point to draw the text and an orientation
+                // of the text so that it fits in the slice better.
                 var _tAngle = (endAngle + startAngle) / 2;
                 text.X = _cx + radius * Math.Cos( Math.PI * _tAngle / 180 );
                 text.Y = _cy + radius * Math.Sin( Math.PI * _tAngle / 180 );
