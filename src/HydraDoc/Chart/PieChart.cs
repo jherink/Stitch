@@ -58,6 +58,7 @@ namespace HydraDoc.Chart
         public PieSlice()
         {
             Path.Stroke = "white";
+            //Text.Fill = "white";
             Path.StrokeWidth = 1;
             Children.Add( Path );
             Children.Add( Text );
@@ -100,28 +101,51 @@ namespace HydraDoc.Chart
 
         public List<string> Colors { get; private set; } = new List<string>()
         {
-            "rgb(51,102,204)",
-            "rgb(220, 57, 18)",
-            "rgb(255,153,0)",
-            "rgb(16,150,24)",
-            "rgb(153,0,153)",
-            "rgb(204,204,204)",
-            "rgb(22,214,32)",
-            "rgb(183,115,34)",
-            "rgb(59,62,172)",
-            "rgb(85, 116, 166)",
-            "rgb(50, 146, 98)",
-            "rgb(139, 7, 7)",
-            "rgb(230, 115, 0)",
-            "rgb(102, 51, 204)",
-            "rgb(170, 170, 17)",
-            "rgb(34, 170, 153)",
-            "rgb(153, 68, 153)",
-            "rgb(49, 99, 149)",
-            "rgb(184, 46, 46)",
-            "rgb(102, 170, 0)",
-            "rgb(221, 68, 119)",
-            "rgb(0, 153, 198)",
+            "#3366cc",
+            "#dc3912",
+            "#ff9900",
+            "#109618",
+            "#990099",
+            "#0099c6",
+            "#dd4477",
+            "#66aa00",
+            "#b82e2e",
+            "#316395",
+            "#994499",
+            "#22aa99",
+            "#aaaa11",
+            "#6633cc",
+            "#e67300",
+            "#8b0707",
+            "#651067",
+            "#329262",
+            "#5574a6",
+            "#3b3eac",
+            "#b77322",
+            "#16d620",
+            "#16d620"
+            //"rgb(51,102,204)",
+            //"rgb(220, 57, 18)",
+            //"rgb(255,153,0)",
+            //"rgb(16,150,24)",
+            //"rgb(153,0,153)",
+            //"rgb(204,204,204)",
+            //"rgb(22,214,32)",
+            //"rgb(183,115,34)",
+            //"rgb(59,62,172)",
+            //"rgb(85, 116, 166)",
+            //"rgb(50, 146, 98)",
+            //"rgb(139, 7, 7)",
+            //"rgb(230, 115, 0)",
+            //"rgb(102, 51, 204)",
+            //"rgb(170, 170, 17)",
+            //"rgb(34, 170, 153)",
+            //"rgb(153, 68, 153)",
+            //"rgb(49, 99, 149)",
+            //"rgb(184, 46, 46)",
+            //"rgb(102, 170, 0)",
+            //"rgb(221, 68, 119)",
+            //"rgb(0, 153, 198)",
         };
 
         #endregion
@@ -178,7 +202,7 @@ namespace HydraDoc.Chart
 
         public IChartArea ChartArea { get; set; }
 
-        public bool Is3D { get; set; }
+        //public bool Is3D { get; set; }
 
         public string FontName { get; set; }
 
@@ -357,11 +381,11 @@ namespace HydraDoc.Chart
             var radius = .4 * Math.Min( Width, Height );
             var startAngle = PieStartAngle - 90.0;
             var endAngle = PieStartAngle - 90.0;
-            var _cx = Width / 4;
-            var _cy = (1.05 * Height) / 2;
+            var cx = 2 * radius;
+            var cy = (1.05 * Height) / 2;
             if (LegendPosition == LegendPosition.Left)
             {
-                _cx += Slices.Max( t => t.Text.Text.Text.Length ) * FontSize + .15 * Width;
+                cx += Slices.Max( t => t.Text.Text.Text.Length ) * FontSize + .15 * Width;
             }
             var margin = .05 * Height;
             var total = Slices.Sum( t => t.Value );
@@ -371,6 +395,15 @@ namespace HydraDoc.Chart
                 startAngle = endAngle;
                 endAngle += Math.Ceiling( 360 * slice.Value / total );
                 var angleDifference = endAngle - startAngle;
+
+                var _cx = cx;
+                var _cy = cy;
+                if (slice.Offset > 0)
+                {
+                    var midAngle = startAngle + ((endAngle - startAngle) / 2);
+                    _cx += slice.Offset * radius * Math.Cos( Math.PI * midAngle / 180 );
+                    _cy += slice.Offset * radius * Math.Sin( Math.PI * midAngle / 180 );
+                }
 
                 var x1 = _cx + radius * Math.Cos( Math.PI * startAngle / 180 );
                 var y1 = _cy + radius * Math.Sin( Math.PI * startAngle / 180 );

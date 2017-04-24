@@ -32,8 +32,8 @@ namespace HydraDoc.Chart
 
     public interface IChart
     {
-        int Width { get; set; }
-        int Height { get; set; }
+        double Width { get; set; }
+        double Height { get; set; }
         AdvancedTextStyle TitleTextStyle { get; set; }
         string ChartTitle { get; set; }
         List<string> Colors { get; }
