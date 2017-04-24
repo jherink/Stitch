@@ -9,6 +9,7 @@ using HydraDoc.Elements;
 using HydraDoc.Elements.Interface;
 using System.Globalization;
 using System.Xml;
+using HydraDoc.Export;
 
 namespace HydraDoc
 {
@@ -42,6 +43,8 @@ namespace HydraDoc
 
             // add mobile viewport meta tag.
             Head.Metas.Add( ElementFactory.CreateMeta( "viewport", "width=device-width, initial-scale=1" ) );
+            // add charset meta tag.
+            Head.Metas.Add( ElementFactory.CreateMeta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
 
             // add w3 resource.
             Head.Styles.Add( ElementFactory.CreateStyleFromResource( "w3" ) );
@@ -151,6 +154,25 @@ namespace HydraDoc
 
             var writer = XmlWriter.Create( path, settings );
             xml.Save( writer );
+        }
+
+        public void ExportToPdf( string path )
+        {
+            var pdfExporter = new PDFExporter();
+            using (var output = File.Create( path ))
+            {
+                Export( pdfExporter, output );
+            }
+        }
+
+        public byte[] Export( IExporter exporter )
+        {
+            return exporter.Export( Render() );
+        }
+
+        public void Export( IExporter exporter, Stream exportTo )
+        {
+            exporter.Export( Render(), exportTo );
         }
     }
 }

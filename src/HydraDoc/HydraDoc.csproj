@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NReco.PdfGenerator">
+      <HintPath>..\ThirdParty\NReco.PdfGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -162,6 +165,8 @@
     <Compile Include="Elements\TableElements.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Chart\Interface\IChart.cs" />
+    <Compile Include="Export\IExporter.cs" />
+    <Compile Include="Export\PDFExporter.cs" />
     <Compile Include="Graph\BarGraph.cs" />
     <Compile Include="Graph\Graph.cs" />
     <Compile Include="Graph\HorizontalBarChart.cs" />

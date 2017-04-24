@@ -71,32 +71,6 @@ namespace HydraDoc.Chart
 
         public AdvancedTextStyle TitleTextStyle { get; set; } = new AdvancedTextStyle();
 
-        int IChart.Width
-        {
-            get
-            {
-                return (int)base.Width;
-            }
-
-            set
-            {
-                base.Width = value;
-            }
-        }
-
-        int IChart.Height
-        {
-            get
-            {
-                return (int)base.Height;
-            }
-
-            set
-            {
-                base.Height = value;
-            }
-        }
-
         public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
 
         public List<string> Colors { get; private set; } = new List<string>()
@@ -385,7 +359,7 @@ namespace HydraDoc.Chart
             var radius = .4 * Math.Min( Width, Height );
             var startAngle = PieStartAngle - 90.0;
             var endAngle = PieStartAngle - 90.0;
-            var cx = 2 * radius;
+            var cx = 1.5 * radius;
             var cy = (1.05 * Height) / 2;
             if (LegendPosition == LegendPosition.Left)
             { // If the legend is on the left then we need to move the graph right so it will fit.

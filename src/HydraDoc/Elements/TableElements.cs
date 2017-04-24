@@ -212,7 +212,7 @@ namespace HydraDoc.Elements
             var body = new TableBody();
             Children.Remove( TableFooter );
             Children.Add( body );
-            Children.Add( TableFooter );
+            if (TableFooter != null) Children.Add( TableFooter );
             return body;
         }
 
