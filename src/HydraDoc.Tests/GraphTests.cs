@@ -49,44 +49,6 @@ namespace HydraDoc.Tests
         }
 
         [TestMethod]
-        public void PieGraphTest()
-        {
-            var doc = new HydraDocument();
-            var graph = new PieChart(400,400);
-            graph.AddData( " #F15854", "Jump right in, startupville here I come.", 4 );
-            graph.AddData( "#4D4D4D", "Email back to discuss, flattered and positive.", 4 );
-            graph.AddData( "#B276B2", "Respond and say \"Thanks but no thanks.\"", 6 );
-            graph.AddData( "#5DA5DA", "	Email back to discuss, all business.", 9 );
-            graph.AddData( "#DECF3F", "Email back to discuss, but skeptically.", 31 );
-            graph.AddData( "#FAA43A", "Delete the email.", 46 );
-            graph.StyleList.Add( "transform", "rotate(-90deg)" );
-            graph.StyleList.Add( "float", "left" );
-            doc.Add( graph );
-            var legend = graph.CreateLegend();
-            legend.StyleList.Add( "float", "left" );
-            legend.StyleList.Add( "padding-top", "20px" );
-            doc.Add( legend );
-
-            IntegrationHelpers.SaveToTemp( "PieGraphTest", doc );
-        }
-
-        [TestMethod]
-        public void PieGraph2Test()
-        {
-            var doc = new HydraDocument();
-            var graph = new PieChart();
-            graph.GraphWidth = 400;
-            graph.AddData( "#468966", "Asia", 113 );
-            graph.AddData( "#FFF0A5", "NA", 100 );
-            graph.AddData( "#FFB03B", "Europe", 50 );
-            graph.AddData( "#B64926", "Africa", 28 );
-            graph.AddData( "#8E2800", "Australia", 27 );
-            doc.Add( graph );
-
-            IntegrationHelpers.SaveToTemp( "PieGraph2Test", doc );
-        }
-
-        [TestMethod]
         public void LineGraphTest()
         {
             var doc = new HydraDocument();

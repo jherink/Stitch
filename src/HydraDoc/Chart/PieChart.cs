@@ -73,73 +73,26 @@ namespace HydraDoc.Chart
 
         public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
 
-        public List<string> Colors { get; private set; } = new List<string>()
-        {
-            "#3366cc",
-            "#dc3912",
-            "#ff9900",
-            "#109618",
-            "#990099",
-            "#0099c6",
-            "#dd4477",
-            "#66aa00",
-            "#b82e2e",
-            "#316395",
-            "#994499",
-            "#22aa99",
-            "#aaaa11",
-            "#6633cc",
-            "#e67300",
-            "#8b0707",
-            "#651067",
-            "#329262",
-            "#5574a6",
-            "#3b3eac",
-            "#b77322",
-            "#16d620",
-            "#16d620"
-            //"rgb(51,102,204)",
-            //"rgb(220, 57, 18)",
-            //"rgb(255,153,0)",
-            //"rgb(16,150,24)",
-            //"rgb(153,0,153)",
-            //"rgb(204,204,204)",
-            //"rgb(22,214,32)",
-            //"rgb(183,115,34)",
-            //"rgb(59,62,172)",
-            //"rgb(85, 116, 166)",
-            //"rgb(50, 146, 98)",
-            //"rgb(139, 7, 7)",
-            //"rgb(230, 115, 0)",
-            //"rgb(102, 51, 204)",
-            //"rgb(170, 170, 17)",
-            //"rgb(34, 170, 153)",
-            //"rgb(153, 68, 153)",
-            //"rgb(49, 99, 149)",
-            //"rgb(184, 46, 46)",
-            //"rgb(102, 170, 0)",
-            //"rgb(221, 68, 119)",
-            //"rgb(0, 153, 198)",
-        };
+        public List<string> Colors { get; private set; } = Helpers.GetDefaultColors();
 
         #endregion
 
         #region Properties
 
-        #region SliceVisibilityThreshold
+        //#region SliceVisibilityThreshold
 
-        private double _sliceVisibilityThreshold { get; set; } = 0;
+        //private double _sliceVisibilityThreshold { get; set; } = 0;
 
-        public double SliceVisibilityThreshold
-        {
-            get { return _sliceVisibilityThreshold; }
-            set
-            {
-                _sliceVisibilityThreshold = Quantative0To1Check( value, _sliceVisibilityThreshold );
-            }
-        }
+        //public double SliceVisibilityThreshold
+        //{
+        //    get { return _sliceVisibilityThreshold; }
+        //    set
+        //    {
+        //        _sliceVisibilityThreshold = Quantative0To1Check( value, _sliceVisibilityThreshold );
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
         #region PieHole
 
@@ -263,11 +216,6 @@ namespace HydraDoc.Chart
             return (slice.Value / Slices.Sum( t => t.Value )) * 100;
         }
 
-        private string GetColor( int index )
-        {
-            return Colors[index % (Colors.Count - 1)];
-        }
-
         private void RenderTitle()
         {
             if (!string.IsNullOrWhiteSpace( ChartTitle ))
@@ -313,7 +261,7 @@ namespace HydraDoc.Chart
 
                 foreach (var slice in Slices)
                 {
-                    var item = slice.CreateLegendLine( string.IsNullOrWhiteSpace( slice.Color ) ? GetColor( i++ ) : slice.Color );
+                    var item = slice.CreateLegendLine( string.IsNullOrWhiteSpace( slice.Color ) ? Helpers.GetColor( Colors, i++ ) : slice.Color );
                     var circle = item.Children[0] as SVGCircle;
                     var text = item.Children[1] as SVGText;
 
@@ -451,7 +399,7 @@ namespace HydraDoc.Chart
                     path.EllipticalArc( radius, radius, false, false, 1, x2, y2 );
                 }
                 path.ClosePath(); // Complete the slice.
-                path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? GetColor( i++ ) : slice.Color;
+                path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? Helpers.GetColor( Colors, i++ ) : slice.Color;
 
                 var text = slice.Text;
                 text.Text.Clear();

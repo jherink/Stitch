@@ -7,17 +7,45 @@ using System.Threading.Tasks;
 
 namespace HydraDoc.Chart
 {
-    public enum BarChartOrientation
+    public enum Orientation
     {
         Horizontal,
         Vertical
     };
-
+    
     public class BarChart : SVG, IChart
     {
-        public BarChartOrientation Orientation { get; set; } = BarChartOrientation.Vertical;
+        private Dictionary<string, double> Values = new Dictionary<string, double>();
+
+        #region AxisOrientation 
+
+        private Orientation _axisOrientation;
+
+        public Orientation AxisOrientation
+        {
+            get { return _axisOrientation; }
+            set
+            {
+                _axisOrientation = value;
+                LabeledAxis.Orientation = value;
+                switch (value) {
+                    case Orientation.Horizontal:
+                        MeasuredAxis.Orientation = Orientation.Vertical;
+                        break;
+                    case Orientation.Vertical:
+                        MeasuredAxis.Orientation = Orientation.Horizontal;
+                        break;
+                }
+            }
+        }
+
+        #endregion
 
         public LegendPosition LegendPosition { get; set; } = LegendPosition.Right;
+
+        public Axis<double> MeasuredAxis { get; private set; } = new Axis<double>();
+
+        public Axis<string> LabeledAxis { get; private set; } = new Axis<string>();
 
         #region IChart Implementation
 
@@ -55,5 +83,43 @@ namespace HydraDoc.Chart
 
 
         #endregion
+
+        #region Constructor
+
+        public BarChart() : this( 900, 500 )
+        {
+            AxisOrientation = Orientation.Vertical;
+        }
+
+        public BarChart( int width, int height ) : base( height, width )
+        {
+            StyleList.Add( "overflow: hidden;" );
+            //StyleList.Add( "transform", "rotate(-90deg)" );
+            //Children.Add( TitleGroup );
+            //Children.Add( Legend );
+
+            //SvgTitle = new SVGText();
+
+            //TitleGroup.Add( SvgTitle );            
+            Children.Add( MeasuredAxis );
+            Children.Add( LabeledAxis );
+        }
+
+        #endregion
+
+        public void AddData( string label, double value )
+        {
+            Values.Add( label, value );
+        }
+
+        public override string Render()
+        {
+            LabeledAxis.AxisLength = LabeledAxis.Orientation == Orientation.Vertical ? base.Height : base.Width; 
+            MeasuredAxis.AxisLength = MeasuredAxis.Orientation == Orientation.Vertical ? base.Height : base.Width;
+            var ticks = MeasuredAxis.GenerateAxisData( Values.Values.Min(), Values.Values.Max() );
+            MeasuredAxis.GenerateAxisData( ticks );
+            LabeledAxis.GenerateAxisData( Values.Keys );
+            return base.Render();
+        }
     }
 }

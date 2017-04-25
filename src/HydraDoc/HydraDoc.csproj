@@ -44,7 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chart\Axis.cs" />
+    <Compile Include="Chart\Axis\Axis_old.cs" />
+    <Compile Include="Chart\Axis\AxisData.cs" />
+    <Compile Include="Chart\Axis\Range.cs" />
     <Compile Include="Chart\BarChart.cs" />
+    <Compile Include="Chart\Formatters\Format.cs" />
+    <Compile Include="Chart\Formatters\NumericFormat.cs" />
+    <Compile Include="Chart\Formatters\ScientificFormat.cs" />
+    <Compile Include="Chart\Formatters\UnitFormat.cs" />
+    <Compile Include="Chart\Helpers.cs" />
     <Compile Include="Chart\Interface\IChartArea.cs" />
     <Compile Include="Chart\PieChart.cs" />
     <Compile Include="Chart\TextStyle.cs" />
@@ -172,7 +181,6 @@
     <Compile Include="Graph\HorizontalBarChart.cs" />
     <Compile Include="Graph\IGraph.cs" />
     <Compile Include="Graph\LineGraph.cs" />
-    <Compile Include="Graph\PieChart.cs" />
     <Compile Include="Graph\ScatterPlot.cs" />
     <Compile Include="HydraDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

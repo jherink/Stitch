@@ -135,5 +135,23 @@ namespace HydraDoc.Tests
 
             IntegrationHelpers.SaveToTemp( "ExplodeSliceTest", doc );
         }
+
+        [Theory( DisplayName = "BarChartTest" )]
+        [InlineData( new[] { "Copper", "Silver", "Gold", "Platinum" },
+                     new[] { 8.94, 10.49, 19.30, 21.45 }, Orientation.Horizontal, "HorizontalBarChartTest" )]
+        [InlineData( new[] { "Copper", "Silver", "Gold", "Platinum" },
+                     new[] { 8.94, 10.49, 19.30, 21.45 }, Orientation.Vertical, "VerticalBarChartTest" )]
+        public void BarChartTest( string[] labels, double[] axisData, Orientation graphOrientation, string fileName )
+        {
+            var chart = new BarChart();
+            chart.AxisOrientation = graphOrientation;
+            for (int i = 0; i < Math.Min( labels.Length, axisData.Length ); i++)
+            {
+                chart.AddData( labels[i], axisData[i] );
+            }
+            var doc = new HydraDocument();
+            doc.Add( chart );
+            IntegrationHelpers.SaveToTemp( fileName, doc );
+        }
     }
 }
