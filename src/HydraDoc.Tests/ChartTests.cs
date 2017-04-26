@@ -147,7 +147,7 @@ namespace HydraDoc.Tests
             chart.AxisOrientation = graphOrientation;
             for (int i = 0; i < Math.Min( labels.Length, axisData.Length ); i++)
             {
-                chart.AddData( labels[i], axisData[i] );
+                chart.AddBar( labels[i], axisData[i] );
             }
             var doc = new HydraDocument();
             doc.Add( chart );

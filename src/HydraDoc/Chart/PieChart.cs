@@ -135,9 +135,9 @@ namespace HydraDoc.Chart
 
         public int FontSize { get; set; } = 14;
 
-        public string PieResidueSliceLabel { get; set; } = "Other";
+        //public string PieResidueSliceLabel { get; set; } = "Other";
 
-        public string PieResidueSliceColor { get; set; } = "#ccc";
+        //public string PieResidueSliceColor { get; set; } = "#ccc";
 
         public int PieStartAngle { get; set; }
 
