@@ -137,17 +137,29 @@ namespace HydraDoc.Tests
         }
 
         [Theory( DisplayName = "BarChartTest" )]
-        [InlineData( new[] { "Copper", "Silver", "Gold", "Platinum" },
-                     new[] { 8.94, 10.49, 19.30, 21.45 }, Orientation.Horizontal, "HorizontalBarChartTest" )]
-        [InlineData( new[] { "Copper", "Silver", "Gold", "Platinum" },
-                     new[] { 8.94, 10.49, 19.30, 21.45 }, Orientation.Vertical, "VerticalBarChartTest" )]
-        public void BarChartTest( string[] labels, double[] axisData, Orientation graphOrientation, string fileName )
+        [InlineData( "Density of Precious Metals, in g/cm^3", 
+                     new[] { "Copper", "Silver", "Gold", "Platinum" },
+                     new[] { 8.94, 10.49, 19.30, 21.45 },  
+                     new[] { "#b87333", "silver", "gold", "#e5e4e2" },
+                     Orientation.Horizontal, 
+                     "HorizontalBarChartTest" )]
+        [InlineData( "Density of Precious Metals, in g/cm^3",
+                     new[] { "Copper", "Silver", "Gold", "Platinum" },
+                     new[] { 8.94, 10.49, 19.30, 21.45 },
+                     new[] { "#b87333", "silver", "gold", "#e5e4e2" },
+                     Orientation.Vertical, 
+                    "VerticalBarChartTest" )]
+        public void BarChartTest( string label, string[] labels, double[] axisData, string[] colors, Orientation graphOrientation, string fileName )
         {
+            Assert.Equal( labels.Length, axisData.Length );
+            Assert.Equal( labels.Length, colors.Length );
             var chart = new BarChart();
             chart.AxisOrientation = graphOrientation;
-            for (int i = 0; i < Math.Min( labels.Length, axisData.Length ); i++)
+            chart.ChartTitle = label;
+            chart.TitleTextStyle.Bold = true;
+            for (int i = 0; i < labels.Length; i++)
             {
-                chart.AddBar( labels[i], axisData[i] );
+                chart.AddBar( labels[i], axisData[i], colors[i] );
             }
             var doc = new HydraDocument();
             doc.Add( chart );

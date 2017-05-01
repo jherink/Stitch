@@ -69,7 +69,9 @@ namespace HydraDoc.Chart
     {
         #region IChart Implementation
 
-        public AdvancedTextStyle TitleTextStyle { get; set; } = new AdvancedTextStyle();
+        public ITextStyle TitleTextStyle { get; set; }
+
+        public ITextStyle ChartTextStyle { get; set; }
 
         public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
 
@@ -192,11 +194,12 @@ namespace HydraDoc.Chart
         public PieChart( int width, int height ) : base( height, width )
         {
             StyleList.Add( "overflow: hidden;" );
-            //StyleList.Add( "transform", "rotate(-90deg)" );
             Children.Add( TitleGroup );
             Children.Add( Legend );
 
             SvgTitle = new SVGText();
+            TitleTextStyle = new TextStyle( SvgTitle );
+            ChartTextStyle = new TextStyle( this );           
 
             TitleGroup.Add( SvgTitle );
         }

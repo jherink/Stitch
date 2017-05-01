@@ -47,6 +47,7 @@
     <Compile Include="Chart\Axis.cs" />
     <Compile Include="Chart\Axis\Axis_old.cs" />
     <Compile Include="Chart\Axis\AxisData.cs" />
+    <Compile Include="Chart\Axis\IAxis.cs" />
     <Compile Include="Chart\Axis\Range.cs" />
     <Compile Include="Chart\BarChart.cs" />
     <Compile Include="Chart\Formatters\Format.cs" />

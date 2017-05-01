@@ -1,4 +1,5 @@
 ﻿using HydraDoc.Elements;
+using HydraDoc.Elements.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +23,6 @@ namespace HydraDoc.Chart
         public double Value { get; set; }
 
         internal SVGRectangle Rect { get; set; } = new SVGRectangle();
-
-
     }
 
     public class BarChart : SVG, IChart
@@ -64,15 +63,17 @@ namespace HydraDoc.Chart
 
         public Axis<string> LabeledAxis { get; private set; } = new Axis<string>();
 
-        public int FontSize { get; set; } = 14;
+        public int BarSpacing { get; set; } = 15;
 
         #endregion
 
         #region IChart Implementation
 
-        public AdvancedTextStyle TitleTextStyle { get; set; } = new AdvancedTextStyle();
+        public ITextStyle TitleTextStyle { get; set; }
 
-        public string ChartTitle { get; set; }
+        public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
+
+        public ITextStyle ChartTextStyle { get; set; }
 
         public List<string> Colors { get; private set; } = Helpers.GetDefaultColors();
 
@@ -110,20 +111,26 @@ namespace HydraDoc.Chart
         public BarChart() : this( 900, 500 )
         {
             AxisOrientation = Orientation.Vertical;
+            ChartTextStyle.FontSize = MeasuredAxis.AxisTextStyle.FontSize = LabeledAxis.AxisTextStyle.FontSize = 15;
         }
 
         public BarChart( int width, int height ) : base( height, width )
         {
             StyleList.Add( "overflow: hidden;" );
-            //StyleList.Add( "transform", "rotate(-90deg)" );
-            //Children.Add( TitleGroup );
-            //Children.Add( Legend );
+            Children.Add( TitleGroup );
 
-            //SvgTitle = new SVGText();
+            SvgTitle = new SVGText();
+            TitleTextStyle = new TextStyle( SvgTitle );
+            ChartTextStyle = new TextStyle( this );
 
-            //TitleGroup.Add( SvgTitle );            
-            Children.Add( MeasuredAxis );
-            Children.Add( LabeledAxis );
+            LabeledAxis.GraphWidth = MeasuredAxis.GraphWidth = Width;
+            LabeledAxis.GraphHeight = MeasuredAxis.GraphHeight = Height;
+
+            TitleGroup.Add( SvgTitle );
+            //Children.Add( MeasuredAxis );
+            //Children.Add( LabeledAxis );
+            Children.Add( VerticalAxisGroup );
+            Children.Add( HorizontalAxisGroup );
             Children.Add( BarGroup );
         }
 
@@ -150,6 +157,8 @@ namespace HydraDoc.Chart
         private readonly SVGText SvgTitle = new SVGText();
         private readonly SVGGroup Legend = new SVGGroup();
         private readonly SVGGroup BarGroup = new SVGGroup();
+        private readonly SVGGroup HorizontalAxisGroup = new SVGGroup();
+        private readonly SVGGroup VerticalAxisGroup = new SVGGroup();
 
         #endregion
 
@@ -157,41 +166,220 @@ namespace HydraDoc.Chart
         {
             if (!string.IsNullOrWhiteSpace( ChartTitle ))
             {
-                SvgTitle.StyleList.Add( "font-family", TitleTextStyle.FontName );
-                SvgTitle.StyleList.Add( "font-weight", TitleTextStyle.Bold ? "bold" : string.Empty );
-                SvgTitle.StyleList.Add( "font-style", TitleTextStyle.Italic ? "italic" : string.Empty );
-                SvgTitle.X = ((Width - ChartTitle.Length * (FontSize / 2)) / 4);
+                SvgTitle.X = ((Width - ChartTitle.Length * (ChartTextStyle.FontSize / 2)) / 4);
                 SvgTitle.Y = (.05 * Height);
                 SvgTitle.Fill = TitleTextStyle.Color;
             }
         }
 
-        private void GenerateBars()
+        private void GenerateBars( double maxTick )
         {
-            var barHeight = (Height * .8) / Bars.Count;
-            var i = 0;
-            var y = .1 * Height;
-            foreach (var bar in Bars)
-            {
-                bar.Rect.X = .15 * Width;
-                bar.Rect.Y = y;
-                bar.Rect.Height = barHeight;
-                bar.Rect.Fill = string.IsNullOrWhiteSpace( bar.Color ) ? Helpers.GetColor( Colors, 0 ) : bar.Color;
-                bar.Rect.Width = .15 * Width;
+            //var _height = .8 * Height;
+            //_height -= AxisOrientation == Orientation.Vertical ? MeasuredAxis.Ticks.Max( t => t.ToString().Length ) * MeasuredAxis.AxisTextStyle.FontSize : 0;
+            //var barHeight = _height / Bars.Count;
 
-                y += barHeight + 15;
+            //var y = .1 * Height;
+            //var x = .05 * Width;
+            //foreach (var bar in Bars)
+            //{
+            //    bar.Rect.X = x;
+            //    bar.Rect.Y = y;
+            //    bar.Rect.Fill = string.IsNullOrWhiteSpace( bar.Color ) ? Helpers.GetColor( Colors, 0 ) : bar.Color;
+
+            //    switch (AxisOrientation)
+            //    {
+            //        case Orientation.Vertical:
+            //            bar.Rect.Height = barHeight;
+            //            bar.Rect.Width = .85 * Width * bar.Value / maxTick;
+
+            //            y += barHeight + BarSpacing;
+            //            break;
+            //        case Orientation.Horizontal:
+            //            bar.Rect.Width = barHeight;
+            //            bar.Rect.Height = .9 * Height * bar.Value / maxTick;
+
+            //            x += barHeight + BarSpacing;
+            //            break;
+            //    }
+            //}
+        }
+
+        //private void RenderChart()
+        //{
+        //    LabeledAxis.GraphWidth = MeasuredAxis.GraphWidth = base.Width;
+        //    LabeledAxis.GraphHeight = MeasuredAxis.GraphHeight = base.Height;
+        //    switch (LabeledAxis.Orientation)
+        //    {
+        //        case Orientation.Horizontal:
+        //            LabeledAxis.AxisLength = Width;                    
+        //            break;
+        //        case Orientation.Vertical:
+        //            LabeledAxis.AxisLength = Height;
+        //            break;
+        //    }
+        //    switch (MeasuredAxis.Orientation)
+        //    {
+        //        case Orientation.Horizontal:
+        //            MeasuredAxis.AxisLength = Width;
+        //            break;
+        //        case Orientation.Vertical:
+        //            MeasuredAxis.AxisLength = Height;
+        //            break;
+        //    }
+
+        //    var ticks = MeasuredAxis.GenerateAxisData( Bars.Min( t => t.Value ), Bars.Max( t => t.Value ) );
+        //    ticks = MeasuredAxis.Orientation == Orientation.Vertical ? ticks.Reverse() : ticks;
+        //    var measuredTexts = MeasuredAxis.GenerateAxisData( ticks );
+        //    var labeledTexts = LabeledAxis.GenerateAxisData( Bars.Select( t => t.Label ) );
+
+        //    //TODO: Render Bars
+
+        //    //TODO: Render Grid Lines
+
+        //    //TODO: Render Axis Lines
+
+        //    //TODO: Render Axis Text
+        //}
+
+        public void RenderChart()
+        {
+            BarGroup.Children.Clear();
+            HorizontalAxisGroup.Children.Clear();
+            VerticalAxisGroup.Children.Clear();
+
+            LabeledAxis.SetTicks( Bars.Select( t => t.Label ) );
+            var titleHeight = 0.0;
+            if (!string.IsNullOrWhiteSpace( ChartTitle ))
+            {
+                titleHeight = TitleTextStyle.FontSize * 4;
+                SvgTitle.X = Width / 2;
+                SvgTitle.Y = 1.5 * TitleTextStyle.FontSize;
+                SvgTitle.StyleList.Add( "text-anchor", "middle" );
+            }
+
+            var rotation = string.Empty;
+            var verticalSpace = Width / Bars.Count;
+            var horizontalSpace = 0.0;
+            var measuredAxisX = 0.0;
+            var measuredAxisY = 0.0;
+            var labeledAxisX = 0.0;
+            var labeledAxisY = 0.0;
+            var maxTickLength = 0;
+
+            switch (AxisOrientation)
+            {
+                case Orientation.Horizontal:
+                    // Bars going --->>
+                    // Measured Axis is on bottom. 
+
+
+
+
+                    break;
+                case Orientation.Vertical:
+                    // Bars going   |
+                    //              |
+                    //              |
+                    //              V
+                    //              V
+                    // Labeled Axis is on bottom.
+                    // We need to generate this first so we know how far down the measured axis can go.
+                    var space = 1.5 * ChartTextStyle.FontSize;
+                    var measuredTicks = MeasuredAxis.SuggestTicks( Bars.Min( t => t.Value ), Bars.Max( t => t.Value ) );
+                    // Reverse ticks if necessary.  Note: because of the way SVG is rendered we 
+                    // render them backwards when reverse isn't specified so they render correctly.
+                    measuredTicks = MeasuredAxis.ReverseDirection ? measuredTicks : measuredTicks.Reverse();
+                    MeasuredAxis.SetTicks( measuredTicks );
+                    labeledAxisX = verticalSpace / 2;
+                    maxTickLength = LabeledAxis.Ticks.Max( t => t.Length );
+                    labeledAxisY = Height - (maxTickLength * (ChartTextStyle.FontSize + 1) / 2);
+
+                    // Render Labeld Axsis
+                    foreach (var label in LabeledAxis.Ticks)
+                    {
+                        var bar = Bars.First( t => t.Label == label );
+                        rotation = maxTickLength > 4 ? $"rotate(90 {labeledAxisX},{labeledAxisY})" : string.Empty;
+                        var text = new SVGText()
+                        {
+                            X = labeledAxisX,
+                            Y = labeledAxisY,
+                            Transform = rotation
+                        };
+
+                        //var barHeight = (((Height - (Height - labeledAxisY)) * bar.Value) / MeasuredAxis.MaxValue) - 2 * (ChartTextStyle.FontSize + 1);
+                        var barHeight = bar.Value * (Height - titleHeight - (Height - labeledAxisY)) / MeasuredAxis.MaxValue;
+                        var barY = labeledAxisY - barHeight - space;
+                        var svgBar = new SVGRectangle()
+                        {
+                            X = labeledAxisX - (verticalSpace / 4.5), // check this
+                            Y = barY,
+                            Height = barHeight,
+                            Width = verticalSpace / 2,
+                            Fill = string.IsNullOrWhiteSpace( bar.Color ) ? Helpers.GetColor( Colors, 0 ) : bar.Color
+                        };
+
+                        text.Text.Append( label );
+                        HorizontalAxisGroup.Add( text );
+                        BarGroup.Add( svgBar );
+
+                        if (LabeledAxis.GridLines)
+                        { // add grid lines
+                            var labeledRect = new SVGRectangle()
+                            {
+                                X = labeledAxisX,
+                                Y = titleHeight - ChartTextStyle.FontSize,
+                                Fill = LabeledAxis.GridLineColor,
+                                Height = barY,
+                                Width = 1
+                            };
+                            HorizontalAxisGroup.Add( labeledRect );
+                        }                                               
+
+                        labeledAxisX += verticalSpace;
+                    }
+
+                    measuredAxisX = ChartTextStyle.FontSize;
+                    measuredAxisY = titleHeight;
+                    horizontalSpace = (Height - titleHeight - space) / MeasuredAxis.Ticks.Count;
+
+                    // Render Vertical Axis
+                    foreach (var tick in MeasuredAxis.Ticks)
+                    {
+                        var text = new SVGText()
+                        {
+                            X = measuredAxisX,
+                            Y = measuredAxisY
+                        };
+                        text.Text.Append( tick.ToString( MeasuredAxis.Format ) );
+                        VerticalAxisGroup.Add( text );
+
+                        if (MeasuredAxis.GridLines)
+                        { // Add grid lines
+                            var labeledRect = new SVGRectangle
+                            {
+                                X = measuredAxisX + space,
+                                Y = measuredAxisY - (ChartTextStyle.FontSize / 2),
+                                Fill = MeasuredAxis.GridLineColor,
+                                Width = Width,
+                                Height = 1
+                            };
+                            VerticalAxisGroup.Add( labeledRect );
+                        }
+
+                        measuredAxisY += horizontalSpace;
+                    }
+
+                    var plotableArea = measuredAxisY - titleHeight;
+                    
+                    break;
+                    
             }
         }
 
         public override string Render()
         {
             RenderTitle();
-            LabeledAxis.AxisLength = LabeledAxis.Orientation == Orientation.Vertical ? Height : Width;
-            MeasuredAxis.AxisLength = MeasuredAxis.Orientation == Orientation.Vertical ? Height : Width;
-            var ticks = MeasuredAxis.GenerateAxisData( Bars.Min( t => t.Value ), Bars.Max( t => t.Value ) );
-            MeasuredAxis.GenerateAxisData( ticks );
-            LabeledAxis.GenerateAxisData( Bars.Select( t => t.Label ) );
-            GenerateBars();
+            RenderChart();
             return base.Render();
         }
     }
