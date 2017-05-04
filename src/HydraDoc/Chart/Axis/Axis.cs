@@ -1,13 +1,9 @@
-﻿using HydraDoc.Chart.Axis;
-using HydraDoc.Elements;
-using HydraDoc.Elements.Interface;
+﻿using HydraDoc.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HydraDoc.Chart
+namespace HydraDoc.Chart.Axis
 {
     public class Axis<T> : SVGGroup, IAxis<T> where T : IComparable<T>
     {
@@ -42,9 +38,7 @@ namespace HydraDoc.Chart
         public string AxisTitle { get; set; }
 
         public ITextStyle TitleTextStyle { get; set; }
-
-        public Orientation Orientation { get; set; }
-
+        
         public T MaxValue
         {
             get
@@ -171,28 +165,6 @@ namespace HydraDoc.Chart
 
         #endregion
 
-        private SVGRectangle CreateTickLine( double x, double y, double size )
-        {
-            var rect = new SVGRectangle()
-            {
-                Fill = "#cccccc",
-                X = x,
-                Y = y,
-                Height = 1,
-                Width = 1
-            };
-            switch (Orientation)
-            {
-                case Orientation.Vertical:
-                    rect.Height = size;
-                    break;
-                case Orientation.Horizontal:
-                    rect.Width = size;
-                    break;
-            }
-            return rect;
-        }
-
         public IEnumerable<double> SuggestTicks( double min, double max, int intervals = 5 )
         {
             intervals = Math.Max( intervals, 3 );
@@ -202,85 +174,6 @@ namespace HydraDoc.Chart
         public void SetTicks( IEnumerable<T> ticks )
         {
             _ticks = ticks.ToList();
-        }
-
-        public IEnumerable<ISVGText> GenerateAxisData( IEnumerable<T> ticks )
-        {
-            TickGroup.Children.Clear();
-            _ticks = (ReverseDirection ? ticks.Reverse() : ticks).ToList();
-            var texts = new List<ISVGText>();
-            double space = AxisLength / _ticks.Count;
-            var fs = AxisTextStyle.FontSize;
-            var maxTickLength = ticks.Max( t => t.ToString().Length );
-            double x = Orientation == Orientation.Horizontal ? 0 : fs;
-            double y = Orientation == Orientation.Horizontal ?
-                       GraphHeight - (maxTickLength * (fs + 1) / 2) :
-                       0;
-            var rotation = string.Empty;
-
-
-            foreach (var tick in _ticks)
-            {
-                var tickString = tick.ToString();
-                switch (Orientation)
-                {
-                    case Orientation.Horizontal:
-                        x += space - (tickString.Length * fs / 2.0);
-                        rotation = maxTickLength > 4 ? $"rotate(90 {x},{y})" : string.Empty; // rotate 90 degrees about (x,y)
-                        break;
-                    case Orientation.Vertical:
-                        y += space - fs / 2;
-                        break;
-                }
-                var t = new SVGText()
-                {
-                    X = x,
-                    Y = y,
-                    Transform = rotation
-                };
-                t.Text.Append( tickString );
-                texts.Add( t );
-                TickGroup.Children.Add( t );
-            }
-
-            var minX = texts.Min( t => t.X );
-            var minY = texts.Min( t => t.Y );
-            var maxX = texts.Max( t => t.X );
-            var maxY = texts.Max( t => t.Y );
-            var axisRect = new SVGRectangle() { Fill = GridLineColor };
-            axisRect.X = minX;
-            axisRect.Y = minY;
-            axisRect.Width = Orientation == Orientation.Vertical ? 1 : maxX - minX;
-            axisRect.Height = Orientation == Orientation.Vertical ? maxY - minY : 1;
-            TickGroup.Children.Add( axisRect );
-
-            // TODO: Render Axis
-            //GridLineGroup.Children.Clear();
-            //if (GridLines)
-            //{
-            //    foreach (var t in texts)
-            //    {
-            //        SVGRectangle line = new SVGRectangle() { Fill = GridLineColor };
-            //        switch (Orientation)
-            //        {
-            //            case Orientation.Horizontal:
-            //                line.X = t.X;
-            //                line.Y = 0;
-            //                line.Width = 1;
-            //                line.Height = GraphHeight;
-            //                break;
-            //            case Orientation.Vertical:
-            //                line.X = t.X + (1.5 * maxTickLength) * fs;
-            //                line.Y = t.Y;
-            //                line.Width = GraphWidth;
-            //                line.Height = 1;
-            //                break;
-            //        }
-            //        GridLineGroup.Children.Add( line );
-            //    }
-            //}
-
-            return texts;
         }
 
         public override string Render()
