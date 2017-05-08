@@ -19,5 +19,6 @@ namespace HydraDoc.Chart.Axis
         T MaxValue { get; }
         T MinValue { get; }        
         void SetTicks( IEnumerable<T> ticks );
+        bool Visible { get; set; }
     }
 }

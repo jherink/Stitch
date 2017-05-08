@@ -1,4 +1,5 @@
 ﻿using HydraDoc.Chart.Axis;
+using HydraDoc.Chart.Axis.Algorithms;
 using HydraDoc.Elements;
 using HydraDoc.Elements.Interface;
 using System;
@@ -24,104 +25,26 @@ namespace HydraDoc.Chart
         public double Value { get; set; }
     }
 
-    public class BarChart : SVG, IChart
-    {
+    public class BarChart : AxisChart<string, double>
+    {        
+        private readonly List<Bar> Bars = new List<Bar>();       
 
-        #region Properties
+        public Orientation AxisOrientation { get; set; }
 
-        private readonly List<Bar> Bars = new List<Bar>();
-
-        #region AxisOrientation 
-
-        private Orientation _axisOrientation;
-
-        public Orientation AxisOrientation
-        {
-            get { return _axisOrientation; }
-            set
-            {
-                _axisOrientation = value;
-            }
-        }
-
-        #endregion
-
+        // TODO?
         //public LegendPosition LegendPosition { get; set; } = LegendPosition.Right;
-
-        public IAxis<double> MeasuredAxis { get; private set; } = new Axis<double>();
-
-        public IAxis<string> LabeledAxis { get; private set; } = new Axis<string>();
         
-        #endregion
-
-        #region IChart Implementation
-
-        public ITextStyle TitleTextStyle { get; set; }
-
-        public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
-
-        public ITextStyle ChartTextStyle { get; set; }
-
-        public List<string> Colors { get; private set; } = Helpers.GetDefaultColors();
-
-        double IChart.Width
-        {
-            get
-            {
-                return Width;
-            }
-
-            set
-            {
-                Width = value;
-            }
-        }
-
-        double IChart.Height
-        {
-            get
-            {
-                return Height;
-            }
-
-            set
-            {
-                Height = value;
-            }
-        }
-        
-        #endregion
-
         #region Constructor
 
         public BarChart() : this( 900, 500 )
         {            
         }
 
-        public BarChart( int width, int height ) : base( height, width )
+        public BarChart( int width, int height ) : base( width, height )
         {
-            StyleList.Add( "overflow: visible;" );
-            Children.Add( TitleGroup );
-
-            SvgTitle = new SVGText();
-            TitleTextStyle = new TextStyle( SvgTitle );
-            ChartTextStyle = new TextStyle( this );
-
-            LabeledAxis.GridLines = false;
-
-            TitleGroup.Add( SvgTitle );
-            Children.Add( VerticalAxisGroup );
-            Children.Add( HorizontalAxisGroup );
-            Children.Add( BarGroup );
-
             AxisOrientation = Orientation.Vertical;
-            ChartTextStyle.FontSize = 15;
-            var txtDummy = new SVGText();
-            ChartTextStyle.ApplyStyle( txtDummy );
-            MeasuredAxis.AxisTextStyle = new TextStyle( txtDummy.Clone() as SVGText );
-            LabeledAxis.AxisTextStyle = new TextStyle( txtDummy.Clone() as SVGText );
-            MeasuredAxis.AxisTitleTextStyle = new TextStyle( txtDummy.Clone() as SVGText );
-            LabeledAxis.AxisTitleTextStyle = new TextStyle( txtDummy.Clone() as SVGText );
+            LabeledAxis.GridLines = false;
+            LabeledAxisTickAlgorithm = null;
         }
 
         #endregion
@@ -139,31 +62,10 @@ namespace HydraDoc.Chart
         }
 
         #endregion
-
-        #region SVG Members
-
-        private readonly SVGGroup TitleGroup = new SVGGroup();
-        private readonly SVGText SvgTitle = new SVGText();
-        private readonly SVGGroup Legend = new SVGGroup();
-        private readonly SVGGroup BarGroup = new SVGGroup();
-        private readonly SVGGroup HorizontalAxisGroup = new SVGGroup();
-        private readonly SVGGroup VerticalAxisGroup = new SVGGroup();
-
-        #endregion
-
-        private void RenderChart()
+        
+        protected override void RenderChartImpl()
         {
-            BarGroup.Children.Clear();
-            HorizontalAxisGroup.Children.Clear();
-            VerticalAxisGroup.Children.Clear();
-
-            LabeledAxis.SetTicks( Bars.Select( t => t.Label ) );
-            if (!string.IsNullOrWhiteSpace( ChartTitle ))
-            {
-                SvgTitle.X = Width / 2;
-                SvgTitle.Y = 1.5 * TitleTextStyle.FontSize;
-                SvgTitle.StyleList.Add( "text-anchor", "middle" );
-            }
+            LabeledAxis.SetTicks( Bars.Select( t => t.Label ) );            
 
             switch (AxisOrientation)
             {
@@ -187,7 +89,10 @@ namespace HydraDoc.Chart
             var verticalAxisLocations = new double[] { };
             var measuredIntervals = SVGAxisHelpers.SuggestIntervals( Width );
             var min = MeasuredAxis.IncludeDefault ? default(double) : Bars.Min( t => t.Value );
-            MeasuredAxis.SetTicks( SVGAxisHelpers.SuggestTicks( min, Bars.Max( t => t.Value ), measuredIntervals ) );
+            //MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( min, Bars.Max( t => t.Value ), measuredIntervals ) );
+            var set = new List<double>() { 0 };
+            set.AddRange( Bars.Select( t => t.Value ) );
+            MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( set, measuredIntervals ) );
             var labeledClone = LabeledAxis.Clone() as IAxis<string>;
             var ticks = labeledClone.Ticks.ToList();
             ticks.Insert( 0, string.Empty );
@@ -217,7 +122,7 @@ namespace HydraDoc.Chart
                     Fill = string.IsNullOrWhiteSpace( bar.Color ) ? Helpers.GetColor( Colors, 0 ) : bar.Color
                 };
 
-                BarGroup.Add( svgBar );
+                ChartGroup.Add( svgBar );
             }
         }
 
@@ -234,7 +139,10 @@ namespace HydraDoc.Chart
             var verticalAxisLocations = new double[] { };
             var intervals = SVGAxisHelpers.SuggestIntervals( Height );
             var min = MeasuredAxis.IncludeDefault ? default( double ) : Bars.Min( t => t.Value );
-            MeasuredAxis.SetTicks( SVGAxisHelpers.SuggestTicks( min, Bars.Max( t => t.Value ), intervals ) );
+            //MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( min, Bars.Max( t => t.Value ), intervals ) );
+            var set = new List<double>() { 0 };
+            set.AddRange( Bars.Select( t => t.Value ) );
+            MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( set, intervals ) );
             // Because of how SVG renders we must reverse the measured values first.
             var measuredClone = MeasuredAxis.Clone() as IAxis<double>;
             measuredClone.SetTicks( measuredClone.Ticks.Reverse() );
@@ -267,19 +175,8 @@ namespace HydraDoc.Chart
                     Fill = string.IsNullOrWhiteSpace( bar.Color ) ? Helpers.GetColor( Colors, 0 ) : bar.Color
                 };
 
-                BarGroup.Add( svgBar );
+                ChartGroup.Add( svgBar );
             }
-        }
-
-        private double GetTitleHeight()
-        {
-            return !string.IsNullOrWhiteSpace( ChartTitle ) ? TitleTextStyle.FontSize * 4 : 0;
-        }
-
-        public override string Render()
-        {
-            RenderChart();
-            return base.Render();
         }
     }
 }

@@ -8,47 +8,6 @@ namespace HydraDoc.Tests
     public class GraphTests
     {
         [TestMethod]
-        public void HorizontalBarChartTest()
-        {
-            var doc = new HydraDocument();
-            var graph = new HorizontalBarChart();
-            graph.GraphTitle = "Browser market share June 2015";
-            graph.StyleList.Add( "max-width", "700px" );
-            graph.AddData( "IE 11: 11.33%", 11.33 );
-            graph.AddData( "Chrome: 49.77%", 49.77 );
-            graph.AddData( "Firefox: 16.09%", 16.09 );
-            graph.AddData( "Safari: 5.41%", 5.41 );
-            graph.AddData( "Opera: 1.62%", 1.62 );
-            graph.AddData( "Android 4.4: 2%", 2 );
-            doc.Add( graph );
-
-            IntegrationHelpers.SaveToTemp( "BarGraphTest", doc );
-        }
-
-        [TestMethod]
-        public void BarGraphTest()
-        {
-            var doc = new HydraDocument();
-            var graph = new BarGraph();
-            graph.GraphTitle = "Quarterly Results";
-            graph.GraphWidth = 600;
-            graph.FontSize = 10;
-            graph.YAxisFormat = "c0";
-            graph.PlotYAxis = false;
-            graph.PlotBarValues = true;
-            graph.BarColors.Add( "#39cccc" );
-            graph.BarColors.Add( "#7fdbff" );
-            graph.AddData( "Q1", "c", 18450, 16500 );
-            graph.AddData( "Q2", "c", 34340.72, 32340.72 );
-            graph.AddData( "Q3", "c", 43145.52, 32225.52 );
-            graph.AddData( "Q4", "c", 18415, 32425 );
-            doc.Add( graph );
-            doc.Add( graph.CreateTicks() );
-
-            IntegrationHelpers.SaveToTemp( "BarGraphTest", doc );
-        }
-
-        [TestMethod]
         public void LineGraphTest()
         {
             var doc = new HydraDocument();

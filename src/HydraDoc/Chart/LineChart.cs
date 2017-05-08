@@ -1,4 +1,5 @@
 ﻿using HydraDoc.Chart.Axis;
+using HydraDoc.Chart.Axis.Algorithms;
 using HydraDoc.Elements;
 using System;
 using System.Collections.Generic;
@@ -8,72 +9,27 @@ using System.Threading.Tasks;
 
 namespace HydraDoc.Chart
 {
-    public class Line
+    public class Line<T1, T2> where T1 : IComparable<T1>
+                              where T2 : IComparable<T2>
     {
-        public string Label { get; set; }
+        public string LineName { get; set; }
+        public List<Tuple<T1, T2>> Values { get; set; } = new List<Tuple<T1, T2>>();
         public string Color { get; set; }
-        public List<double> Values { get; set; }        
+
+        public void AddPoint( T1 x, T2 y )
+        {
+            Values.Add( new Tuple<T1, T2>( x, y ) );
+        }
+
+        public void Sort()
+        {
+            Values.OrderBy( t => t.Item1 );
+        }
     }
-    public class LineChart : SVG, IChart
+    public class LineChart<T1, T2> : AxisChart<T1, T2> where T1 : IComparable<T1>
+                                                       where T2 : IComparable<T2>
     {
-        private readonly List<Line> Lines = new List<Line>();
-
-        #region Properties
-
-        public IAxis<double> MeasuredAxis { get; private set; } = new Axis<double>();
-
-        public IAxis<string> LabeledAxis { get; private set; } = new Axis<string>();
-
-        #endregion
-
-        #region IChart Implementation
-
-        public ITextStyle TitleTextStyle { get; set; }
-
-        public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
-
-        public ITextStyle ChartTextStyle { get; set; }
-
-        public List<string> Colors { get; private set; } = Helpers.GetDefaultColors();
-
-        double IChart.Width
-        {
-            get
-            {
-                return Width;
-            }
-
-            set
-            {
-                Width = value;
-            }
-        }
-
-        double IChart.Height
-        {
-            get
-            {
-                return Height;
-            }
-
-            set
-            {
-                Height = value;
-            }
-        }
-
-        #endregion
-
-        #region SVG Members
-
-        private readonly SVGGroup TitleGroup = new SVGGroup();
-        private readonly SVGText SvgTitle = new SVGText();
-        private readonly SVGGroup Legend = new SVGGroup();
-        private readonly SVGGroup LineGroup = new SVGGroup();
-        private readonly SVGGroup HorizontalAxisGroup = new SVGGroup();
-        private readonly SVGGroup VerticalAxisGroup = new SVGGroup();
-
-        #endregion
+        private readonly List<Line<T1, T2>> Lines = new List<Line<T1, T2>>();
 
         #region Constructors
 
@@ -82,56 +38,142 @@ namespace HydraDoc.Chart
 
         }
 
-        public LineChart( int width, int height ) : base( height, width )
+        public LineChart( int width, int height ) : base( width, height )
         {
-            StyleList.Add( "overflow: visible;" );
-            Children.Add( TitleGroup );
-
-            SvgTitle = new SVGText();
-            TitleTextStyle = new TextStyle( SvgTitle );
-            ChartTextStyle = new TextStyle( this );
-
-            LabeledAxis.GridLines = false;
-
-            TitleGroup.Add( SvgTitle );
-            Children.Add( VerticalAxisGroup );
-            Children.Add( HorizontalAxisGroup );
-            Children.Add( LineGroup );
-            
-            ChartTextStyle.FontSize = 15;
-            var txtDummy = new SVGText();
-            ChartTextStyle.ApplyStyle( txtDummy );
-            MeasuredAxis.AxisTextStyle = new TextStyle( txtDummy.Clone() as SVGText );
-            LabeledAxis.AxisTextStyle = new TextStyle( txtDummy.Clone() as SVGText );
-            MeasuredAxis.AxisTitleTextStyle = new TextStyle( txtDummy.Clone() as SVGText );
-            LabeledAxis.AxisTitleTextStyle = new TextStyle( txtDummy.Clone() as SVGText );
         }
 
         #endregion
-        
 
-        public void AddLine( Line line )
+        public Line<T1, T2> GetLine( string lineName )
+        {
+            return Lines.FirstOrDefault( t => t.LineName.Equals( lineName, StringComparison.InvariantCultureIgnoreCase ) );
+        }
+
+        public Line<T1, T2> GetLine( int index )
+        {
+            return Lines[index];
+        }
+
+        public void AddPoint( string lineName, T1 xValue, T2 yValue )
+        {
+            var line = GetLine( lineName );
+
+            if (line == default( Line<T1, T2> ))
+            {
+                line = new Line<T1, T2>() { LineName = lineName };
+                AddLine( line );
+            }
+
+            line.AddPoint( xValue, yValue ); // add point to line.
+        }
+
+        public void AddLine( Line<T1, T2> line )
         {
             Lines.Add( line );
         }
 
-        private double GetTitleHeight()
+        private void Sort()
         {
-            return !string.IsNullOrWhiteSpace( ChartTitle ) ? TitleTextStyle.FontSize * 4 : 0;
+            foreach (var line in Lines) line.Sort();
         }
 
-        private void RenderChart()
+        protected override void RenderChartImpl()
         {
-            LineGroup.Children.Clear();
-            HorizontalAxisGroup.Children.Clear();
-            VerticalAxisGroup.Children.Clear();
+            // labeled axis is on the bottom.
 
+            var horizontalAxisLocations = new double[] { };
+            var verticalAxisLocations = new double[] { };
+            var horizontalIntervals = SVGAxisHelpers.SuggestIntervals( Width );
+            var verticalIntervals = SVGAxisHelpers.SuggestIntervals( Height );
+            //T1 horizontalMin, horizontalMax;
+            //T2 verticalMin, verticalMax;
+            Sort();
+            //GetChartLimits( out horizontalMin, out horizontalMax, out verticalMin, out verticalMax );
+            var horizontalSet = GetHorizontalSet().ToList();
+            var verticalSet = GetVerticalSet().ToList();
+            if (LabeledAxis.IncludeDefault) horizontalSet.Insert( 0, default( T1 ) );
+            if (MeasuredAxis.IncludeDefault) verticalSet.Insert( 0, default( T2 ) );
+            LabeledAxis.SetTicks( LabeledAxisTickAlgorithm.SuggestTicks( horizontalSet, horizontalIntervals ) );
+            MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( verticalSet, verticalIntervals ) );
+
+            var horizontalClone = LabeledAxis.Clone() as IAxis<T1>;
+
+            // Because of how SVG renders we must reverse the measured values first.
+            var measuredClone = MeasuredAxis.Clone() as IAxis<T2>;
+            measuredClone.SetTicks( measuredClone.Ticks.Reverse() );
+
+            SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, Width, Height, 0, GetTitleHeight(),
+                                       VerticalAxisGroup, HorizontalAxisGroup,
+                                       out verticalAxisLocations, out horizontalAxisLocations );
+
+            var baseLineY = verticalAxisLocations.Max();
+            var baseLineX = horizontalAxisLocations.Min();
+            var horizSpace = verticalAxisLocations.Min();
+            var chartableWidth = horizontalAxisLocations.Max() - horizontalAxisLocations.Min();
+            var chartableHeight = verticalAxisLocations.Max() - verticalAxisLocations.Min();
+            var i = 0;
+            foreach (var line in Lines)
+            {
+                var svgLine = new SVGPath()
+                {
+                    StrokeWidth = 2,
+                    FillOpacity = 1,
+                    Stroke = string.IsNullOrWhiteSpace( line.Color ) ? Helpers.GetColor( Colors, i++ ) : line.Color,
+                    Fill = "none"
+                };
+                svgLine.MoveTo( baseLineX, baseLineY );
+                foreach (var point in line.Values)
+                {
+                    var x = LabeledAxisTickAlgorithm.Subtract( horizontalSet, point.Item1, LabeledAxisTickAlgorithm.Min( horizontalSet ) );
+                    var y = MeasuredAxisTickAlgorithm.Subtract( verticalSet, point.Item2, MeasuredAxisTickAlgorithm.Min( verticalSet ) );
+                    var px = baseLineX + LabeledAxisTickAlgorithm.Percentage( horizontalSet, point.Item1 ) * chartableWidth;
+                    var py = (chartableHeight - MeasuredAxisTickAlgorithm.Percentage( verticalSet, point.Item2 ) * chartableHeight) + horizSpace;
+                    //var px = LabeledAxisTickAlgorithm.Percentage( (x * baseLineX / chartableWidth), horizontalMin, horizontalMax );
+                    //var py = MeasuredAxisTickAlgorithm.Percentage( (y * baseLineY / chartableHeight) / 100, verticalMin, verticalMax );
+                    svgLine.LineTo( px, py );
+                }
+                ChartGroup.Add( svgLine );
+            }
         }
 
-        public override string Render()
+        private IEnumerable<T1> GetHorizontalSet()
         {
-            RenderChart();
-            return base.Render();
+            var set = new List<T1>();
+            foreach (var line in Lines)
+            {
+                set.AddRange( line.Values.Select( t => t.Item1 ) );
+            }
+            return set;
+        }
+
+        private IEnumerable<T2> GetVerticalSet()
+        {
+            var set = new List<T2>();
+            foreach (var line in Lines)
+            {
+                set.AddRange( line.Values.Select( t => t.Item2 ) );
+            }
+            return set;
+        }
+
+        private void GetChartLimits( out T1 horizontalMin, out T1 horizontalMax, out T2 verticalMin, out T2 verticalMax )
+        {
+            horizontalMin = horizontalMax = default( T1 );
+            verticalMin = verticalMax = default( T2 );
+            foreach (var line in Lines)
+            {
+                var lineXMinimum = line.Values.Min( t => t.Item1 );
+                var lineXMaximum = line.Values.Max( t => t.Item1 );
+
+                var lineYMinimum = line.Values.Min( t => t.Item2 );
+                var lineYMaximum = line.Values.Max( t => t.Item2 );
+
+                horizontalMin = lineXMinimum.CompareTo( horizontalMin ) < 0 ? lineXMinimum : horizontalMin;
+                horizontalMax = lineXMaximum.CompareTo( horizontalMax ) > 0 ? lineXMaximum : horizontalMax;
+
+                verticalMin = lineYMinimum.CompareTo( verticalMin ) < 0 ? lineYMinimum : verticalMin;
+                verticalMax = lineYMaximum.CompareTo( verticalMax ) > 0 ? lineYMaximum : verticalMax;
+            }
         }
     }
 }

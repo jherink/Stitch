@@ -29,17 +29,20 @@ namespace HydraDoc.Chart.Axis
 
             foreach (var tick in axis.Ticks)
             {
-                var text = new SVGText()
+                if (axis.Visible)
                 {
-                    X = x,
-                    Y = startY - (axis.AxisTextStyle.FontSize / 4),
+                    var text = new SVGText()
+                    {
+                        X = x,
+                        Y = startY - (axis.AxisTextStyle.FontSize / 4),
 
-                };
-                text.StyleList.Add( "font-size", $"{axis.AxisTextStyle.FontSize}px" );
+                    };
+                    text.StyleList.Add( "font-size", $"{axis.AxisTextStyle.FontSize}px" );
 
-                var formattedLabel = FormatValueToAxisSpecification( tick, axis.Format );
-                text.Text.Append( formattedLabel );
-                group.Add( text );
+                    var formattedLabel = FormatValueToAxisSpecification( tick, axis.Format );
+                    text.Text.Append( formattedLabel );
+                    group.Add( text );
+                }
 
                 if (axis.GridLines)
                 { // Add grid lines
@@ -73,23 +76,25 @@ namespace HydraDoc.Chart.Axis
 
             foreach (var label in axis.Ticks)
             {
-                var formattedLabel = FormatValueToAxisSpecification( label, axis.Format );
-                var text = new SVGText()
+                if (axis.Visible)
                 {
-                    X = startX - (formattedLabel.Length - 1) * axis.AxisTextStyle.FontSize / 2
-                };
-                if (maxTickLength > MaxHorizontalAxisLength)
-                {
-                    text.X = startX - axis.AxisTextStyle.FontSize / 2;
-                    textY = gridBottomY;
-                    text.Transform = $"rotate(90 {startX - axis.AxisTextStyle.FontSize},{textY})";
+                    var formattedLabel = FormatValueToAxisSpecification( label, axis.Format );
+                    var text = new SVGText()
+                    {
+                        X = startX - (formattedLabel.Length - 1) * axis.AxisTextStyle.FontSize / 2
+                    };
+                    if (maxTickLength > MaxHorizontalAxisLength)
+                    {
+                        text.X = startX - axis.AxisTextStyle.FontSize / 2;
+                        textY = gridBottomY;
+                        text.Transform = $"rotate(90 {startX - axis.AxisTextStyle.FontSize},{textY})";
+                    }
+                    text.StyleList.Add( "font-size", $"{axis.AxisTextStyle.FontSize}px" );
+                    text.Y = textY;
+
+                    text.Text.Append( formattedLabel );
+                    group.Add( text );
                 }
-                text.StyleList.Add( "font-size", $"{axis.AxisTextStyle.FontSize}px" );
-                text.Y = textY;
-
-                text.Text.Append( formattedLabel );
-                group.Add( text );
-
                 if (axis.GridLines)
                 { // add grid lines
                     var labeledRect = new SVGRectangle()
@@ -218,83 +223,6 @@ namespace HydraDoc.Chart.Axis
             }
 
         }
-
-        #region Approximating Axis Intervals
-
-        private static readonly int[] bases = { 1, 2, 5 };
-
-        private static double GetNiceInterval( double min, double max, int n )
-        {
-
-            var rawInterval = (max - min) / n;
-            var rawExponent = Math.Log10( rawInterval );
-
-            var exponents = new[] { Math.Floor( rawExponent ), Math.Ceiling( rawExponent ) };
-            var nicestInterval = double.PositiveInfinity;
-
-            foreach (var b in bases)
-            {
-                foreach (var exponent in exponents)
-                {
-                    var currentInterval = b * Math.Pow( 10, exponent );
-
-                    var currentDeviation = Math.Abs( rawInterval - currentInterval );
-                    var nicestDeviation = Math.Abs( rawInterval - nicestInterval );
-
-                    if (currentDeviation < nicestDeviation)
-                    {
-                        nicestInterval = currentInterval;
-                    }
-                }
-            }
-            return nicestInterval;
-        }
-
-        private static double GetFirstTickValue( double min, double interval )
-        {
-            return Math.Floor( min / interval ) * interval;
-        }
-
-        private static IEnumerable<double> GenerateTicks( double min, double max, int n, bool tight = false )
-        {
-            if (min > max)
-            {
-                var t = min;
-                min = max;
-                max = t;
-            }
-
-            var interval = GetNiceInterval( min, max, n );
-            var value = GetFirstTickValue( min, interval );
-
-            var ticks = new List<double>() { value };
-            while (value < max)
-            {
-                value += interval;
-                ticks.Add( value );
-            }
-
-            var multiplier = Math.Pow( 10, Math.Ceiling( Math.Log10( interval ) ) + 1 );
-            for (int i = 0; i < ticks.Count; i++)
-            {
-                ticks[i] = Math.Round( ticks[i] * multiplier ) / multiplier;
-            }
-
-            if (tight)
-            {
-                ticks[0] = min;
-                ticks[ticks.Count] = max;
-            }
-
-            return ticks;
-        }
-
-        #endregion
-
-        public static IEnumerable<double> SuggestTicks( double min, double max, int intervals = 5 )
-        {
-            intervals = Math.Max( intervals, 3 );
-            return GenerateTicks( min, max, intervals - 2 );
-        }
+                       
     }
 }

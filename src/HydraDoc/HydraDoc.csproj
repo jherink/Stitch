@@ -44,6 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chart\AxisChart.cs" />
+    <Compile Include="Chart\Axis\Algorithms\ITickAlgorithm.cs" />
+    <Compile Include="Chart\Axis\Algorithms\SimpleNumericTickAlgorithm.cs" />
+    <Compile Include="Chart\Axis\Algorithms\StringTickAlgorithm.cs" />
     <Compile Include="Chart\Axis\Axis.cs" />
     <Compile Include="Chart\Axis\IAxis.cs" />
     <Compile Include="Chart\Axis\SVGAxisHelpers.cs" />

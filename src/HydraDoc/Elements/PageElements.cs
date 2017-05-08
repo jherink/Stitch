@@ -302,6 +302,10 @@ namespace HydraDoc.Elements
 
         public Div( params IElement[] children )
         {
+            Add( children );
+        }
+        public void Add( params IElement[] children )
+        {
             foreach (var child in children) { Children.Add( child ); }
         }
     }

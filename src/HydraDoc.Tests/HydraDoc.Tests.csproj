@@ -86,6 +86,7 @@
     <Compile Include="GraphTests.cs" />
     <Compile Include="ChartTests.cs" />
     <Compile Include="ExportTest.cs" />
+    <Compile Include="TickAlgorithmTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

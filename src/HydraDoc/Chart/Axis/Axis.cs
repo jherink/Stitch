@@ -64,6 +64,8 @@ namespace HydraDoc.Chart.Axis
 
         public double GraphHeight { get; set; }
 
+        public bool Visible { get; set; } = true;
+
         #endregion
 
         #region Constructors

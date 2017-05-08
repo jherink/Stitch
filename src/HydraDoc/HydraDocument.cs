@@ -83,9 +83,9 @@ namespace HydraDoc
         /// Add an element to the body of the document.
         /// </summary>
         /// <param name="element"></param>
-        public void Add( IElement element )
+        public void Add( params IElement[] elements )
         {
-            Body.Children.Add( element );
+            foreach (var element in elements) Body.Children.Add( element );
         }
 
         public bool Remove( IElement element )
