@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace HydraDoc.Chart.Axis
 {
-    public interface IAxis<T> where T : IComparable<T>
+    public interface IAxis<T> : ICloneable where T : IComparable<T>
     {
-        //double AxisLength { get; set; }
+        bool IncludeDefault { get; set; }
         string BaselineColor { get; set; }
         bool ReverseDirection { get; set; }
         ITextStyle AxisTextStyle { get; set; }
@@ -15,14 +15,9 @@ namespace HydraDoc.Chart.Axis
         string GridLineColor { get; set; }
         IReadOnlyList<T> Ticks { get; }
         string AxisTitle { get; set; }
-        ITextStyle TitleTextStyle { get; set; }
-        //Orientation Orientation { get; set; }
+        ITextStyle AxisTitleTextStyle { get; set; }
         T MaxValue { get; }
-        T MinValue { get; }
-        IEnumerable<double> SuggestTicks( double min, double max, int intervals );
+        T MinValue { get; }        
         void SetTicks( IEnumerable<T> ticks );
-        //double GraphWidth { get; set; }
-        //double GraphHeight { get; set; }
-        //IEnumerable<ISVGText> GenerateAxisData( IEnumerable<T> ticks );
     }
 }

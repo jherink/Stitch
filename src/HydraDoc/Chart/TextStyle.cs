@@ -1,8 +1,9 @@
 ﻿using HydraDoc.Elements.Interface;
+using System;
 
 namespace HydraDoc.Chart
 {
-    public interface ITextStyle
+    public interface ITextStyle : ICloneable
     {
         bool Bold { get; set; }
 
@@ -14,6 +15,7 @@ namespace HydraDoc.Chart
 
         string FontName { get; set; }
 
+        void ApplyStyle( IElement element );
     }
 
     public class TextStyle : ITextStyle
@@ -92,6 +94,19 @@ namespace HydraDoc.Chart
             {
                 AppliedElement.StyleList.Add( "font-family", value );
             }
+        }
+
+        public void ApplyStyle( IElement element )
+        {
+            foreach (var style in AppliedElement.StyleList)
+            {
+                element.StyleList.Add( style );
+            }
+        }
+
+        public object Clone()
+        {
+            return new TextStyle( AppliedElement.Clone() as IElement );
         }
     }
 

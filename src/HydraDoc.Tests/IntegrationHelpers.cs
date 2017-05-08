@@ -45,7 +45,7 @@ namespace HydraDoc.Tests
         {
             SaveToTemp( name, doc );
             if (!name.EndsWith( ".pdf" )) name += ".pdf";
-            
+
             var path = Path.Combine( EnsuredTempDirectory(), name );
             doc.ExportToPdf( path );
         }
@@ -83,7 +83,7 @@ namespace HydraDoc.Tests
             return conn;
         }
 
-        public static DataTable GetSalesByCategory(string category)
+        public static DataTable GetSalesByCategory( string category )
         {
             var data = new DataTable();
             using (var connection = CreateNorthwindConnection())
@@ -96,6 +96,22 @@ namespace HydraDoc.Tests
                 adapter.Fill( data );
                 data.Columns[0].ColumnName = "Product Name";
                 data.Columns[1].ColumnName = "Total Purchase";
+            }
+            return data;
+        }
+
+        public static DataTable GetYearSummarySales()
+        {
+            var query = @"select YEAR(CAST(s.ShippedDate AS date)) AS year, SUM(s.Subtotal) AS total
+FROM dbo.[Summary of Sales by Year] AS s
+GROUP BY YEAR(CAST(s.ShippedDate AS date))
+ORDER BY YEAR";
+            var data = new DataTable();
+            using (var connection = CreateNorthwindConnection())
+            {
+                var cmd = new SqlCommand( query, connection );
+                var adapter = new SqlDataAdapter( cmd );
+                adapter.Fill( data );
             }
             return data;
         }

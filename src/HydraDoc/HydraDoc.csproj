@@ -54,6 +54,7 @@
     <Compile Include="Chart\Formatters\UnitFormat.cs" />
     <Compile Include="Chart\Helpers.cs" />
     <Compile Include="Chart\Interface\IChartArea.cs" />
+    <Compile Include="Chart\LineChart.cs" />
     <Compile Include="Chart\PieChart.cs" />
     <Compile Include="Chart\TextStyle.cs" />
     <Compile Include="CSS\CSSResourceResolver.cs" />
