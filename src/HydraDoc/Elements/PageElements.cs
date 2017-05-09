@@ -218,15 +218,8 @@ namespace HydraDoc.Elements
             builder.Append( $">{Content.Render()}</{Tag}>" );
             return builder.ToString();
         }
-
-        //public object Clone()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public Paragraph()
+        public Paragraph() : this (string.Empty)
         {
-            Content = new DOMString();
         }
 
         public Paragraph( string content )

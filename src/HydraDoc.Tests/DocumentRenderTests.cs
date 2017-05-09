@@ -4,6 +4,8 @@ using HydraDoc.Elements;
 using System.Collections.Generic;
 using HydraDoc.Elements.Interface;
 using System.Linq;
+using HydraDoc.Chart;
+using System.Data;
 
 namespace HydraDoc.Tests
 {
@@ -384,7 +386,29 @@ namespace HydraDoc.Tests
             doc.Add( rowDiv );
             doc.Body.ClassList.Add( "w3-content" );
 
-            IntegrationHelpers.SaveToTemp( "W3CSSSampleTest", doc );
+            //IntegrationHelpers.SaveToTemp( "W3CSSSampleTest", doc );
+            IntegrationHelpers.ExportPdfToTemp( "W3CSSSampleTest", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void ExportTest01()
+        {
+            var doc = new HydraDocument();
+            var container = doc.AddBodyContainer();
+            container.Children.Add( new Heading( HeadingLevel.H3, "Total Beverage Amounts" ) );
+            container.Children.Add( new HorizontalRule() );
+
+            var salesData = IntegrationHelpers.GetSalesByCategory( "Beverages" );
+            var chart = new PieChart( 850, 400 );
+            chart.LegendPosition = LegendPosition.Right;
+            foreach (DataRow row in salesData.Rows)
+            {
+                chart.AddSlice( row["Product Name"] as string, double.Parse( row["Total Purchase"].ToString() ) );
+            }
+            container.Children.Add( chart );
+            container.Children.Add( ElementFactory.CreateTable( salesData ) );
+
+            IntegrationHelpers.ExportPdfToTemp( "ExportTest01", doc );
         }
     }
 }

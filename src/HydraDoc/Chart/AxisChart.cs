@@ -80,6 +80,7 @@ namespace HydraDoc.Chart
         protected AxisChart( int width, int height ) : base( height, width )
         {
             StyleList.Add( "overflow: visible;" );
+            StyleList.Add( "width", "100%" );
             Children.Add( TitleGroup );
 
             SvgTitle = new SVGText();

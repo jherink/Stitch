@@ -54,22 +54,7 @@ namespace HydraDoc
             // add a custom styles style sheet for user defined rules.
             CustomStyles = ElementFactory.CreateStyle( new StyleSheet() );
             Head.Styles.Add( CustomStyles );
-
-            //var assembly = typeof( StyleSheet ).Assembly;
-            //var name = "HydraDoc.CSS.Themes.w3.css";
-            //using (var stream = assembly.GetManifestResourceStream( name ))
-            //{
-            //    using (var reader = new StreamReader( stream ))
-            //    {
-            //        var parser = new Parser();
-            //        Head.Styles.Add( ElementFactory.CreateStyle( parser.Parse( reader.ReadToEnd() ) ) );
-            //    }
-            //}
-
-            // load w3 style.
-            //var loader = new CssThemeLoader();
-            //loader.LoadThemeResource( "w3" );
-            //Head.Styles.Add( ElementFactory.CreateStyle(loader.StyleSheet) );
+            Body.StyleList.Add( "max-width", "1024px !important" );
         }
 
         public IDivElement AddBodyContainer()
@@ -87,7 +72,7 @@ namespace HydraDoc
         {
             foreach (var element in elements) Body.Children.Add( element );
         }
-
+        
         public bool Remove( IElement element )
         {
             return Body.Children.Remove( element );
@@ -115,6 +100,19 @@ namespace HydraDoc
             {
                 CustomStyles.StyleSheet.Rules.Add( rule );
             }
+        }
+
+        public void InsertPageBreak()
+        {
+            var last = Body.Children.Last();
+            if (last is IDivElement && last.ClassList.Contains( "w3-container" )) last = (last as IDivElement).Children.Last();
+            InsertPageBreak( last );
+        }
+
+        public IElement InsertPageBreak( IElement element )
+        {
+            element.StyleList.Add( "page-break-after", "always" );
+            return element;
         }
 
         public IElement Find( string id )

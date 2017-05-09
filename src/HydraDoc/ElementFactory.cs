@@ -303,9 +303,6 @@ namespace HydraDoc
 
         public static ITableElement CreateTable()
         {
-            //    var table = new Table( new string[] { } ) { ID = Inst.GetElementId().ToString() };
-            //    table.ClassList.Add( "w3-table" );
-            //    return table;
             return CreateTable( new string[] { } );
         }
 

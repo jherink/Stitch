@@ -88,7 +88,6 @@ namespace HydraDoc.Chart
             //T1 horizontalMin, horizontalMax;
             //T2 verticalMin, verticalMax;
             Sort();
-            //GetChartLimits( out horizontalMin, out horizontalMax, out verticalMin, out verticalMax );
             var horizontalSet = GetHorizontalSet().ToList();
             var verticalSet = GetVerticalSet().ToList();
             if (LabeledAxis.IncludeDefault) horizontalSet.Insert( 0, default( T1 ) );
@@ -121,15 +120,29 @@ namespace HydraDoc.Chart
                     Stroke = string.IsNullOrWhiteSpace( line.Color ) ? Helpers.GetColor( Colors, i++ ) : line.Color,
                     Fill = "none"
                 };
-                svgLine.MoveTo( baseLineX, baseLineY );
+                int lineI = 0;
+
                 foreach (var point in line.Values)
                 {
                     var x = LabeledAxisTickAlgorithm.Subtract( horizontalSet, point.Item1, LabeledAxisTickAlgorithm.Min( horizontalSet ) );
                     var y = MeasuredAxisTickAlgorithm.Subtract( verticalSet, point.Item2, MeasuredAxisTickAlgorithm.Min( verticalSet ) );
-                    var px = baseLineX + LabeledAxisTickAlgorithm.Percentage( horizontalSet, point.Item1 ) * chartableWidth;
-                    var py = (chartableHeight - MeasuredAxisTickAlgorithm.Percentage( verticalSet, point.Item2 ) * chartableHeight) + horizSpace;
-                    //var px = LabeledAxisTickAlgorithm.Percentage( (x * baseLineX / chartableWidth), horizontalMin, horizontalMax );
-                    //var py = MeasuredAxisTickAlgorithm.Percentage( (y * baseLineY / chartableHeight) / 100, verticalMin, verticalMax );
+                    var pctX = LabeledAxisTickAlgorithm.Percentage( horizontalSet, point.Item1 );
+                    var pctY = MeasuredAxisTickAlgorithm.Percentage( verticalSet, point.Item2 );
+                    var px = baseLineX + pctX * chartableWidth;
+                    var py = (chartableHeight - pctY * chartableHeight) + horizSpace;
+
+                    if (lineI++ == 0)
+                    { // move to start point if first line point.
+                        if (!LabeledAxis.IncludeDefault && MeasuredAxis.IncludeDefault)
+                        {
+                            svgLine.MoveTo( baseLineX, py );
+                        }
+                        else 
+                        {
+                            svgLine.MoveTo( baseLineX, baseLineY );
+                        }
+                    }
+
                     svgLine.LineTo( px, py );
                 }
                 ChartGroup.Add( svgLine );
@@ -154,26 +167,6 @@ namespace HydraDoc.Chart
                 set.AddRange( line.Values.Select( t => t.Item2 ) );
             }
             return set;
-        }
-
-        private void GetChartLimits( out T1 horizontalMin, out T1 horizontalMax, out T2 verticalMin, out T2 verticalMax )
-        {
-            horizontalMin = horizontalMax = default( T1 );
-            verticalMin = verticalMax = default( T2 );
-            foreach (var line in Lines)
-            {
-                var lineXMinimum = line.Values.Min( t => t.Item1 );
-                var lineXMaximum = line.Values.Max( t => t.Item1 );
-
-                var lineYMinimum = line.Values.Min( t => t.Item2 );
-                var lineYMaximum = line.Values.Max( t => t.Item2 );
-
-                horizontalMin = lineXMinimum.CompareTo( horizontalMin ) < 0 ? lineXMinimum : horizontalMin;
-                horizontalMax = lineXMaximum.CompareTo( horizontalMax ) > 0 ? lineXMaximum : horizontalMax;
-
-                verticalMin = lineYMinimum.CompareTo( verticalMin ) < 0 ? lineYMinimum : verticalMin;
-                verticalMax = lineYMaximum.CompareTo( verticalMax ) > 0 ? lineYMaximum : verticalMax;
-            }
-        }
+        }       
     }
 }

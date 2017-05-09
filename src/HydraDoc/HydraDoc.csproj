@@ -56,7 +56,7 @@
     <Compile Include="Chart\Formatters\NumericFormat.cs" />
     <Compile Include="Chart\Formatters\ScientificFormat.cs" />
     <Compile Include="Chart\Formatters\UnitFormat.cs" />
-    <Compile Include="Chart\Helpers.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Chart\Interface\IChartArea.cs" />
     <Compile Include="Chart\LineChart.cs" />
     <Compile Include="Chart\PieChart.cs" />
@@ -180,12 +180,6 @@
     <Compile Include="Chart\Interface\IChart.cs" />
     <Compile Include="Export\IExporter.cs" />
     <Compile Include="Export\PDFExporter.cs" />
-    <Compile Include="Graph\BarGraph.cs" />
-    <Compile Include="Graph\Graph.cs" />
-    <Compile Include="Graph\HorizontalBarChart.cs" />
-    <Compile Include="Graph\IGraph.cs" />
-    <Compile Include="Graph\LineGraph.cs" />
-    <Compile Include="Graph\ScatterPlot.cs" />
     <Compile Include="HydraDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

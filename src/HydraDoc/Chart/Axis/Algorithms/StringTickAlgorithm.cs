@@ -30,7 +30,7 @@ namespace HydraDoc.Chart.Axis.Algorithms
                 if ((val == null && value == null) || (val != null && val.Equals( value ))) break;
                 i += 1;
             }
-            return i / range.Count();
+            return i / (range.Count() - 1);
         }
 
         public double Subtract( IEnumerable<string> set, string a, string b )

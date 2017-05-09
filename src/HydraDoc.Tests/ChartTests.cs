@@ -363,11 +363,13 @@ namespace HydraDoc.Tests
             chart2.AddPoint( "Temperatures In NY City", "Thursday", 57 );
             chart2.AddPoint( "Temperatures In NY City", "Friday", 59 );
             chart2.AddPoint( "Temperatures In NY City", "Saturday", 69 );
+            chart2.AddPoint( "Temperatures In NY City", "Sunday", 51 );
+            chart2.LabeledAxis.IncludeDefault = false;
 
             chart.GetLine( 0 ).Color = "green";
             chart2.GetLine( 0 ).Color = "red";
 
-            doc.Add( chart, chart2 );
+            doc.Add( chart, chart2, chart.Clone() as LineChart<double, double> );
             IntegrationHelpers.SaveToTemp( "TemperaturesLineGraphTest", doc );
         }
     }

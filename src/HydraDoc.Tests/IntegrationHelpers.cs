@@ -75,7 +75,7 @@ namespace HydraDoc.Tests
             return dt;
         }
 
-        private static SqlConnection CreateNorthwindConnection()
+        public static SqlConnection CreateNorthwindConnection()
         {
             var dbPath = Path.Combine( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ), "Data\\Northwind.mdf" );
             var conn = new SqlConnection( $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"{dbPath}\";Integrated Security=True;Connect Timeout=30" );
@@ -100,9 +100,24 @@ namespace HydraDoc.Tests
             return data;
         }
 
+        public static int TotalProductCount()
+        {
+            var query = @"SELECT COUNT(p.ProductID) AS NumberOfProducts FROM
+dbo.Products AS p
+WHERE p.Discontinued = 0";
+            var data = new DataTable();
+            using (var connection = CreateNorthwindConnection())
+            {
+                var cmd = new SqlCommand( query, connection );
+                var adapter = new SqlDataAdapter( cmd );
+                adapter.Fill( data );
+            }
+            return (int)(data.Rows[0]["NumberOfProducts"]);
+        }
+
         public static DataTable GetYearSummarySales()
         {
-            var query = @"select YEAR(CAST(s.ShippedDate AS date)) AS year, SUM(s.Subtotal) AS total
+            var query = @"select YEAR(CAST(s.ShippedDate AS date)) AS Year, FORMAT(SUM(s.Subtotal), 'C') AS Total
 FROM dbo.[Summary of Sales by Year] AS s
 GROUP BY YEAR(CAST(s.ShippedDate AS date))
 ORDER BY YEAR";
@@ -110,6 +125,49 @@ ORDER BY YEAR";
             using (var connection = CreateNorthwindConnection())
             {
                 var cmd = new SqlCommand( query, connection );
+                var adapter = new SqlDataAdapter( cmd );
+                adapter.Fill( data );
+            }
+            return data;
+        }
+
+        public static DataTable GetTenMostExpensiveProducts()
+        {
+            var data = new DataTable();
+            using (var connection = CreateNorthwindConnection())
+            {
+                var cmd = new SqlCommand( "Ten Most Expensive Products", connection );
+                cmd.CommandType = CommandType.StoredProcedure;
+                var adapter = new SqlDataAdapter( cmd );
+                adapter.Fill( data );
+                data.Columns[0].ColumnName = "Products";
+                data.Columns[1].ColumnName = "Unit Price";
+            }
+            return data;
+        }
+
+        public static DataTable GetCategorySalesSummary()
+        {
+            var data = new DataTable();
+            using (var connection = CreateNorthwindConnection())
+            {
+                var cmd = new SqlCommand( "Get Category Sales Summary", connection );
+                cmd.CommandType = CommandType.StoredProcedure;
+                var adapter = new SqlDataAdapter( cmd );
+                adapter.Fill( data );
+                data.Columns[0].ColumnName = "Category Name";
+                data.Columns[1].ColumnName = "Total Sales";
+            }
+            return data;
+        }
+
+        public static DataTable GetEmployeeData()
+        {
+            var data = new DataTable();
+            using (var connection = CreateNorthwindConnection())
+            {
+                var cmd = new SqlCommand( "GetEmployeeData", connection );
+                cmd.CommandType = CommandType.StoredProcedure;
                 var adapter = new SqlDataAdapter( cmd );
                 adapter.Fill( data );
             }

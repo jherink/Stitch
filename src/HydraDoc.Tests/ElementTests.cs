@@ -26,7 +26,7 @@ namespace HydraDoc.Tests
         {
             var type = typeof( IElement );
             var assem = Assembly.GetAssembly( type );
-            var elementTypes = assem.GetTypes().Where( p => type.IsAssignableFrom( p ) && !p.IsAbstract );
+            var elementTypes = assem.GetTypes().Where( p => type.IsAssignableFrom( p ) && !p.IsAbstract && !p.ContainsGenericParameters );
             foreach (var elementType in elementTypes)
             {
                 try
