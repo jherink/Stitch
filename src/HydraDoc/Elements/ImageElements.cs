@@ -32,8 +32,12 @@ namespace HydraDoc.Elements
         public override string Render()
         {
             var builder = new StringBuilder();
-            var src = Src.IsAbsoluteUri ? Src.AbsoluteUri : Src.OriginalString;
-            builder.Append( $"<{Tag} src=\"{src}\"" ); // there must be a source.
+            builder.Append( $"<{Tag} " ); // there must be a source.
+            if (Src != null)
+            {
+                var src = Src.IsAbsoluteUri ? Src.AbsoluteUri : Src.OriginalString;
+                builder.Append( $"src =\"{src}\"" );
+            }
             if (!string.IsNullOrWhiteSpace( Alt )) builder.Append( $" alt=\"{Alt}\"" );
             AppendIdAndClassInfoToTag( builder );
 

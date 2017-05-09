@@ -51,7 +51,7 @@ namespace HydraDoc.Elements
         {
             var builder = new StringBuilder();
             builder.Append( $"<{Tag}" );
-            if (ClassList.Any()) builder.AppendLine( $" {ClassList.GetClassString()}>" );
+            base.AppendIdAndClassInfoToTag( builder );
             builder.AppendLine( ">" );
             builder.Append( RenderChildren() );
             builder.AppendLine( $"</{Tag}>" );
@@ -77,7 +77,7 @@ namespace HydraDoc.Elements
         {
             var builder = new StringBuilder();
             builder.Append( "<body" );
-            if (ClassList.Any()) builder.AppendLine( $" {ClassList.GetClassString()}" );
+            base.AppendIdAndClassInfoToTag( builder );
             builder.Append( ">" );
             builder.Append( RenderChildren() );
             builder.AppendLine( "</body>" );

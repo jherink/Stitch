@@ -9,6 +9,7 @@ using HydraDoc.Elements;
 using HydraDoc.Elements.Interface;
 using System.Globalization;
 using System.Xml;
+using HydraDoc.Export;
 
 namespace HydraDoc
 {
@@ -42,6 +43,8 @@ namespace HydraDoc
 
             // add mobile viewport meta tag.
             Head.Metas.Add( ElementFactory.CreateMeta( "viewport", "width=device-width, initial-scale=1" ) );
+            // add charset meta tag.
+            Head.Metas.Add( ElementFactory.CreateMeta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
 
             // add w3 resource.
             Head.Styles.Add( ElementFactory.CreateStyleFromResource( "w3" ) );
@@ -51,22 +54,7 @@ namespace HydraDoc
             // add a custom styles style sheet for user defined rules.
             CustomStyles = ElementFactory.CreateStyle( new StyleSheet() );
             Head.Styles.Add( CustomStyles );
-
-            //var assembly = typeof( StyleSheet ).Assembly;
-            //var name = "HydraDoc.CSS.Themes.w3.css";
-            //using (var stream = assembly.GetManifestResourceStream( name ))
-            //{
-            //    using (var reader = new StreamReader( stream ))
-            //    {
-            //        var parser = new Parser();
-            //        Head.Styles.Add( ElementFactory.CreateStyle( parser.Parse( reader.ReadToEnd() ) ) );
-            //    }
-            //}
-
-            // load w3 style.
-            //var loader = new CssThemeLoader();
-            //loader.LoadThemeResource( "w3" );
-            //Head.Styles.Add( ElementFactory.CreateStyle(loader.StyleSheet) );
+            Body.StyleList.Add( "max-width", "1024px !important" );
         }
 
         public IDivElement AddBodyContainer()
@@ -80,11 +68,11 @@ namespace HydraDoc
         /// Add an element to the body of the document.
         /// </summary>
         /// <param name="element"></param>
-        public void Add( IElement element )
+        public void Add( params IElement[] elements )
         {
-            Body.Children.Add( element );
+            foreach (var element in elements) Body.Children.Add( element );
         }
-
+        
         public bool Remove( IElement element )
         {
             return Body.Children.Remove( element );
@@ -112,6 +100,19 @@ namespace HydraDoc
             {
                 CustomStyles.StyleSheet.Rules.Add( rule );
             }
+        }
+
+        public void InsertPageBreak()
+        {
+            var last = Body.Children.Last();
+            if (last is IDivElement && last.ClassList.Contains( "w3-container" )) last = (last as IDivElement).Children.Last();
+            InsertPageBreak( last );
+        }
+
+        public IElement InsertPageBreak( IElement element )
+        {
+            element.StyleList.Add( "page-break-after", "always" );
+            return element;
         }
 
         public IElement Find( string id )
@@ -151,6 +152,25 @@ namespace HydraDoc
 
             var writer = XmlWriter.Create( path, settings );
             xml.Save( writer );
+        }
+
+        public void ExportToPdf( string path )
+        {
+            var pdfExporter = new PDFExporter();
+            using (var output = File.Create( path ))
+            {
+                Export( pdfExporter, output );
+            }
+        }
+
+        public byte[] Export( IExporter exporter )
+        {
+            return exporter.Export( Render() );
+        }
+
+        public void Export( IExporter exporter, Stream exportTo )
+        {
+            exporter.Export( Render(), exportTo );
         }
     }
 }

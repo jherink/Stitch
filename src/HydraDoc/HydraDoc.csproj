@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NReco.PdfGenerator">
+      <HintPath>..\ThirdParty\NReco.PdfGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,8 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chart\AxisChart.cs" />
+    <Compile Include="Chart\Axis\Algorithms\ITickAlgorithm.cs" />
+    <Compile Include="Chart\Axis\Algorithms\SimpleNumericTickAlgorithm.cs" />
+    <Compile Include="Chart\Axis\Algorithms\StringTickAlgorithm.cs" />
+    <Compile Include="Chart\Axis\Axis.cs" />
+    <Compile Include="Chart\Axis\IAxis.cs" />
+    <Compile Include="Chart\Axis\SVGAxisHelpers.cs" />
     <Compile Include="Chart\BarChart.cs" />
+    <Compile Include="Chart\Formatters\Format.cs" />
+    <Compile Include="Chart\Formatters\NumericFormat.cs" />
+    <Compile Include="Chart\Formatters\ScientificFormat.cs" />
+    <Compile Include="Chart\Formatters\UnitFormat.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Chart\Interface\IChartArea.cs" />
+    <Compile Include="Chart\LineChart.cs" />
     <Compile Include="Chart\PieChart.cs" />
     <Compile Include="Chart\TextStyle.cs" />
     <Compile Include="CSS\CSSResourceResolver.cs" />
@@ -162,13 +178,8 @@
     <Compile Include="Elements\TableElements.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Chart\Interface\IChart.cs" />
-    <Compile Include="Graph\BarGraph.cs" />
-    <Compile Include="Graph\Graph.cs" />
-    <Compile Include="Graph\HorizontalBarChart.cs" />
-    <Compile Include="Graph\IGraph.cs" />
-    <Compile Include="Graph\LineGraph.cs" />
-    <Compile Include="Graph\PieChart.cs" />
-    <Compile Include="Graph\ScatterPlot.cs" />
+    <Compile Include="Export\IExporter.cs" />
+    <Compile Include="Export\PDFExporter.cs" />
     <Compile Include="HydraDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using HydraDoc.Elements.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -108,6 +109,16 @@ namespace HydraDoc.Elements
 
         public override string Render()
         {
+            if (TableHead.Rows.Any())
+            {
+                var row = TableHead.Rows.First();
+                if (!row.StyleList.ContainsKey( "background-color" ))
+                {
+                    row.StyleList.Add( "background-color", Helpers.GetColor( Helpers.GetDefaultColors(), 0 ) );
+                    row.StyleList.Add( "color", "#fff" );
+                }
+            }
+
             var builder = new StringBuilder();
             builder.Append( $"<{Tag}" );
             AppendIdAndClassInfoToTag( builder );
@@ -138,81 +149,13 @@ namespace HydraDoc.Elements
             builder.AppendLine( $"</{Tag}>" ); // close table
             return builder.ToString();
         }
-
-        //public IElement FindById( string id )
-        //{
-        //    if (TableHead != null)
-        //    {
-        //        if (TableHead.ID == id) return TableHead;
-        //        var element = TableHead.FindById( id );
-        //        if (element != default( IElement )) return element;
-        //    }
-
-        //    if (TableFooter != null)
-        //    {
-        //        if (TableFooter.ID == id) return TableFooter;
-        //        var element = TableFooter.FindById( id );
-        //        if (element != default( IElement )) return element;
-        //    }
-
-        //    foreach (var tableBody in TableBodies)
-        //    {
-        //        if (tableBody.ID == id) return tableBody;
-        //        var element = tableBody.FindById( id );
-        //        if (element != default( IElement )) return element;
-        //    }
-
-        //    return default( IElement );
-        //}
-
-        //public IEnumerable<IElement> GetAllNodes()
-        //{
-        //    var nodes = new List<IElement>();
-        //    if (TableHead != null)
-        //    {
-        //        nodes.Add( TableHead );
-        //        nodes.AddRange( TableHead.GetAllNodes() );
-        //    }
-        //    foreach (var body in TableBodies)
-        //    {
-        //        nodes.Add( body );
-        //        nodes.AddRange( body.GetAllNodes() );
-        //    }
-        //    if (TableFooter != null)
-        //    {
-        //        nodes.Add( TableFooter );
-        //        nodes.AddRange( TableFooter.GetAllNodes() );
-        //    }
-        //    return nodes;
-        //}
-
-        //public IEnumerable<IElement> GetNodes( string tagFilter )
-        //{
-        //    var nodes = new List<IElement>();
-        //    if (TableHead != null)
-        //    {
-        //        nodes.Add( TableHead );
-        //        nodes.AddRange( TableHead.GetNodes( tagFilter ) );
-        //    }
-        //    foreach (var body in TableBodies)
-        //    {
-        //        nodes.Add( body );
-        //        nodes.AddRange( body.GetNodes( tagFilter ) );
-        //    }
-        //    if (TableFooter != null)
-        //    {
-        //        nodes.Add( TableFooter );
-        //        nodes.AddRange( TableFooter.GetNodes( tagFilter ) );
-        //    }
-        //    return nodes;
-        //}
-
+        
         public ITableSectionElement AddBody()
         {
             var body = new TableBody();
             Children.Remove( TableFooter );
             Children.Add( body );
-            Children.Add( TableFooter );
+            if (TableFooter != null) Children.Add( TableFooter );
             return body;
         }
 
@@ -223,68 +166,71 @@ namespace HydraDoc.Elements
             TableHead = new TableHeader();
             Children.Add( new TableBody() );
             TableFooter = new TableFooter();
+            ClassList.Add( "w3-table", "w3-table-all" );
+            
         }
 
-        public Table( params string[] headings )
+        public Table( DataTable table ) : this( )
         {
-            TableHead = new TableHeader();
+            var row = new TableRow();
+            foreach (DataColumn column in table.Columns)
+            {
+                row.Children.Add( new TableCell( new DOMString( new PlainText( column.ColumnName ) ) ) );
+            }
+            if (row.Children.Any()) TableHead.Children.Add( row );
+
+            var body = AddBody();
+            foreach (DataRow tableRow in table.Rows)
+            {
+                body.Children.Add( CreateRow( tableRow ) );
+            }
         }
 
-        //public override object Clone()
-        //{
-        //    //var tasks = new Task[2];
-        //    var baseClone = (ITableElement)base.Clone();
-        //    //int i = 0;
-
-        //    //tasks[i++] = Task.Factory.StartNew( () =>
-        //    // {
-        //     //    if (TableHead != null) baseClone.TableHead = (ITableSectionElement)TableHead.Clone();
-        //     //    if (TableCaption != null) baseClone.TableCaption = (ITableCaptionElement)TableCaption.Clone();
-        //     //    if (TableFooter != null) baseClone.TableFooter = (ITableSectionElement)TableFooter.Clone();
-        //     //} );
-
-        //    //baseClone.TableBodies = new List<ITableSectionElement>();
-        //    //tasks[i++] = Task.Factory.StartNew( () =>
-        //    // {
-        //    //     foreach (var body in TableBodies)
-        //    //     {
-        //    //         baseClone.TableBodies.Add( (ITableSectionElement)body.Clone() );
-        //    //     }
-        //    // } );
-
-        //    Task.WaitAll( tasks );
-
-        //    return baseClone;
-        //}
+        public Table( params string[] headings ) : this()
+        {
+            var tableRow = new TableRow();
+            foreach (var heading in headings)
+            {
+                var cell = new TableCell();
+                cell.Content.Append( heading );
+                tableRow.Children.Add( cell );
+            }
+            if (tableRow.Children.Any()) TableHead.Children.Add( tableRow );
+        }
 
         public ITableRowElement CreateRow()
         {
-            ITableSectionElement body;
-            var bodies = TableBodies.ToArray();
-            if (bodies.Length > 0)
-            {
-                body = TableBodies.Last();
-            }
-            else
-            {
-                body = new TableBody();
-                Children.Add( body );
-                //TableBodies.Add( body );
-            }
-            var row = new TableRow();
-            body.Children.Add( row );
+            //ITableSectionElement body;
+            //var bodies = TableBodies.ToArray();
+            //if (bodies.Length > 0)
+            //{
+            //    body = TableBodies.Last();
+            //}
+            //else
+            //{
+            //    body = new TableBody();
+            //    Children.Add( body );
+            //    //TableBodies.Add( body );
+            //}
+            //var row = new TableRow();
+            //body.Children.Add( row );
 
-            return row;
+            return new TableRow();
+        }
+
+        public ITableRowElement CreateRow( DataRow row )
+        {
+            var row2 = row.ItemArray.Select( t => new DOMString( new PlainText( t.ToString() ) ) ).ToArray();
+            return CreateRow( row2 );
         }
 
         public ITableRowElement CreateRow( params DOMString[] data )
         {
-            var row = CreateRow();
+            var row = new TableRow();
             foreach (var item in data)
             {
                 row.Children.Add( new TableCell( item ) );
             }
-
             return row;
         }
     }

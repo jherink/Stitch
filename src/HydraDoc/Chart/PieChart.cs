@@ -69,103 +69,32 @@ namespace HydraDoc.Chart
     {
         #region IChart Implementation
 
-        public AdvancedTextStyle TitleTextStyle { get; set; } = new AdvancedTextStyle();
+        public ITextStyle TitleTextStyle { get; set; }
 
-        int IChart.Width
-        {
-            get
-            {
-                return (int)base.Width;
-            }
-
-            set
-            {
-                base.Width = value;
-            }
-        }
-
-        int IChart.Height
-        {
-            get
-            {
-                return (int)base.Height;
-            }
-
-            set
-            {
-                base.Height = value;
-            }
-        }
+        public ITextStyle ChartTextStyle { get; set; }
 
         public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
 
-        public List<string> Colors { get; private set; } = new List<string>()
-        {
-            "#3366cc",
-            "#dc3912",
-            "#ff9900",
-            "#109618",
-            "#990099",
-            "#0099c6",
-            "#dd4477",
-            "#66aa00",
-            "#b82e2e",
-            "#316395",
-            "#994499",
-            "#22aa99",
-            "#aaaa11",
-            "#6633cc",
-            "#e67300",
-            "#8b0707",
-            "#651067",
-            "#329262",
-            "#5574a6",
-            "#3b3eac",
-            "#b77322",
-            "#16d620",
-            "#16d620"
-            //"rgb(51,102,204)",
-            //"rgb(220, 57, 18)",
-            //"rgb(255,153,0)",
-            //"rgb(16,150,24)",
-            //"rgb(153,0,153)",
-            //"rgb(204,204,204)",
-            //"rgb(22,214,32)",
-            //"rgb(183,115,34)",
-            //"rgb(59,62,172)",
-            //"rgb(85, 116, 166)",
-            //"rgb(50, 146, 98)",
-            //"rgb(139, 7, 7)",
-            //"rgb(230, 115, 0)",
-            //"rgb(102, 51, 204)",
-            //"rgb(170, 170, 17)",
-            //"rgb(34, 170, 153)",
-            //"rgb(153, 68, 153)",
-            //"rgb(49, 99, 149)",
-            //"rgb(184, 46, 46)",
-            //"rgb(102, 170, 0)",
-            //"rgb(221, 68, 119)",
-            //"rgb(0, 153, 198)",
-        };
+        public List<string> Colors { get; private set; } = Helpers.GetDefaultColors();
 
         #endregion
 
         #region Properties
 
-        #region SliceVisibilityThreshold
+        //#region SliceVisibilityThreshold
 
-        private double _sliceVisibilityThreshold { get; set; } = 0;
+        //private double _sliceVisibilityThreshold { get; set; } = 0;
 
-        public double SliceVisibilityThreshold
-        {
-            get { return _sliceVisibilityThreshold; }
-            set
-            {
-                _sliceVisibilityThreshold = Quantative0To1Check( value, _sliceVisibilityThreshold );
-            }
-        }
+        //public double SliceVisibilityThreshold
+        //{
+        //    get { return _sliceVisibilityThreshold; }
+        //    set
+        //    {
+        //        _sliceVisibilityThreshold = Quantative0To1Check( value, _sliceVisibilityThreshold );
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
         #region PieHole
 
@@ -208,9 +137,9 @@ namespace HydraDoc.Chart
 
         public int FontSize { get; set; } = 14;
 
-        public string PieResidueSliceLabel { get; set; } = "Other";
+        //public string PieResidueSliceLabel { get; set; } = "Other";
 
-        public string PieResidueSliceColor { get; set; } = "#ccc";
+        //public string PieResidueSliceColor { get; set; } = "#ccc";
 
         public int PieStartAngle { get; set; }
 
@@ -265,11 +194,12 @@ namespace HydraDoc.Chart
         public PieChart( int width, int height ) : base( height, width )
         {
             StyleList.Add( "overflow: hidden;" );
-            //StyleList.Add( "transform", "rotate(-90deg)" );
             Children.Add( TitleGroup );
             Children.Add( Legend );
 
             SvgTitle = new SVGText();
+            TitleTextStyle = new TextStyle( SvgTitle );
+            ChartTextStyle = new TextStyle( this );           
 
             TitleGroup.Add( SvgTitle );
         }
@@ -287,11 +217,6 @@ namespace HydraDoc.Chart
         private double CalculateSlicePercentage( PieSlice slice )
         {
             return (slice.Value / Slices.Sum( t => t.Value )) * 100;
-        }
-
-        private string GetColor( int index )
-        {
-            return Colors[index % (Colors.Count - 1)];
         }
 
         private void RenderTitle()
@@ -339,7 +264,7 @@ namespace HydraDoc.Chart
 
                 foreach (var slice in Slices)
                 {
-                    var item = slice.CreateLegendLine( string.IsNullOrWhiteSpace( slice.Color ) ? GetColor( i++ ) : slice.Color );
+                    var item = slice.CreateLegendLine( string.IsNullOrWhiteSpace( slice.Color ) ? Helpers.GetColor( Colors, i++ ) : slice.Color );
                     var circle = item.Children[0] as SVGCircle;
                     var text = item.Children[1] as SVGText;
 
@@ -378,13 +303,17 @@ namespace HydraDoc.Chart
 
         private void CalculateSliceSizes()
         {
+            /** NOTE: "left-most & right-most refer to if you were looking at the slice
+             * facing the tip.
+             */
+
             var radius = .4 * Math.Min( Width, Height );
             var startAngle = PieStartAngle - 90.0;
             var endAngle = PieStartAngle - 90.0;
-            var cx = 2 * radius;
+            var cx = 1.5 * radius;
             var cy = (1.05 * Height) / 2;
             if (LegendPosition == LegendPosition.Left)
-            {
+            { // If the legend is on the left then we need to move the graph right so it will fit.
                 cx += Slices.Max( t => t.Text.Text.Text.Length ) * FontSize + .15 * Width;
             }
             var margin = .05 * Height;
@@ -392,81 +321,94 @@ namespace HydraDoc.Chart
             var i = 0;
             foreach (var slice in Slices)
             {
-                startAngle = endAngle;
-                endAngle += Math.Ceiling( 360 * slice.Value / total );
+                startAngle = endAngle; // start angle becomes the old end angle.
+                endAngle += Math.Ceiling( 360 * slice.Value / total ); // calculate new end angle for slice.
                 var angleDifference = endAngle - startAngle;
 
                 var _cx = cx;
                 var _cy = cy;
                 if (slice.Offset > 0)
-                {
+                {   // if offsetting slice then we need to calculate the angle between
+                    // the start and end angle and calculate a new origin for the slice's tip.
                     var midAngle = startAngle + ((endAngle - startAngle) / 2);
                     _cx += slice.Offset * radius * Math.Cos( Math.PI * midAngle / 180 );
                     _cy += slice.Offset * radius * Math.Sin( Math.PI * midAngle / 180 );
                 }
 
+                // Calculate the left-most point of the slice.
                 var x1 = _cx + radius * Math.Cos( Math.PI * startAngle / 180 );
                 var y1 = _cy + radius * Math.Sin( Math.PI * startAngle / 180 );
 
+                // Calculate the right-most point of the slice.
                 var x2 = _cx + radius * Math.Cos( Math.PI * endAngle / 180 );
                 var y2 = _cy + radius * Math.Sin( Math.PI * endAngle / 180 );
 
                 double x5 = 0, y5 = 0;
                 if (angleDifference >= 180)
-                {
+                {   // If the angle difference is greater than or equal to 50% of the graph then 
+                    // it will render incorrectly.  Add two points at the midpoint of the circle so it
+                    // will render correctly.
                     x5 = _cx + radius * Math.Cos( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
                     y5 = _cy + radius * Math.Sin( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
                 }
 
                 var path = slice.Path;
-                path.Clear();
+                path.Clear(); // Clear old path renderings.
                 if (PieHole > 0)
                 {
-                    var r2 = (1 - PieHole) * radius;
+                    var r2 = (1 - PieHole) * radius; // r2 is the new radius with the pie hole factored in.
 
+                    // Calculate a point for the left-most inner pie hole point.
                     var x3 = x1 - r2 * Math.Cos( Math.PI * startAngle / 180 );
                     var y3 = y1 - r2 * Math.Sin( Math.PI * startAngle / 180 );
 
+                    // Calculate a point for the right-most inner pie hole point.
                     var x4 = x2 - r2 * Math.Cos( Math.PI * endAngle / 180 );
                     var y4 = y2 - r2 * Math.Sin( Math.PI * endAngle / 180 );
 
+                    // move to the left-most inner pie hole point instead of the radius.
                     path.MoveTo( x3, y3 );
 
                     if (angleDifference >= 180)
-                    {
+                    {   // See note above about case where slice is 50% or more of graph.
                         var x6 = x5 - r2 * Math.Cos( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
                         var y6 = y5 - r2 * Math.Sin( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
                         path.EllipticalArc( radius - r2, radius - r2, false, false, 1, x6, y6 );
                     }
 
+                    // Close the inner pie hole arc by moving to the right-most point.
                     path.EllipticalArc( radius - r2, radius - r2, false, false, 1, x4, y4 );
-                    path.LineTo( x2, y2 );
+                    path.LineTo( x2, y2 ); // move to right-most slice point.
 
                     if (angleDifference >= 180)
-                    {
+                    { // See note above about case where slice is 50% or more of graph.
                         path.EllipticalArc( radius, radius, false, false, 0, x5, y5 );
                     }
 
+                    // Move to left-most slice point.
                     path.EllipticalArc( radius, radius, false, false, 0, x1, y1 );
                 }
                 else
-                {
-                    path.MoveTo( _cx, _cy );
-                    path.LineTo( x1, y1 );
+                { // No pie hole.
+                    path.MoveTo( _cx, _cy ); // move to graph origin.
+                    path.LineTo( x1, y1 ); // move to left-most slice point.
 
                     if (angleDifference >= 180)
-                    {
+                    { // See note above about case where slice is 50% or more of graph.
                         path.EllipticalArc( radius, radius, false, false, 1, x5, y5 );
                     }
 
+                    // Arc to right-most slice point.
                     path.EllipticalArc( radius, radius, false, false, 1, x2, y2 );
                 }
-                path.ClosePath();
-                path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? GetColor( i++ ) : slice.Color;
+                path.ClosePath(); // Complete the slice.
+                path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? Helpers.GetColor( Colors, i++ ) : slice.Color;
 
                 var text = slice.Text;
                 text.Text.Clear();
 
+                // TODO: Calculate more precise point to draw the text and an orientation
+                // of the text so that it fits in the slice better.
                 var _tAngle = (endAngle + startAngle) / 2;
                 text.X = _cx + radius * Math.Cos( Math.PI * _tAngle / 180 );
                 text.Y = _cy + radius * Math.Sin( Math.PI * _tAngle / 180 );

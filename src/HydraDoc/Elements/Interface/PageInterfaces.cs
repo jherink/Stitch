@@ -37,6 +37,7 @@
 
     public interface IDivElement : IParentElement
     {
+        void Add( params IElement[] children );
     }
 
     public interface ISpanElement : IParentElement
