@@ -555,6 +555,11 @@ namespace HydraDoc.Elements
 
         public DOMString Text { get; set; } = new DOMString();
 
+        public string GetContent()
+        {
+            return Text.ToString();
+        }
+
         public override string Render()
         {
             var builder = new StringBuilder();

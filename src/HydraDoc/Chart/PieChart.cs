@@ -1,4 +1,5 @@
 ﻿using HydraDoc.Elements;
+using HydraDoc.Elements.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,7 @@ namespace HydraDoc.Chart
             Path.Stroke = "white";
             //Text.Fill = "white";
             Path.StrokeWidth = 1;
+            Text.StyleList.Add( "text-anchor", "middle" );
             Children.Add( Path );
             Children.Add( Text );
         }
@@ -199,7 +201,8 @@ namespace HydraDoc.Chart
 
             SvgTitle = new SVGText();
             TitleTextStyle = new TextStyle( SvgTitle );
-            ChartTextStyle = new TextStyle( this );           
+            ChartTextStyle = new TextStyle( this );
+            ChartTextStyle.FontSize = 15;
 
             TitleGroup.Add( SvgTitle );
         }
@@ -303,7 +306,7 @@ namespace HydraDoc.Chart
 
         private void CalculateSliceSizes()
         {
-            /** NOTE: "left-most & right-most refer to if you were looking at the slice
+            /** NOTE: "left-most" & "right-most" refer to if you were looking at the slice
              * facing the tip.
              */
 
@@ -405,11 +408,14 @@ namespace HydraDoc.Chart
                 path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? Helpers.GetColor( Colors, i++ ) : slice.Color;
 
                 var text = slice.Text;
+                //text.Fill = "#fff";
+                ChartTextStyle.ApplyStyle( text );
                 text.Text.Clear();
 
                 // TODO: Calculate more precise point to draw the text and an orientation
                 // of the text so that it fits in the slice better.
                 var _tAngle = (endAngle + startAngle) / 2;
+                var pct = CalculateSlicePercentage( slice );
                 text.X = _cx + radius * Math.Cos( Math.PI * _tAngle / 180 );
                 text.Y = _cy + radius * Math.Sin( Math.PI * _tAngle / 180 );
                 switch (PieSliceText)
@@ -418,38 +424,50 @@ namespace HydraDoc.Chart
                         text.Text.Append( slice.Label );
                         break;
                     case PieSliceText.Percentage:
-                        text.Text.Append( $"{CalculateSlicePercentage( slice ).ToString( "0.0" )}%" );
+                        text.Text.Append( $"{pct.ToString( "0.0" )}%" );
                         break;
                     case PieSliceText.Value:
                         text.Text.Append( $"{slice.Value.ToString( "0.0" )}" );
                         break;
                 }
+
+                var newCoords = CalculateSliceTextCoordinates( text.GetContent(), ChartTextStyle.FontSize, pct, _tAngle, _cx, _cy, x1, y1, x2, y2, text.X, text.Y );
+                text.X = newCoords.Item1;
+                text.Y= newCoords.Item2;
+                if (!newCoords.Item3) text.StyleList.Add( "display", "none" );
+                else text.StyleList.Remove( "display" );
+                //text.Fill = newCoords.Item3;
             }
         }
 
-        private Tuple<double, double> CalculateTextPostion( string text, double x, double y, double angle )
+        private void CalculateSliceTextCoordinates( string content, double cx, double cy, double x1, double y1, double x2, double y2 )
         {
-            var rAngle = angle * Math.PI / 180;
-            var _x = ((text.Length * 2) * FontSize) * Math.Cos( rAngle );
-            var _y = ((text.Length * 2) * FontSize) * Math.Sin( rAngle );
-            if (rAngle >= 0 && rAngle <= Math.PI)
-            { // quadrant 1
+            var deltaCX1 = Math.Abs( cx - x1 );
+            var deltaCY1 = Math.Abs( cy - y1 );
+            var deltaCX2 = Math.Abs( cx - x2 );
+            var deltaCY2  
+        }
 
-            }
-            else if (rAngle > Math.PI && rAngle <= 2 * Math.PI)
-            { // quadrant 2
+        private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double fontSize, double slicePct, double angle, double cx, double cy, double x1, double y1, double x2, double y2, double x, double y ) {
+            var width = content.Length * fontSize;
+            var height = 2 * fontSize;
+            var show = true;
+            var xSpan = Math.Abs( cx - x1 );
+            var ySpan = Math.Abs( cy - y1 );
+            var xSpanW = Math.Abs( x2 - x1 );
+            var ySpanH = Math.Abs( y2 - y1 );
+            
+            var deltaX = (width / 2) * Math.Cos( angle * (Math.PI / 180) );
+            var deltaY = height * Math.Sin( angle * (Math.PI / 180) );
 
-            }
-            else if (rAngle > 2 * Math.PI && rAngle <= 3 * Math.PI / 2)
-            { // quadrant 3
-
-            }
-            else
-            { // quadrant 4
-                //_x *= -1;
-                //_y *= -1;
-            }
-            return new Tuple<double, double>( x + _x, y + _y );
+            var newX = x - deltaX;
+            var newY = y - deltaY;
+            //if (slicePct < 10 && content.Length > 5)
+            //{
+            //    newX = x + deltaX;
+            //    newY = y + deltaY;
+            //}
+            return new Tuple<double, double, bool>( newX, newY, show );
         }
 
         private static double Quantative0To1Check( double newValue, double oldValue )

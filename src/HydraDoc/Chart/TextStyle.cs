@@ -100,7 +100,17 @@ namespace HydraDoc.Chart
         {
             foreach (var style in AppliedElement.StyleList)
             {
-                element.StyleList.Add( style );
+                if (!element.StyleList.Contains( style ))
+                {
+                    if (element.StyleList.ContainsKey( style.Key ))
+                    {
+                        element.StyleList[style.Key] = style.Value;
+                    }
+                    else
+                    {
+                        element.StyleList.Add( style );
+                    }
+                }
             }
         }
 

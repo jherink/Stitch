@@ -27,9 +27,9 @@ Stuff To Do
 22) Scatter plot show average line.
 23) Bar graphs use SVG instead of CSS. ( Use Google chart as reference https://google-developers.appspot.com/chart/interactive/docs/gallery) 
 
-https://css-tricks.com/making-charts-with-css/
-https://css-tricks.com/how-to-make-charts-with-svg/
-
+24) Bar codes
+25) Embedding PDF files - Pure HTML.
+26) Themes - Currently there are themes but make them better.
 
 
 ----- EXPORT NOTES -----

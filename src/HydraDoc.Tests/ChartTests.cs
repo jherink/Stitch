@@ -256,7 +256,7 @@ namespace HydraDoc.Tests
             chart.AxisOrientation = Orientation.Vertical;
             foreach (DataRow row in data.Rows)
             {
-                chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString() ) );
+                chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString().Remove(0,1) ) );
             }
             var container = doc.AddBodyContainer();
             container.Children.Add( chart );
