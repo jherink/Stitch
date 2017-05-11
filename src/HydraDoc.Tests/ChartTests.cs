@@ -132,7 +132,7 @@ namespace HydraDoc.Tests
             graph.AddSlice( "Tamil", 61 );      // #3b3eac
             graph.AddSlice( "Telugu", 74 );     // #b77322
             graph.AddSlice( "Urdu", 52 );       // #16d620
-
+            
             doc.Add( graph );
 
             IntegrationHelpers.SaveToTemp( "ExplodeSliceTest", doc );

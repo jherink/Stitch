@@ -1,0 +1,48 @@
+1)  Haversack
+2)  Walkway
+3)  Sculpture
+4)  Waffle
+5)  Clutch
+6)  Niche
+7)  Smash
+8)  Asphalt
+9)  Staircase
+10) Railway
+11) Drizzle
+12) Anchor
+13) Panther
+14) Retouch - X
+15) Bench
+16) Koala
+17) Rubbish
+18) Freckle - X
+19) Coil
+20) Frame
+21) Grip
+22) Linen
+23) Attraction
+24) Stitch
+25) Stage
+26) Fold
+27) Reaction
+28) Crush
+29) Curve
+30) Wave
+31) Discovery
+32) Platinum
+----- GEMS ----
+33) Amber
+34) Amethyst
+35) Onyx - Probably Taken
+36) Heliotrope
+37) Spinel
+38) Pyrite
+----- GODS ----
+39) Artemis
+40) Aphrodite - X
+41) Tyche
+----- FLOWERS ----
+42) Amaryllis
+43) Hyacinth
+44) Azalea
+45) Phlox

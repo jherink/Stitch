@@ -6,5 +6,9 @@ using System.Threading.Tasks;
 
 namespace HydraDoc
 {
-
+    public enum PageOrientation
+    {
+        Landscape,
+        Portrait
+    };
 }

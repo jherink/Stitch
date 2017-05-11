@@ -146,6 +146,17 @@ namespace HydraDoc.Chart
             return null;
         }
 
+        protected string GetChartTheme( int id )
+        {
+            return $"hd-chart-theme-{(id % 23)}";
+        }
+
+        protected string GetChartTextTheme( int id )
+        {
+            return $"hd-chart-text-theme-{(id % 23)}";
+        }
+
+
         public override string Render()
         {
             RenderChart();

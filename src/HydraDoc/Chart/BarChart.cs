@@ -119,8 +119,9 @@ namespace HydraDoc.Chart
                     Y = barY,
                     Width = barWidth,
                     Height = verticalSpace,
-                    Fill = string.IsNullOrWhiteSpace( bar.Color ) ? Helpers.GetColor( Colors, 0 ) : bar.Color
+                    Fill = bar.Color
                 };
+                svgBar.ClassList.Add( "hd-theme" );
 
                 ChartGroup.Add( svgBar );
             }
@@ -172,8 +173,9 @@ namespace HydraDoc.Chart
                     Y = baseLineY - barHeight,
                     Height = barHeight,
                     Width = 2* verticalSpace,
-                    Fill = string.IsNullOrWhiteSpace( bar.Color ) ? Helpers.GetColor( Colors, 0 ) : bar.Color
+                    Fill = bar.Color
                 };
+                svgBar.ClassList.Add( "hd-theme" );
 
                 ChartGroup.Add( svgBar );
             }

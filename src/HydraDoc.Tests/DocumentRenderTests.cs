@@ -17,7 +17,8 @@ namespace HydraDoc.Tests
         {
             var doc = new HydraDocument();
             doc.Head.Title = "Hello World";
-            doc.Head.Styles.Add( ElementFactory.CreateStyleFromTheme( "black" ) );
+            
+            //doc.Head.Styles.Add( ElementFactory.CreateStyleFromTheme( "black" ) );
 
             var p = ElementFactory.CreateParagraph( "Hello " );
             p.Content += new Big( "World" );
@@ -31,7 +32,7 @@ namespace HydraDoc.Tests
         {
             var doc = new HydraDocument();
             doc.Head.Title = "Hello World";
-            doc.Head.Styles.Add( ElementFactory.CreateStyleFromTheme( "green" ) );
+            //doc.Head.Styles.Add( ElementFactory.CreateStyleFromTheme( "green" ) );
 
             var div = ElementFactory.CreateDiv();
             div.ClassList.Add( "w3-theme" );

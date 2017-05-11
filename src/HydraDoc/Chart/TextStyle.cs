@@ -80,6 +80,7 @@ namespace HydraDoc.Chart
             set
             {
                 AppliedElement.StyleList.Add( "color", value );
+                AppliedElement.StyleList.Add( "fill", value );
             }
         }
 

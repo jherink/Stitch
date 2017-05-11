@@ -399,7 +399,7 @@ namespace HydraDoc.Elements
         }
     }
 
-    public class SVGGroup : SVGBaseElement, ISVGGroup
+    public class SVGGroup : SVGBaseElement, ISVGGroup, IParentElement
     {
         private List<IElement> children = new List<IElement>();
 
@@ -421,6 +421,19 @@ namespace HydraDoc.Elements
             }
         }
 
+        ICollection<IElement> IParentElement.Children
+        {
+            get
+            {
+                return children;
+            }
+
+            set
+            {
+                children = value.ToList();
+            }
+        }
+
         public override string Render()
         {
             var builder = new StringBuilder();
@@ -434,6 +447,56 @@ namespace HydraDoc.Elements
             }
             builder.AppendLine( $"</{Tag}>" );
             return builder.ToString();
+        }
+
+        public IElement FindById( string id )
+        {
+
+            foreach (var child in Children)
+            {
+                if (child.ID == id) { return child; }
+                else
+                {
+                    if (child is INodeQueryable)
+                    {
+                        var r = (child as INodeQueryable).FindById( id );
+                        if (r != default( INodeQueryable ))
+                        {
+                            return r; // exit if this node or one of it's children is it. Otherwise continue.
+                        }
+                    }
+                }
+            }
+            return default( IElement );
+        }
+
+        public virtual IEnumerable<IElement> GetAllNodes()
+        {
+            var elements = new List<IElement>();
+            foreach (var child in Children)
+            {
+                elements.Add( child );
+                if (child is INodeQueryable)
+                {
+                    elements.AddRange( (child as INodeQueryable).GetAllNodes() );
+                }
+            }
+            return elements;
+        }
+
+        public virtual IEnumerable<IElement> GetNodes( string tagFilter )
+        {
+            var elements = new List<IElement>();
+            foreach (var child in Children)
+            {
+                if (child.Tag == tagFilter) elements.Add( child );
+
+                if (child is INodeQueryable)
+                {
+                    elements.AddRange( (child as INodeQueryable).GetNodes( tagFilter ) );
+                }
+            }
+            return elements;
         }
     }
 
@@ -594,12 +657,13 @@ namespace HydraDoc.Elements
             return tspan;
         }
 
-        public SVGText() : this(string.Empty)
+        public SVGText() : this( string.Empty )
         {
         }
 
         public SVGText( params string[] text )
         {
+            ClassList.Add( "hd-theme" );
             if (text.Length >= 1)
             {
                 Text = new DOMString( text[0] );
@@ -610,7 +674,9 @@ namespace HydraDoc.Elements
                         AppendLine( text[i] );
                     }
                 }
-            } else {
+            }
+            else
+            {
                 Text = new DOMString( string.Empty );
             }
         }

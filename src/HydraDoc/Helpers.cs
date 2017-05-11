@@ -6,62 +6,56 @@ using System.Threading.Tasks;
 
 namespace HydraDoc
 {
-    internal static class Helpers
+    public static class Helpers
     {
         public static List<string> GetDefaultColors()
         {
             return new List<string>() {
-            "#3366cc",
-            "#dc3912",
-            "#ff9900",
-            "#109618",
-            "#990099",
-            "#0099c6",
-            "#dd4477",
-            "#66aa00",
-            "#b82e2e",
-            "#316395",
-            "#994499",
-            "#22aa99",
-            "#aaaa11",
-            "#6633cc",
-            "#e67300",
-            "#8b0707",
-            "#651067",
-            "#329262",
-            "#5574a6",
-            "#3b3eac",
-            "#b77322",
-            "#16d620",
-            "#16d620"
-            //"rgb(51,102,204)",
-            //"rgb(220, 57, 18)",
-            //"rgb(255,153,0)",
-            //"rgb(16,150,24)",
-            //"rgb(153,0,153)",
-            //"rgb(204,204,204)",
-            //"rgb(22,214,32)",
-            //"rgb(183,115,34)",
-            //"rgb(59,62,172)",
-            //"rgb(85, 116, 166)",
-            //"rgb(50, 146, 98)",
-            //"rgb(139, 7, 7)",
-            //"rgb(230, 115, 0)",
-            //"rgb(102, 51, 204)",
-            //"rgb(170, 170, 17)",
-            //"rgb(34, 170, 153)",
-            //"rgb(153, 68, 153)",
-            //"rgb(49, 99, 149)",
-            //"rgb(184, 46, 46)",
-            //"rgb(102, 170, 0)",
-            //"rgb(221, 68, 119)",
-            //"rgb(0, 153, 198)",
-        };
+            "#3366cc", // "mariner"
+            "#dc3912", // "tia maria"
+            "#ff9900", // "orange peel"
+            "#109618", // "la palma"
+            "#990099", // "flirt"
+            "#0099c6", // "pacific blue"
+            "#dd4477", // "cabaret"
+            "#66aa00", // "limeade"
+            "#b82e2e", // "tall poppy"
+            "#316395", // "azure"
+            "#994499", // "plum"
+            "#22aa99", // "jungle green"
+            "#aaaa11", // "sahara"
+            "#6633cc", // "purple heart"
+            "#e67300", // "mango tango"
+            "#8b0707", // "totem pole"
+            "#651067", // "scarlet gum"
+            "#329262", // "sea green"
+            "#5574a6", // "wedgewood"
+            "#3b3eac", // "governor bay"
+            "#b77322", // "bourbon"
+            "#16d620", // "malachite"
+            };
         }
+
+        private const int MAX_COLORS = 22;
 
         public static string GetColor( IList<string> colors, int index )
         {
             return colors[index % (colors.Count - 1)];
+        }
+        
+        public static int TranslateOrientation( PageOrientation orientation, string pageSize = "Letter" )
+        {
+            // Maybe change page size in the future?  Added as option param for now
+            // but doesn't do anything.
+            switch (orientation)
+            {
+                case PageOrientation.Landscape:
+                    return 1680;
+                case PageOrientation.Portrait:
+                    return 1024;
+            }
+
+            return 1024;
         }
     }
 }

@@ -41,10 +41,15 @@ namespace HydraDoc.Elements
         {
             var clone = (IElement)MemberwiseClone();
             clone.ClassList = new ClassList();
+            clone.StyleList = new StyleList();
             clone.ID = string.Empty;
             foreach (var cls in ClassList)
             {
                 clone.ClassList.Add( cls );
+            }
+            foreach (var style in StyleList)
+            {
+                clone.StyleList.Add( style );
             }
             return clone;
         }

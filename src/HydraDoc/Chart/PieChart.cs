@@ -144,9 +144,7 @@ namespace HydraDoc.Chart
         //public string PieResidueSliceColor { get; set; } = "#ccc";
 
         public int PieStartAngle { get; set; }
-
-        public TextStyle PieSliceTextStyle { get; set; }
-
+        
         #region PieSliceText
 
         private PieSliceText _pieSliceText = PieSliceText.Percentage;
@@ -240,7 +238,7 @@ namespace HydraDoc.Chart
             Legend.Children.Clear();
             if (LegendPosition != LegendPosition.None)
             {
-                var i = 0;
+                var i = 1;
 
                 double _cx = 0, _cy = 0;
 
@@ -267,9 +265,10 @@ namespace HydraDoc.Chart
 
                 foreach (var slice in Slices)
                 {
-                    var item = slice.CreateLegendLine( string.IsNullOrWhiteSpace( slice.Color ) ? Helpers.GetColor( Colors, i++ ) : slice.Color );
+                    var item = slice.CreateLegendLine( slice.Color );
                     var circle = item.Children[0] as SVGCircle;
                     var text = item.Children[1] as SVGText;
+                    circle.ClassList.Add( GetChartSliceTheme( i++ ) );
 
                     switch (LegendPosition)
                     {
@@ -321,7 +320,7 @@ namespace HydraDoc.Chart
             }
             var margin = .05 * Height;
             var total = Slices.Sum( t => t.Value );
-            var i = 0;
+            var i = 1;
             foreach (var slice in Slices)
             {
                 startAngle = endAngle; // start angle becomes the old end angle.
@@ -405,10 +404,12 @@ namespace HydraDoc.Chart
                     path.EllipticalArc( radius, radius, false, false, 1, x2, y2 );
                 }
                 path.ClosePath(); // Complete the slice.
-                path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? Helpers.GetColor( Colors, i++ ) : slice.Color;
+                path.ClassList.Add( GetChartSliceTheme( i++ ) );
+                path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? string.Empty : slice.Color;
 
                 var text = slice.Text;
                 //text.Fill = "#fff";
+                text.ClassList.Add( GetChartSliceTextTheme( i - 1 ) );
                 ChartTextStyle.ApplyStyle( text );
                 text.Text.Clear();
 
@@ -491,6 +492,15 @@ namespace HydraDoc.Chart
         private static double Quantative0To1Check( double newValue, double oldValue )
         {
             return (newValue >= 0 && newValue <= 1) ? newValue : oldValue;
+        }
+
+        private string GetChartSliceTheme( int id )
+        {
+            return $"hd-chart-theme-{(id % 23)}";
+        }
+
+        private string GetChartSliceTextTheme( int id ) {
+            return $"hd-chart-text-theme-{(id % 23)}";
         }
 
         public override string Render()

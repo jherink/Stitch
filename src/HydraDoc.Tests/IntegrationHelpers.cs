@@ -13,7 +13,7 @@ namespace HydraDoc.Tests
 {
     public static class IntegrationHelpers
     {
-        private static string EnsuredTempDirectory()
+        public static string EnsuredTempDirectory()
         {
             //var directory = "C:\\temp";
             var directory = Path.GetTempPath();

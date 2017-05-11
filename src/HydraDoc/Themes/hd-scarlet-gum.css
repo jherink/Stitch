@@ -1,0 +1,33 @@
+﻿.hd-theme { color: #fff; background-color: #651067 !important; fill: #651067 }
+
+.hd-chart-theme-7  { fill: #3366cc; }
+.hd-chart-theme-8  { fill: #dc3912; }
+.hd-chart-theme-9  { fill: #ff9900; }
+.hd-chart-theme-10 { fill: #109618; }
+.hd-chart-theme-11 { fill: #990099; }
+.hd-chart-theme-12 { fill: #0099c6; }
+.hd-chart-theme-13 { fill: #dd4477; }
+.hd-chart-theme-14 { fill: #66aa00; }
+.hd-chart-theme-15 { fill: #b82e2e; }
+.hd-chart-theme-16 { fill: #316395; }
+.hd-chart-theme-17 { fill: #994499; }
+.hd-chart-theme-18 { fill: #22aa99; }
+.hd-chart-theme-19 { fill: #aaaa11; }
+.hd-chart-theme-20 { fill: #6633cc; }
+.hd-chart-theme-21 { fill: #e67300; }
+.hd-chart-theme-22 { fill: #8b0707; }
+.hd-chart-theme-1  { fill: #651067; }
+.hd-chart-theme-2  { fill: #329262; }
+.hd-chart-theme-3  { fill: #5574a6; }
+.hd-chart-theme-4  { fill: #3b3eac; }
+.hd-chart-theme-5  { fill: #b77322; }
+.hd-chart-theme-6  { fill: #16d620; }
+
+.hd-chart-text-theme-1, .hd-chart-text-theme-2, .hd-chart-text-theme-3, 
+.hd-chart-text-theme-4, .hd-chart-text-theme-5, .hd-chart-text-theme-6,
+.hd-chart-text-theme-7, .hd-chart-text-theme-8, .hd-chart-text-theme-9, 
+.hd-chart-text-theme-10, .hd-chart-text-theme-11, .hd-chart-text-theme-12 
+.hd-chart-text-theme-13, .hd-chart-text-theme-14, .hd-chart-text-theme-15, 
+.hd-chart-text-theme-16, .hd-chart-text-theme-17, .hd-chart-text-theme-18
+.hd-chart-text-theme-19, .hd-chart-text-theme-20, .hd-chart-text-theme-21, 
+.hd-chart-text-theme-22, { fill: #fff }
