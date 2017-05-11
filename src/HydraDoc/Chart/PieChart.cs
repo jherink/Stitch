@@ -431,7 +431,9 @@ namespace HydraDoc.Chart
                         break;
                 }
 
-                var newCoords = CalculateSliceTextCoordinates( text.GetContent(), ChartTextStyle.FontSize, pct, _tAngle, _cx, _cy, x1, y1, x2, y2, text.X, text.Y );
+                //var newCoords = CalculateSliceTextCoordinates( text.GetContent(), ChartTextStyle.FontSize, pct, _tAngle, _cx, _cy, x1, y1, x2, y2, text.X, text.Y );
+                var newCoords = CalculateSliceTextCoordinates( text.GetContent(), _cx, _cy, x1, y1, x2, y2, 
+                    ChartTextStyle.FontSize, text.X, text.Y, _tAngle );
                 text.X = newCoords.Item1;
                 text.Y= newCoords.Item2;
                 if (!newCoords.Item3) text.StyleList.Add( "display", "none" );
@@ -440,12 +442,28 @@ namespace HydraDoc.Chart
             }
         }
 
-        private void CalculateSliceTextCoordinates( string content, double cx, double cy, double x1, double y1, double x2, double y2 )
+        private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double cx, double cy, 
+                                                                           double x1, double y1, double x2, double y2, 
+                                                                           double fontSize, double x, double y, double angle )
         {
             var deltaCX1 = Math.Abs( cx - x1 );
             var deltaCY1 = Math.Abs( cy - y1 );
             var deltaCX2 = Math.Abs( cx - x2 );
-            var deltaCY2  
+            var deltaCY2 = Math.Abs( cy - y2 );
+
+            var width = content.Length * fontSize;
+            var height = 2 * fontSize;
+
+            var deltaX = (width / 2) * Math.Cos( angle * (Math.PI / 180) );
+            var deltaY = height * Math.Sin( angle * (Math.PI / 180) );
+            var newX = x - deltaX;
+            var newY = y - deltaY;
+
+            var show = width < deltaCX1 && width < deltaCX2 &&
+                       height < deltaCY1 && height < deltaCY2;
+            show = true;
+
+            return new Tuple<double, double, bool>( newX, newY, show );
         }
 
         private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double fontSize, double slicePct, double angle, double cx, double cy, double x1, double y1, double x2, double y2, double x, double y ) {
