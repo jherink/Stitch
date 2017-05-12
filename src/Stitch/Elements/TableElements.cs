@@ -149,7 +149,7 @@ namespace Stitch.Elements
             var body = AddBody();
             foreach (DataRow tableRow in table.Rows)
             {
-                body.Children.Add( CreateRow( tableRow ) );
+                CreateRow( tableRow );
             }
         }
 

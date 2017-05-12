@@ -105,6 +105,9 @@
     <Content Include="Data\Northwind.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Northwind_Log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Css3.css" />
     <Content Include="Resources\Css3Friendly.css" />
     <Content Include="Resources\Css3Min.css" />
