@@ -1,5 +1,8 @@
-# HydraDoc
+<!--# Stitch -->
+<img src="https://raw.githubusercontent.com/jherink/Stitch/master/src/Icon/Stitch326x128.png" />
 Create highly customizable reports using HTML &amp; CSS in .NET
+
+<hr />
 
 <h3>Why HTML?</h3>
 <ul>
