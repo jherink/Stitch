@@ -17,14 +17,14 @@ Stuff To Do
 13) Alex proposed data imports? Ask more about this. He also mentioned data mapping??  
 	This could work similar to Windows Report Viewer? Could this be done with XML transformations?
 14) Change element ids to use a, b,...,aa, ab, ac,...,ba, bb instead of GUIDs for smaller html files. Like Google :) - DONE
-15) Add factory methods that let user specify element ids. - SCRATCH THIS (Move away from ElementFactory)
-16) Add factory methods that let automatically assign an id to an element. - SCRATCH THIS (Move away from ElementFactory)
+15) Add factory methods that let user specify element ids. - SCRATCH THIS (Move away from ElementFactory, see 34)
+16) Add factory methods that let automatically assign an id to an element. - SCRATCH THIS (Move away from ElementFactory, see 34)
 17) Develop some way to parse out formatted elements like <i> and <b>. 
 18) Add support for "style" - DONE
 19) Add comments :<>
 20) Test head class
-21) Move CSS resources for Stitch out of CSS/Themes folder. - See 26
-22) Scatter plot show average line.
+21) Move CSS resources for Stitch out of CSS/Themes folder. - See 26 (DONE)
+22) Make a Scatter plot & show average line.
 23) Bar graphs use SVG instead of CSS. See 10. ( Use Google chart as reference https://google-developers.appspot.com/chart/interactive/docs/gallery) 
 
 24) Bar codes
@@ -33,6 +33,16 @@ Stuff To Do
 27) TimeSpan Axis & DateTime Axis.
 28) Multiple paper sizes.
 29) Page Margins - DONE (for left & right margins)
+
+30) Document how to use Themes
+31) Getting started documentation, Hello World sample.
+32) Getting started documentation, charts
+33) Getting started documentation, tables
+34) Remove element factory -> Keep ID factory.
+35) Parse HTML into a document... Important for mapping
+36) Test all elements that have a DOMString for content are actually returning the DOMStrings children along with top level DOMString content -> They should be marked    as INodeQueryable to achieve this.  We need this for CSS styling and possible parsing.
+37) Change PieChart from rendering it's labels if they will not fit into the slice.
+
 
 ----- EXPORT NOTES -----
 
