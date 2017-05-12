@@ -8,9 +8,9 @@ Stuff To Do
 5)  Download and embed local URL sources from remote style sheet. -DONE
 6)  Embed local URL sources from relative path style sheets - DONE
 
-7)  Create unit test framework that allows for assertions between HydraDocs/individual elements excluding IDs classes ect. as options. - SCRATCH THIS.  Users can do hash regressions removing ids.
+7)  Create unit test framework that allows for assertions between Stitchs/individual elements excluding IDs classes ect. as options. - SCRATCH THIS.  Users can do hash regressions removing ids.
 8)  Give credit to ExCSS parser in a README if I have not done it - DONE
-9)  Create interface for classes to implement when exporting from HydraDoc to other formats. - DONE (IExporter)
+9)  Create interface for classes to implement when exporting from Stitch to other formats. - DONE (IExporter)
 10) Create graphs for complex data representation. See Chart.js, canvas.js, amcharts, highcharts.  Do they also need to be exportable??? - DONE
 11) Test different byte codes in HTML render? UTF-8, UTF-16, UTF-32. (See 12 as well)
 12) Charset testing in both CSS rule set renders and HTML renders.
@@ -23,7 +23,7 @@ Stuff To Do
 18) Add support for "style" - DONE
 19) Add comments :<>
 20) Test head class
-21) Move CSS resources for HydraDoc out of CSS/Themes folder. - See 26
+21) Move CSS resources for Stitch out of CSS/Themes folder. - See 26
 22) Scatter plot show average line.
 23) Bar graphs use SVG instead of CSS. See 10. ( Use Google chart as reference https://google-developers.appspot.com/chart/interactive/docs/gallery) 
 

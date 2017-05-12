@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{22A84095-D5AF-472C-908C-D9A63DDB42E0}"
+	ProjectSection(SolutionItems) = preProject
+		ideas.txt = ideas.txt
+		names.txt = names.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdParty", "ThirdParty", "{1E733EEB-DA99-4D9B-AB35-DE08044C8A32}"
+	ProjectSection(SolutionItems) = preProject
+		ThirdParty\NReco.PdfGenerator.dll = ThirdParty\NReco.PdfGenerator.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stitch", "Stitch\Stitch.csproj", "{93AB75EF-24FB-4E01-B2B1-0F2456BF1F3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stitch.Tests", "Stitch.Test\Stitch.Tests.csproj", "{8B6E0984-36ED-4E20-808D-8C809F9240FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93AB75EF-24FB-4E01-B2B1-0F2456BF1F3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93AB75EF-24FB-4E01-B2B1-0F2456BF1F3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93AB75EF-24FB-4E01-B2B1-0F2456BF1F3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93AB75EF-24FB-4E01-B2B1-0F2456BF1F3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B6E0984-36ED-4E20-808D-8C809F9240FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B6E0984-36ED-4E20-808D-8C809F9240FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B6E0984-36ED-4E20-808D-8C809F9240FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B6E0984-36ED-4E20-808D-8C809F9240FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1E733EEB-DA99-4D9B-AB35-DE08044C8A32} = {22A84095-D5AF-472C-908C-D9A63DDB42E0}
+	EndGlobalSection
+EndGlobal
