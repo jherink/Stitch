@@ -2,34 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/src/HydraDoc.Tests/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
-/src/HydraDoc.Tests/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
-/src/HydraDoc.Tests/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
-/src/HydraDoc.Tests/obj/Debug/HydraDoc.Tests.pdb
-/src/HydraDoc.Tests/obj/Debug/HydraDoc.Tests.dll
-/src/HydraDoc.Tests/obj/Debug/HydraDoc.Tests.csprojResolveAssemblyReference.cache
-/src/HydraDoc.Tests/obj/Debug/HydraDoc.Tests.csproj.FileListAbsolute.txt
-/src/HydraDoc.Tests/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-/src/HydraDoc.Tests/obj/Debug
-/src/HydraDoc.Tests/bin/Debug/xunit.runner.visualstudio.testadapter.dll
-/src/HydraDoc.Tests/bin/Debug/xunit.runner.utility.desktop.dll
-/src/HydraDoc.Tests/bin/Debug/xunit.execution.desktop.xml
-/src/HydraDoc.Tests/bin/Debug/xunit.execution.desktop.pdb
-/src/HydraDoc.Tests/bin/Debug/xunit.execution.desktop.dll
-/src/HydraDoc.Tests/bin/Debug/xunit.core.xml
-/src/HydraDoc.Tests/bin/Debug/xunit.core.pdb
-/src/HydraDoc.Tests/bin/Debug/xunit.core.dll
-/src/HydraDoc.Tests/bin/Debug/xunit.assert.xml
-/src/HydraDoc.Tests/bin/Debug/xunit.assert.pdb
-/src/HydraDoc.Tests/bin/Debug/xunit.assert.dll
-/src/HydraDoc.Tests/bin/Debug/xunit.abstractions.dll
-/src/HydraDoc.Tests/bin/Debug/HydraDoc.Tests.pdb
-/src/HydraDoc.Tests/bin/Debug/HydraDoc.Tests.dll
-/src/HydraDoc.Tests/bin/Debug/HydraDoc.pdb
-/src/HydraDoc.Tests/bin/Debug/HydraDoc.dll
-/src/HydraDoc.Tests/bin/Debug
-/src/HydraDoc/obj/Debug
-/src/HydraDoc/bin/Debug
 /src/Stitch/bin/Debug
 /src/Stitch/obj/Debug
 /src/Stitch.Test/bin/Debug/wkhtmltopdf
@@ -50,7 +22,7 @@
 /src/Stitch.Test/bin/Debug/Stitch.pdb
 /src/Stitch.Test/bin/Debug/Stitch.dll
 /src/Stitch.Test/bin/Debug/NReco.PdfGenerator.dll
-/src/Stitch.Test/Data/Northwind_Log.ldf
-/src/Stitch.Test/Data/Northwind.mdf
 /src/Stitch.Test/obj/Debug
 /src/.vs/Stitch/v14
+/src/Stitch.Test/bin/Debug/Data
+/src/Stitch.Test/bin/Debug/Data
