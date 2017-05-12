@@ -15,9 +15,6 @@
    id="svg76"
    sodipodi:docname="StitchDraft.svg"
    inkscape:version="0.92.1 r15371">
-   <head>
-   @import url('https://fonts.googleapis.com/css?family=Open+Sans');
-   </head>
   <metadata
      id="metadata80">
     <rdf:RDF>
@@ -318,6 +315,6 @@
            x="99.999535"
            y="66.335655"
            id="tspan3792"
-           style="stroke-width:0.78125;">STITCH</tspan></tspan></text>
+           style="stroke-width:0.78125">STITCH</tspan></tspan></text>
   </g>
 </svg>
