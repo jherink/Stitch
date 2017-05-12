@@ -87,37 +87,35 @@ namespace HydraDoc.Elements
             }
         }
 
-        //private ICollection<IElement> _children { get; set; } = new List<IElement>();
+        public override ICollection<IElement> Children
+        {
+            get
+            {
+                if (TableHead != null && TableHead.Rows.Any())
+                {
+                    TableHead.Rows.First().ClassList.Add( "hd-theme" );
+                }
+                return base.Children;
+            }
 
-        //public ICollection<IElement> Children
-        //{
-        //    get
-        //    {
-        //        return _children;
-        //        //var children = new List<IElement>();
-
-        //        //if (TableHead != null) children.Add( TableHead );
-        //        //if (TableBodies.Any()) children.AddRange( TableBodies );
-        //        //if (TableFooter != null) children.Add( TableFooter );
-
-        //        //return children;
-        //    }
-        //    set
-        //    { // does nothing.
-        //    }
-        //}
+            set
+            {
+                base.Children = value;
+            }
+        }
 
         public override string Render()
         {
-            if (TableHead.Rows.Any())
-            {
-                var row = TableHead.Rows.First();
-                if (!row.StyleList.ContainsKey( "background-color" ))
-                {
-                    row.StyleList.Add( "background-color", Helpers.GetColor( Helpers.GetDefaultColors(), 0 ) );
-                    row.StyleList.Add( "color", "#fff" );
-                }
-            }
+            //if (TableHead.Rows.Any())
+            //{
+            //    var row = TableHead.Rows.First();
+            //    row.ClassList.Add( "hd-theme" );
+            //    //if (!row.StyleList.ContainsKey( "background-color" ))
+            //    //{
+            //    //    row.StyleList.Add( "background-color", Helpers.GetColor( Helpers.GetDefaultColors(), 0 ) );
+            //    //    row.StyleList.Add( "color", "#fff" );
+            //    //}
+            //}
 
             var builder = new StringBuilder();
             builder.Append( $"<{Tag}" );

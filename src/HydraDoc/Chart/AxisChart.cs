@@ -93,6 +93,8 @@ namespace HydraDoc.Chart
             Children.Add( ChartGroup );
 
             ChartTextStyle.FontSize = 15;
+            StyleList.Add( "margin-top", "30px" );
+            StyleList.Add( "margin-bottom", "30px" );
 
             var txtDummy = new SVGText();
             ChartTextStyle.ApplyStyle( txtDummy );
@@ -145,6 +147,17 @@ namespace HydraDoc.Chart
 
             return null;
         }
+
+        protected string GetChartTheme( int id )
+        {
+            return $"hd-chart-theme-{(id % 23)}";
+        }
+
+        protected string GetChartTextTheme( int id )
+        {
+            return $"hd-chart-text-theme-{(id % 23)}";
+        }
+
 
         public override string Render()
         {

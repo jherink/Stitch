@@ -10,12 +10,33 @@ using HydraDoc.Elements.Interface;
 using System.Globalization;
 using System.Xml;
 using HydraDoc.Export;
+using HydraDoc.Themes;
 
 namespace HydraDoc
 {
     public class HydraDocument
     {
         public readonly IHtmlElement Page;
+
+        private readonly ThemeCssResourceLoader resourceLoader = new ThemeCssResourceLoader();
+
+        public Theme Theme { get; private set; }
+
+        #region Orientation
+
+        private PageOrientation _orientation;
+
+        public PageOrientation Orientation
+        {
+            get { return _orientation; }
+            set
+            {
+                _orientation = value;
+                Body.StyleList.Add( "max-width", $"{Helpers.TranslateOrientation( _orientation )}px !important" );
+            }
+        }
+
+        #endregion
 
         public IHeadElement Head
         {
@@ -31,6 +52,7 @@ namespace HydraDoc
         }
 
         private IStyleElement CustomStyles;
+        private IStyleElement ActiveTheme;
 
         public string Language { get; set; }
 
@@ -47,14 +69,18 @@ namespace HydraDoc
             Head.Metas.Add( ElementFactory.CreateMeta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
 
             // add w3 resource.
-            Head.Styles.Add( ElementFactory.CreateStyleFromResource( "w3" ) );
-            // add graph resource.
-            Head.Styles.Add( ElementFactory.CreateStyleFromResource( "graph" ) );
+            //Head.Styles.Add( ElementFactory.CreateStyleFromResource( "w3" ) );
+            Head.Styles.Add( new Style() { StyleSheet = resourceLoader.LoadTheme( "w3" ) } );
+
+            SetTheme( Theme.Blue );
 
             // add a custom styles style sheet for user defined rules.
-            CustomStyles = ElementFactory.CreateStyle( new StyleSheet() );
+            CustomStyles = new Style { StyleSheet = new StyleSheet() };
             Head.Styles.Add( CustomStyles );
-            Body.StyleList.Add( "max-width", "1024px !important" );
+
+            // Setup defaults
+            Orientation = PageOrientation.Portrait;
+            Margin = 25;
         }
 
         public IDivElement AddBodyContainer()
@@ -72,7 +98,7 @@ namespace HydraDoc
         {
             foreach (var element in elements) Body.Children.Add( element );
         }
-        
+
         public bool Remove( IElement element )
         {
             return Body.Children.Remove( element );
@@ -86,6 +112,22 @@ namespace HydraDoc
         public void AddMeta( IMetaElement meta )
         {
             Head.Metas.Add( meta );
+        }
+
+        /// <summary>
+        /// The width in pixels of the left and right margins.
+        /// </summary>
+        public int Margin
+        {
+            get
+            {
+                var margin = Body.StyleList["margin-left"];
+                return int.Parse( margin.Substring( 0, margin.Length - 2 ) );
+            }
+            set
+            {
+                Body.StyleList["margin-left"] = Body.StyleList["margin-right"] = $"{value}px";
+            }
         }
 
         /// <summary>
@@ -107,6 +149,36 @@ namespace HydraDoc
             var last = Body.Children.Last();
             if (last is IDivElement && last.ClassList.Contains( "w3-container" )) last = (last as IDivElement).Children.Last();
             InsertPageBreak( last );
+        }
+
+        public void SetTheme( StyleSheet newTheme )
+        {
+            if (newTheme != null)
+            {
+                if (ActiveTheme != null)
+                {
+                    ActiveTheme.StyleSheet = newTheme;
+                }
+                else
+                {
+                    ActiveTheme = new Style() { StyleSheet = newTheme };
+                    Head.Styles.Add( ActiveTheme );
+                }
+            }
+        }
+
+        public void SetTheme( Theme theme )
+        {
+            Theme = theme;
+
+            // extract resource name.
+            var type = typeof( Theme );
+            var memInfo = type.GetMember( theme.ToString() );
+            var attributes = memInfo[0].GetCustomAttributes( typeof( ThemeResourceAttribute ), false );
+            var resource = ((ThemeResourceAttribute)attributes[0]).ResourceName;
+            var newTheme = resourceLoader.LoadTheme( resource );
+
+            SetTheme( newTheme );
         }
 
         public IElement InsertPageBreak( IElement element )

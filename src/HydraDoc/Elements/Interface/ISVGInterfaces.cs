@@ -184,6 +184,7 @@ namespace HydraDoc.Elements.Interface
         double Dx { get; set; }
         double Dy { get; set; }
         void Append( string text );
+        string GetContent();
         ISVGTspan AppendLine( string text );
         ISVGTspan AppendLine( double x, double y, string text );
     }

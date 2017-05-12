@@ -132,7 +132,7 @@ namespace HydraDoc.Tests
             graph.AddSlice( "Tamil", 61 );      // #3b3eac
             graph.AddSlice( "Telugu", 74 );     // #b77322
             graph.AddSlice( "Urdu", 52 );       // #16d620
-
+            
             doc.Add( graph );
 
             IntegrationHelpers.SaveToTemp( "ExplodeSliceTest", doc );
@@ -256,7 +256,7 @@ namespace HydraDoc.Tests
             chart.AxisOrientation = Orientation.Vertical;
             foreach (DataRow row in data.Rows)
             {
-                chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString() ) );
+                chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString().Remove(0,1) ) );
             }
             var container = doc.AddBodyContainer();
             container.Children.Add( chart );

@@ -117,9 +117,10 @@ namespace HydraDoc.Chart
                 {
                     StrokeWidth = 2,
                     FillOpacity = 1,
-                    Stroke = string.IsNullOrWhiteSpace( line.Color ) ? Helpers.GetColor( Colors, i++ ) : line.Color,
+                    Stroke = line.Color,
                     Fill = "none"
                 };
+                svgLine.ClassList.Add( GetChartTheme( i++ ) );
                 int lineI = 0;
 
                 foreach (var point in line.Values)

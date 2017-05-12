@@ -62,7 +62,6 @@
     <Compile Include="Chart\PieChart.cs" />
     <Compile Include="Chart\TextStyle.cs" />
     <Compile Include="CSS\CSSResourceResolver.cs" />
-    <Compile Include="CSS\CssThemeResourceLoader.cs" />
     <Compile Include="CSS\Extensions\CharacterExtensions.cs" />
     <Compile Include="CSS\Extensions\StringExtensions.cs" />
     <Compile Include="CSS\Model\Enumerations.cs" />
@@ -182,33 +181,9 @@
     <Compile Include="Export\PDFExporter.cs" />
     <Compile Include="HydraDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="CSS\Themes\w3-theme-yellow.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-teal.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-red.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-purple.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-pink.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-orange.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-lime.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-light-green.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-light-blue.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-khaki.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-deep-purple.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-green.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-grey.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-indigo.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-dark-orange.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-dark-grey.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-cyan.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-brown.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-blue-grey.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-blue.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-black.css" />
-    <EmbeddedResource Include="CSS\Themes\w3-theme-amber.css" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="CSS\Themes\w3.css" />
+    <Compile Include="Themes\ThemeResourceAttribute.cs" />
+    <Compile Include="Themes\ThemeCssResourceLoader.cs" />
+    <Compile Include="Themes\Themes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bundleconfig.json" />
@@ -217,7 +192,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\README.txt" />
-    <EmbeddedResource Include="CSS\Themes\graph.css" />
     <Content Include="HydraIcon\css.png" />
     <Content Include="HydraIcon\docx.png" />
     <Content Include="HydraIcon\dragon_head_silhouette.svg" />
@@ -233,6 +207,29 @@
     <Content Include="HydraIcon\rtf.png" />
     <Content Include="HydraIcon\xlsx.png" />
     <Content Include="README.txt" />
+    <EmbeddedResource Include="Themes\hd-azure.css" />
+    <EmbeddedResource Include="Themes\hd-bourbon.css" />
+    <EmbeddedResource Include="Themes\hd-cabaret.css" />
+    <EmbeddedResource Include="Themes\hd-flirt.css" />
+    <EmbeddedResource Include="Themes\hd-governor-bay.css" />
+    <EmbeddedResource Include="Themes\hd-jungle-green.css" />
+    <EmbeddedResource Include="Themes\hd-la-palma.css" />
+    <EmbeddedResource Include="Themes\hd-limeade.css" />
+    <EmbeddedResource Include="Themes\hd-malachite.css" />
+    <EmbeddedResource Include="Themes\hd-mango-tango.css" />
+    <EmbeddedResource Include="Themes\hd-orange-peel.css" />
+    <EmbeddedResource Include="Themes\hd-pacific-blue.css" />
+    <EmbeddedResource Include="Themes\hd-plum.css" />
+    <EmbeddedResource Include="Themes\hd-purple-heart.css" />
+    <EmbeddedResource Include="Themes\hd-sahara.css" />
+    <EmbeddedResource Include="Themes\hd-scarlet-gum.css" />
+    <EmbeddedResource Include="Themes\hd-sea-green.css" />
+    <EmbeddedResource Include="Themes\hd-tall-poppy.css" />
+    <EmbeddedResource Include="Themes\hd-tia-maria.css" />
+    <EmbeddedResource Include="Themes\hd-totem-pole.css" />
+    <EmbeddedResource Include="Themes\hd-wedgewood.css" />
+    <EmbeddedResource Include="Themes\hd-mariner.css" />
+    <EmbeddedResource Include="Themes\w3.css" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

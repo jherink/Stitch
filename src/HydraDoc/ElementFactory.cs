@@ -247,27 +247,27 @@ namespace HydraDoc
 
         #region Styles
 
-        public static IStyleElement CreateStyleFromTheme( string theme )
-        {
-            var resourceLoader = new CssThemeResourceLoader();
+        //public static IStyleElement CreateStyleFromTheme( string theme )
+        //{
+        //    var resourceLoader = new CssThemeResourceLoader();
 
-            return CreateStyle( resourceLoader.LoadTheme( theme ) );
-        }
+        //    return CreateStyle( resourceLoader.LoadTheme( theme ) );
+        //}
 
-        public static IStyleElement CreateStyleFromResource( string resource )
-        {
-            var loader = new CssThemeResourceLoader();
-            return CreateStyle( loader.LoadCssResource( resource ) );
-        }
+        //public static IStyleElement CreateStyleFromResource( string resource )
+        //{
+        //    var loader = new CssThemeResourceLoader();
+        //    return CreateStyle( loader.LoadCssResource( resource ) );
+        //}
 
-        public static IStyleElement CreateStyle( StyleSheet stylesheet )
-        {
-            return new Style() { StyleSheet = stylesheet };
-            //var style = new Style();
-            //stylesheet.
-            //foreach (var rule in rules) style.Rules.Add( rule );
-            //return style;
-        }
+        //public static IStyleElement CreateStyle( StyleSheet stylesheet )
+        //{
+        //    return new Style() { StyleSheet = stylesheet };
+        //    //var style = new Style();
+        //    //stylesheet.
+        //    //foreach (var rule in rules) style.Rules.Add( rule );
+        //    //return style;
+        //}
 
         #endregion
 
