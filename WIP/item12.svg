@@ -1,0 +1,82 @@
+
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="128" height="128" viewBox="0 0 100 100">
+
+
+		<defs>
+			<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="50" y1="50" x2="50" y2="0" spreadMethod="pad">
+			<stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.7"/>
+			<stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.1"/>
+		</linearGradient><linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="50" y1="75" x2="50" y2="0" spreadMethod="pad">
+			<stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.1"/>
+			<stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.7"/>
+		</linearGradient><g id="background">
+			<path fill="url(#background-gradient)" stroke="none" d=" M 93.35 75 L 93.35 25 50 0 6.65 25 6.65 75 50 100 93.35 75 Z"/>
+		</g><mask id="mask">
+			<path fill="#FFFFFF" stroke="none" d=" M 93.35 75 L 93.35 25 50 0 6.65 25 6.65 75 50 100 93.35 75 Z"/>
+		</mask><g id="gloss-top">
+			<path fill="url(#Gradient_2)" stroke="none" d=" M 93.35 25.05 L 93.35 25 50 0 6.65 25 6.65 25.05 50 50 93.35 25.05 Z"/>
+		</g><g id="gloss-right">
+			<path fill="url(#Gradient_3)" stroke="none" d=" M 93.35 75 L 93.35 25 50 0 6.65 25 93.35 75 Z"/>
+		</g><g id="gloss-left">
+			<path fill="url(#Gradient_3)" stroke="none" d=" M 6.65 25 L 6.65 75 93.35 25 50 0 6.65 25 Z"/>
+		</g>
+			
+	<linearGradient id="background-gradient" x1="0" y1="0" y2="1" x2="0" >
+		<stop stop-color="#057c95" offset="0%"/>
+		<stop stop-color="#042449" offset="100%"/>
+	</linearGradient>
+
+			
+	<filter id="inner-shadow" x="-50%" y="-50%" width="200%" height="200%">
+		<feComponentTransfer in="SourceAlpha">
+			<feFuncA type="table" tableValues="1 0" />
+		</feComponentTransfer>
+		<feComponentTransfer>
+			<feFuncA type="linear" slope="0.9"/>
+		</feComponentTransfer>
+		<feGaussianBlur stdDeviation="0" />
+		<feOffset dx="-0.9999999999999999" dy="1" result="offsetblur" />
+		<feFlood flood-color="#000" result="color" />
+		<feComposite in2="offsetblur" operator="in" />
+		<feComposite in2="SourceAlpha" operator="in" />
+		<feMerge>
+			<feMergeNode in="SourceGraphic" />
+			<feMergeNode />
+		</feMerge>
+	</filter>
+
+			
+			<g transform="scale(1.7241379310344827) translate(-1 -1)" id="picture"><path d="M1 6v48h58V6H1zm56 46H3V16h54v36zM3 14V8h54v6H3z M8 11a2 2 0 1 1-4 0 2 2 0 1 1 4 0zm5 0a2 2 0 1 1-4 0 2 2 0 1 1 4 0zm5 0a2 2 0 1 1-4 0 2 2 0 1 1 4 0zm7.1 34.4c.1.1.3.1.4.1.4 0 .8-.2.9-.6l9-21c.2-.5 0-1.1-.5-1.3-.5-.2-1.1 0-1.3.5l-9 21c-.2.5 0 1.1.5 1.3zm-12.5-11l9.8 6c.2.1.3.1.5.1.3 0 .7-.2.9-.5.3-.5.1-1.1-.3-1.4L15 33.5l8.4-5.2c.5-.3.6-.9.3-1.4-.3-.5-.9-.6-1.4-.3l-9.8 6c-.3.2-.5.5-.5.9s.3.7.6.9zM36.4 40c.2.3.5.5.9.5.2 0 .4 0 .5-.1l9.8-6c.3-.2.5-.5.5-.9s-.2-.7-.5-.9l-9.8-6c-.5-.3-1.1-.1-1.4.3-.3.5-.1 1.1.3 1.4l8.4 5.2-8.4 5.2c-.5.2-.6.9-.3 1.3z"/></g>
+			
+	<linearGradient id="picture-gradient" x1="0" y1="0" y2="1" x2="0" >
+		<stop stop-color="#eae8e8" offset="0%"/>
+		<stop stop-color="#f6f5f4" offset="100%"/>
+	</linearGradient>
+
+		</defs>
+
+		
+
+			<use xlink:href="#background" fill="url(#background-gradient)" />
+
+		
+
+			<g mask="url(#mask)">
+				<g transform="
+				        translate(
+                                50 50
+)
+                            translate(0 0)  scale(0.5)  
+                            translate(
+                                -50 -50
+)">
+						<use xlink:href="#picture" fill="url(#picture-gradient)" filter="url(#inner-shadow)" />
+				</g>
+			</g>
+
+		
+
+			<use xlink:href="#gloss-top" opacity="1" />
+
+
+	</svg>
