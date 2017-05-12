@@ -188,10 +188,10 @@
   <ItemGroup>
     <None Include="bundleconfig.json" />
     <Compile Include="CSS\Parser\Parser.Blocks.cs" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\README.txt" />
-    <Content Include="README.txt" />
     <EmbeddedResource Include="Themes\stitch-azure.css" />
     <EmbeddedResource Include="Themes\stitch-bourbon.css" />
     <EmbeddedResource Include="Themes\stitch-cabaret.css" />
