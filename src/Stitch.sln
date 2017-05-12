@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{22A84095-D5AF-472C-908C-D9A63DDB42E0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22A84095-D5AF-472C-908C-D9A63DDB42E0}"
 	ProjectSection(SolutionItems) = preProject
 		ideas.txt = ideas.txt
 		names.txt = names.txt
