@@ -18,6 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stitch", "Stitch\Stitch.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stitch.Tests", "Stitch.Test\Stitch.Tests.csproj", "{8B6E0984-36ED-4E20-808D-8C809F9240FA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Icon", "Icon", "{D66C8A93-D1D7-48A4-876A-B85552E42FD5}"
+	ProjectSection(SolutionItems) = preProject
+		Icon\Stitch.svg = Icon\Stitch.svg
+		Icon\Stitch326x128.png = Icon\Stitch326x128.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,5 +44,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1E733EEB-DA99-4D9B-AB35-DE08044C8A32} = {22A84095-D5AF-472C-908C-D9A63DDB42E0}
+		{D66C8A93-D1D7-48A4-876A-B85552E42FD5} = {22A84095-D5AF-472C-908C-D9A63DDB42E0}
 	EndGlobalSection
 EndGlobal
