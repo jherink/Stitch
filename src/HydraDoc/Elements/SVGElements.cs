@@ -663,7 +663,7 @@ namespace HydraDoc.Elements
 
         public SVGText( params string[] text )
         {
-            ClassList.Add( "hd-theme" );
+            //ClassList.Add( "hd-theme" );
             if (text.Length >= 1)
             {
                 Text = new DOMString( text[0] );

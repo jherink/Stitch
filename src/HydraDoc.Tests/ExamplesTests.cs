@@ -24,37 +24,68 @@ namespace HydraDoc.Tests
         public void RenderThemesTest()
         {
             var table = IntegrationHelpers.GetSampleTableData();
-            var tmp = System.IO.Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "ThemeSamples" );
+            var tmp = System.IO.Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "Themes" );
+            var pieData = IntegrationHelpers.GetCategorySalesSummary();
             if (!System.IO.Directory.Exists( tmp )) System.IO.Directory.CreateDirectory( tmp );
 
             foreach (Theme theme in Enum.GetValues( typeof( Theme ) ))
             {
                 var doc = new HydraDocument();
                 doc.SetTheme( theme );
+                var b = new Paragraph();
+                b.ClassList.Add( "hd-text-theme" );
+                b.StyleList.Add( "display", "none" );
+                doc.Add( b );
 
                 var div = new Div();
                 var p = new Bold( theme.ToString() );
-                p.ClassList.Add( "hd-theme" );
+                p.ClassList.Add( "hd-text-theme" );
                 div.Add( new Heading( HeadingLevel.H2, $"Default Theme: {p.Render()}" ) );
                 div.Add( new HorizontalRule() );
                 doc.Add( div );
 
                 doc.Add( new Table( table ) );
 
+                // Bar chart
                 var chart = new BarChart();
-                var cont = doc.AddBodyContainer();
-                chart.ChartTitle = "Quarterly Results";
+                chart.ChartTitle = "Bar Chart";
                 chart.TitleTextStyle.Bold = true;
                 chart.Width = 600;
                 chart.MeasuredAxis.Format = "C0";
-                chart.StyleList.Add( "padding-left", "25%" );
                 chart.AddBar( "Q1", 18450 );
                 chart.AddBar( "Q2", 34340.72 );
                 chart.AddBar( "Q3", 43145.52 );
                 chart.AddBar( "Q4", 18415 );
-                cont.Add( chart );
+                doc.Add( chart );
 
-                IntegrationHelpers.SaveToTemp( $"ThemeSamples\\{theme}", doc );
+                var pieChart = new PieChart();
+                //chart.LegendPosition = LegendPosition.Left;
+                pieChart.ChartTitle = "Pie Chart";
+                pieChart.TitleTextStyle.Bold = true;
+                foreach (DataRow row in pieData.Rows)
+                {
+                    pieChart.AddSlice( row[0].ToString(), double.Parse( row[1].ToString().Remove( 0, 1 ) ) );
+                }
+                doc.Add( pieChart );
+
+                // Pie Chart
+                //var pieChart = new PieChart();
+                //pieChart.ChartTitle = "Pie Chart";
+                //pieChart.TitleTextStyle.Bold = true;
+                //pieChart.AddSlice( "Work", 11 );
+                //pieChart.AddSlice( "Eat", 2 );
+                //pieChart.AddSlice( "Commute", 2 );
+                //pieChart.AddSlice( "Watch TV", 2 );
+                //pieChart.AddSlice( "Sleep", 7 );
+                //doc.Add( pieChart );
+
+                //// Donut Chart
+                //pieChart = pieChart.Clone() as PieChart;
+                //pieChart.ChartTitle = "Donut Chart";
+                //pieChart.PieHole = .4; // just add this
+                //doc.Add( pieChart );
+
+                IntegrationHelpers.ExportPdfToTemp( $"Themes\\{theme}", doc );
             }
         }
 

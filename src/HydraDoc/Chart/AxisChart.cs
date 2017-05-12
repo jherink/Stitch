@@ -93,6 +93,8 @@ namespace HydraDoc.Chart
             Children.Add( ChartGroup );
 
             ChartTextStyle.FontSize = 15;
+            StyleList.Add( "margin-top", "30px" );
+            StyleList.Add( "margin-bottom", "30px" );
 
             var txtDummy = new SVGText();
             ChartTextStyle.ApplyStyle( txtDummy );

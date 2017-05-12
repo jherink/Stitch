@@ -202,6 +202,9 @@ namespace HydraDoc.Chart
             ChartTextStyle = new TextStyle( this );
             ChartTextStyle.FontSize = 15;
 
+            StyleList.Add( "margin-top", "30px" );
+            StyleList.Add( "margin-bottom", "30px" );
+
             TitleGroup.Add( SvgTitle );
         }
 
