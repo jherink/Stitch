@@ -10,6 +10,15 @@ namespace Stitch.Elements
     {
         public DOMString Content { get; set; }
 
+        public ListItemElement() {
+            Content = new DOMString( string.Empty );
+        }
+
+        public ListItemElement( DOMString content )
+        {
+            Content = content;
+        }
+
         public override string Tag
         {
             get
@@ -43,11 +52,6 @@ namespace Stitch.Elements
             builder.AppendLine( $">{Content}</{Tag}>" );
             return builder.ToString();
         }
-
-        public ListItemElement()
-        {
-            Content = new DOMString( string.Empty );
-        }
     }
 
     /// <summary>
@@ -55,6 +59,10 @@ namespace Stitch.Elements
     /// </summary>
     public class DescriptionTermElement : ListItemElement, IDescriptionTermElement
     {
+        public DescriptionTermElement() : base() { }
+
+        public DescriptionTermElement( DOMString content ) : base( content ) { }
+
         public override string Tag
         {
             get
@@ -69,6 +77,11 @@ namespace Stitch.Elements
     /// </summary>
     public class DescriptionDescribeElement : ListItemElement, IDescriptionDescribeElement
     {
+
+        public DescriptionDescribeElement() : base() { }
+
+        public DescriptionDescribeElement( DOMString content ) : base( content ) { }
+
         public override string Tag
         {
             get
@@ -87,11 +100,48 @@ namespace Stitch.Elements
                 return Children.Where( c => (c as IListItemElement) != null ).Select( c => (IListItemElement)c );
             }
         }
+
+        public BaseListElement() { }
+
+        public BaseListElement( IEnumerable<object> data )
+        {
+            foreach (var d in data)
+            {
+                Children.Add( CreateListItem( d.ToString() ) );
+            }
+        }
+
+        protected abstract IListItemElement CreateListItem( DOMString content );
     }
 
-    public class UnorderedListElement : BaseListElement, IUnorderedListElement
+    public class UnorderedList : BaseListElement, IUnorderedListElement
     {
         public UnorderedListStyleType StyleType { get; set; } = UnorderedListStyleType.Disc;
+
+        public UnorderedList()
+        {
+
+        }
+
+        public UnorderedList( IEnumerable<object> data ) : base( data )
+        {
+
+        }
+
+        public UnorderedList( UnorderedListStyleType style )
+        {
+            StyleType = style;
+        }
+
+        public UnorderedList( IEnumerable<object> data, UnorderedListStyleType style ) : this( data )
+        {
+            StyleType = style;
+        }
+
+        protected override IListItemElement CreateListItem( DOMString content )
+        {
+            return new ListItemElement() { Content = content };
+        }
 
         public override string Tag
         {
@@ -115,9 +165,34 @@ namespace Stitch.Elements
         }
     }
 
-    public class OrderedListElement : BaseListElement, IOrderedListElement
+    public class OrderedList : BaseListElement, IOrderedListElement
     {
         public OrderedListStyleType StyleType { get; set; } = OrderedListStyleType.Numbered;
+
+        public OrderedList()
+        {
+
+        }
+
+        public OrderedList( IEnumerable<object> data ) : base( data )
+        {
+
+        }
+
+        public OrderedList( OrderedListStyleType style )
+        {
+            StyleType = style;
+        }
+
+        public OrderedList( IEnumerable<object> data, OrderedListStyleType style ) : this( data )
+        {
+            StyleType = style;
+        }
+
+        protected override IListItemElement CreateListItem( DOMString content )
+        {
+            return new ListItemElement() { Content = content };
+        }
 
         public override string Tag
         {
@@ -142,8 +217,23 @@ namespace Stitch.Elements
     /// <summary>
     /// A description list, with terms and descriptions
     /// </summary>
-    public class DescriptionListElement : BaseListElement, IDescriptionList
+    public class DescriptionList : BaseListElement, IDescriptionList
     {
+        public DescriptionList()
+        {
+
+        }
+
+        public DescriptionList( IEnumerable<object> data ) : base( data )
+        {
+
+        }
+
+        protected override IListItemElement CreateListItem( DOMString content )
+        {
+            return new DescriptionTermElement( content );
+        }
+
         public override string Tag
         {
             get

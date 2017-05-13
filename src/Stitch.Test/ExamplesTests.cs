@@ -202,7 +202,7 @@ namespace Stitch.Tests
             var div = new Div();
             div.Add( CreatePageHeader( "Active Employees" ) );
             var data = IntegrationHelpers.GetEmployeeData();
-            var ul = new UnorderedListElement();
+            var ul = new UnorderedList();
 
             data.Columns[0].ColumnName = "Employee Id";
             data.Columns[1].ColumnName = "First Name";

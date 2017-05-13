@@ -17,10 +17,11 @@ namespace Stitch.Tests
         {
             var doc = new StitchDocument();
             doc.Head.Title = "Hello World";
-            
+
             //doc.Head.Styles.Add( ElementFactory.CreateStyleFromTheme( "black" ) );
 
-            var p = ElementFactory.CreateParagraph( "Hello " );
+            //var p = ElementFactory.CreateParagraph( "Hello " );
+            var p = new Paragraph( "Hello" );
             p.Content += new Big( "World" );
             p.Content += new Bold( "!!!" );
             doc.Add( p );
@@ -34,11 +35,12 @@ namespace Stitch.Tests
             doc.Head.Title = "Hello World";
             //doc.Head.Styles.Add( ElementFactory.CreateStyleFromTheme( "green" ) );
 
-            var div = ElementFactory.CreateDiv();
+            //var div = ElementFactory.CreateDiv();
+            var div = new Div();
             div.ClassList.Add( "w3-theme" );
-            div.Children.Add( ElementFactory.CreateParagraph( "Hello World" ) );
+            div.Children.Add( new Paragraph( "Hello World" ) );
 
-            var p = ElementFactory.CreateParagraph( " You too!" );
+            var p = new Paragraph( " You too!" );
             p.ClassList.Add( "w3-theme-d1" );
             div.Children.Add( p );
 
@@ -52,8 +54,8 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             doc.Head.Title = "Table Test";
 
-            var div = ElementFactory.CreateDiv( true );
-            var table = ElementFactory.CreateTable( IntegrationHelpers.GetSampleTableData() );
+            var div = new Div( true );
+            var table = new Table( IntegrationHelpers.GetSampleTableData() );
             table.ClassList.Add( "w3-table-all" );
             table.TableHead.Rows.First().ClassList.Add( "w3-green" );
             foreach (var row in table.TableBodies.First().Rows)
@@ -75,17 +77,24 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             doc.Head.Title = "Unordered List Test";
 
-            var div = ElementFactory.CreateDiv( true );
-            div.Children.Add( ElementFactory.CreateUnorderedList( list ) );
+            var div = new Div( true );
+            //div.Children.Add( ElementFactory.CreateUnorderedList( list ) );
+            div.Children.Add( new UnorderedList( list ) );
 
-            div.Children.Add( ElementFactory.CreateHorizontalRule( false ) );
-            div.Children.Add( ElementFactory.CreateOrderedList( list ) );
+            //div.Children.Add( ElementFactory.CreateHorizontalRule( false ) );
+            div.Children.Add( new HorizontalRule() );
+            //div.Children.Add( ElementFactory.CreateOrderedList( list ) );
+            div.Children.Add( new OrderedList( list ) );
 
-            div.Children.Add( ElementFactory.CreateHorizontalRule( false ) );
-            div.Children.Add( ElementFactory.CreateOrderedList( list, OrderedListStyleType.UppercaseRomanNumeral ) );
+            //div.Children.Add( ElementFactory.CreateHorizontalRule( false ) );
+            div.Children.Add( new HorizontalRule() );
+            //div.Children.Add( ElementFactory.CreateOrderedList( list, OrderedListStyleType.UppercaseRomanNumeral ) );
+            div.Children.Add( new OrderedList( list, OrderedListStyleType.UppercaseRomanNumeral ) );
 
-            div.Children.Add( ElementFactory.CreateHorizontalRule( false ) );
-            div.Children.Add( ElementFactory.CreateUnorderedList( list, UnorderedListStyleType.Circle ) );
+            //div.Children.Add( ElementFactory.CreateHorizontalRule( false ) );
+            div.Children.Add( new HorizontalRule() );
+            //div.Children.Add( ElementFactory.CreateUnorderedList( list, UnorderedListStyleType.Circle ) );
+            div.Children.Add( new UnorderedList( list, UnorderedListStyleType.Circle ) );
 
             doc.Add( div );
 
@@ -99,12 +108,14 @@ namespace Stitch.Tests
             doc.Head.Title = "Header Tests";
 
             var container = doc.AddBodyContainer();
-            container.Children.Add( ElementFactory.CreateHeadingElement( HeadingLevel.H1, "Heading Level 1" ) );
-            container.Children.Add( ElementFactory.CreateHeadingElement( HeadingLevel.H2, "Heading Level 2" ) );
-            container.Children.Add( ElementFactory.CreateHeadingElement( HeadingLevel.H3, "Heading Level 3" ) );
-            container.Children.Add( ElementFactory.CreateHeadingElement( HeadingLevel.H4, "Heading Level 4" ) );
-            container.Children.Add( ElementFactory.CreateHeadingElement( HeadingLevel.H5, "Heading Level 5" ) );
-            container.Children.Add( ElementFactory.CreateHeadingElement( HeadingLevel.H6, "Heading Level 6" ) );
+            // This was testing that Element factory and constructor yielded the
+            // same. Now they are identical now that element factory was removed.
+            container.Children.Add( new Heading( HeadingLevel.H1, "Heading Level 1" ) );
+            container.Children.Add( new Heading( HeadingLevel.H2, "Heading Level 2" ) );
+            container.Children.Add( new Heading( HeadingLevel.H3, "Heading Level 3" ) );
+            container.Children.Add( new Heading( HeadingLevel.H4, "Heading Level 4" ) );
+            container.Children.Add( new Heading( HeadingLevel.H5, "Heading Level 5" ) );
+            container.Children.Add( new Heading( HeadingLevel.H6, "Heading Level 6" ) );
 
             container.Children.Add( new HorizontalRule() );
             container.Children.Add( new Heading( HeadingLevel.H6, "Heading Level 6" ) );
@@ -143,7 +154,7 @@ namespace Stitch.Tests
             text += new Bold( "red" );
             text += " paragraph";
             text.Append( "!!!!" );
-            var p = ElementFactory.CreateParagraph( text );
+            var p = new Paragraph( text );
 
             p.ClassList.Add( "myCustomParagraph" );
 
@@ -167,11 +178,11 @@ namespace Stitch.Tests
                 ID = "GoBackLink"
             };
 
-            container.Children.Add( ElementFactory.CreateDiv( link ) );
+            container.Children.Add( new Div( link ) );
 
 
             // create div now so we have it's ID
-            var linkDiv = ElementFactory.CreateDiv( new Paragraph { Content = "There is something here" } );
+            var linkDiv = new Div( new Paragraph { Content = "There is something here" } );
 
             // now create an link element that links to link div.
             link = new AnchorLinkElement
@@ -183,12 +194,12 @@ namespace Stitch.Tests
             container.Children.Add( link ); // add the link before the space.
 
             // now create and add a large space in the page.
-            var bigSpace = ElementFactory.CreateDiv();
+            var bigSpace = new Div();
             bigSpace.ClassList.Add( "bigDiv" );
             container.Children.Add( bigSpace ); // add a big space
 
             // now add the linked div at the bottom of the page.
-            container.Children.Add( ElementFactory.CreateDiv( false, linkDiv ) ); // no add div linking to.
+            container.Children.Add( new Div( false, linkDiv ) ); // no add div linking to.
 
             // now create a link back to the top of the page.
             container.Children.Add( new AnchorLinkElement
@@ -206,34 +217,34 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             var container = doc.AddBodyContainer();
 
-            var table = ElementFactory.CreateTable();
-            var row = ElementFactory.CreateRow();
-            var cell = ElementFactory.CreateCell();
+            var table = new Table();
+            var row = new TableRow();
+            var cell = new TableCell();
 
             var url = "http://www.w3schools.com/images/w3schools_green.jpg";
 
-            cell.Content = new DOMString( ElementFactory.CreateImage( url ) );
+            cell.Content = new DOMString( new ImageElement( url ) );
 
             row.Children.Add( cell );
             var body = table.AddBody();
             body.Children.Add( row );
 
             var rowClone = (ITableRowElement)row.Clone();
-            rowClone[0].Content = new DOMString( ElementFactory.CreateImage( url, "second row", 50, 50 ) );
+            rowClone[0].Content = new DOMString( new ImageElement( url, "second row", 50, 50 ) );
             body.Children.Add( rowClone );
 
             rowClone = (ITableRowElement)row.Clone();
 
             // full path
             var fullPath = IntegrationHelpers.CreateLocalResource( "..\\..\\Resources\\Images\\tiger.jpg" );
-            rowClone[0].Content = new DOMString( ElementFactory.CreateImage( fullPath ) );
+            rowClone[0].Content = new DOMString( new ImageElement( fullPath ) );
             body.Children.Add( rowClone );
 
             // relative
             rowClone = (ITableRowElement)row.Clone();
-            rowClone[0].Content = new DOMString( ElementFactory.CreateImage( System.IO.Path.GetFileName( fullPath ) ) );
+            rowClone[0].Content = new DOMString( new ImageElement( System.IO.Path.GetFileName( fullPath ) ) );
             body.Children.Add( rowClone );
-            
+
             container.Children.Add( table );
 
             IntegrationHelpers.SaveToTemp( "imageInTableTests.html", doc );
@@ -252,7 +263,7 @@ namespace Stitch.Tests
             dt.Rows.Add( "January", "$100" );
             dt.Rows.Add( "Febuary", "$50" );
 
-            var table = ElementFactory.CreateTable( dt );
+            var table = new Table( dt );
             table.TableCaption = new TableCaption( "Monthly Savings" );
             cont.Children.Add( table );
 
@@ -315,7 +326,8 @@ namespace Stitch.Tests
         public void W3SSSSampleTest()
         {
             var doc = new StitchDocument();
-            var rowDiv = ElementFactory.CreateDiv();
+            //var rowDiv = ElementFactory.CreateDiv();
+            var rowDiv = new Div();
             rowDiv.ClassList.Add( "w3-row" ).Add( "w3-section" ); // like javascript!
 
             doc.Head.Styles.Add( new Style( new Uri( "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" ) ) );
@@ -324,7 +336,8 @@ namespace Stitch.Tests
             doc.AddStyleRule( "body { max-width:1200px; }" );
 
             // Contact Info
-            var contactInfo = ElementFactory.CreateDiv();
+            //var contactInfo = ElementFactory.CreateDiv();
+            var contactInfo = new Div();
             contactInfo.ClassList.Add( "w3-third", "w3-container", "w3-black", "w3-large", "contactBox" );
             contactInfo.Children.Add( new Heading( HeadingLevel.H2, "Contact Info" ) );
             var p = new Paragraph();
@@ -351,7 +364,8 @@ namespace Stitch.Tests
             rowDiv.Children.Add( contactInfo );
 
             // Contact Us
-            var contactUs = ElementFactory.CreateDiv();
+            //var contactUs = ElementFactory.CreateDiv();
+            var contactUs = new Div();
             contactUs.ClassList.Add( "w3-third w3-center w3-large w3-dark-grey w3-text-white contactBox" ); // split?
             contactUs.Children.Add( new Heading( HeadingLevel.H2, "Contact Us" ) );
             contactUs.Children.Add( new Paragraph( "If you have an idea." ) );
@@ -360,7 +374,8 @@ namespace Stitch.Tests
             rowDiv.Children.Add( contactUs );
 
             // Like Us
-            var likeUs = ElementFactory.CreateDiv();
+            //var likeUs = ElementFactory.CreateDiv();
+            var likeUs = new Div();
             likeUs.ClassList.Add( "w3-third w3-center w3-large w3-grey w3-text-white contactBox" );
             likeUs.Children.Add( new Heading( HeadingLevel.H2, "Like Us" ) );
             i = new Italic();
@@ -413,7 +428,7 @@ namespace Stitch.Tests
                 chart.AddSlice( row["Product Name"] as string, double.Parse( row["Total Purchase"].ToString() ) );
             }
             container.Children.Add( chart );
-            container.Children.Add( ElementFactory.CreateTable( salesData ) );
+            container.Children.Add( new Table( salesData ) );
 
             IntegrationHelpers.ExportPdfToTemp( "ExportTest01", doc );
         }

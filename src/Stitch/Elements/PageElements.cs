@@ -194,8 +194,22 @@ namespace Stitch.Elements
     {
         public override string Tag { get { return "label"; } }
         public string For { get; set; }
-
         public DOMString Text { get; set; }
+
+        public Label() { }
+
+        public Label( DOMString labelText )
+        {
+            Text = labelText;
+        }
+
+        public Label( IElement _for ) : this( _for, string.Empty ) { }
+
+        public Label( IElement _for, DOMString labelText ) : this( labelText )
+        {
+            For = _for.ID;
+        }
+
         public override string Render()
         {
             var builder = new StringBuilder();
@@ -297,12 +311,25 @@ namespace Stitch.Elements
             return builder.ToString();
         }
 
-        public Div() { }
+        public Div() : this( false ) { }
 
-        public Div( params IElement[] children )
+        public Div( bool container )
+        {
+            if (container)
+            {
+                ClassList.Add( "w3-container" );
+            }
+        }
+
+        public Div( bool container, params IElement[] children ) : this( container )
         {
             Add( children );
         }
+
+        public Div( params IElement[] children ) : this( false, children )
+        {
+        }
+
         public void Add( params IElement[] children )
         {
             foreach (var child in children) { Children.Add( child ); }
