@@ -64,9 +64,12 @@ namespace Stitch
             Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName; // set to current culture.
 
             // add mobile viewport meta tag.
-            Head.Metas.Add( ElementFactory.CreateMeta( "viewport", "width=device-width, initial-scale=1" ) );
+            //Head.Metas.Add( ElementFactory.CreateMeta( "viewport", "width=device-width, initial-scale=1" ) );
+            Head.Metas.Add( new Meta( "viewport", "width=device-width, initial-scale=1" ) );
             // add charset meta tag.
-            Head.Metas.Add( ElementFactory.CreateMeta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
+            //Head.Metas.Add( ElementFactory.CreateMeta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
+            Head.Metas.Add( new Meta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
+
 
             // add w3 resource.
             //Head.Styles.Add( ElementFactory.CreateStyleFromResource( "w3" ) );
@@ -85,7 +88,7 @@ namespace Stitch
 
         public IDivElement AddBodyContainer()
         {
-            var div = ElementFactory.CreateDiv( true );
+            var div = new Div( true );
             Body.Children.Add( div );
             return div;
         }

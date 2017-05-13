@@ -135,7 +135,6 @@
     <Compile Include="CSS\Values\TermList.cs" />
     <Compile Include="CSS\Values\Whitespace.cs" />
     <Compile Include="DOMString.cs" />
-    <Compile Include="ElementFactory.cs" />
     <Compile Include="Elements\Body.cs" />
     <Compile Include="Elements\ClassList.cs" />
     <Compile Include="Elements\Enumerations.cs" />
@@ -179,6 +178,7 @@
     <Compile Include="Chart\Interface\IChart.cs" />
     <Compile Include="Export\IExporter.cs" />
     <Compile Include="Export\PDFExporter.cs" />
+    <Compile Include="IDFactory.cs" />
     <Compile Include="StitchDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Themes\ThemeResourceAttribute.cs" />

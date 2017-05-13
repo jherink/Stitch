@@ -101,6 +101,19 @@ namespace Stitch.Elements
 
     public class Meta : IMetaElement
     {
+        public Meta() { }
+
+        public Meta( string name ) : this()
+        {
+            Name = name;
+        }
+
+        public Meta( string name, string content, string httpEquiv = "" ) : this( name )
+        {
+            Content = content;
+            HttpEquiv = httpEquiv;
+        }
+
         public string Tag { get { return "meta"; } }
 
         public ClassList ClassList { get; set; } = new ClassList();
