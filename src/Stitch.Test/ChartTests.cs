@@ -52,6 +52,39 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
+        [Theory( DisplayName = "PieSliceContentRenderingTest" )]
+        [InlineData( PieSliceText.Label, 
+                     new[] { "Value1", "Value2", "Value3", "Value4" }, 
+                     new[] { 1.0, 1, 1, 1 }, 
+                    "PieSliceContentRenderingTestFour" )]
+        [InlineData( PieSliceText.Label,
+                     new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8" },
+                     new[] { 1.0, 1, 1, 1, 1, 1, 1, 1 },
+                    "PieSliceContentRenderingTestEight" )]
+        [InlineData( PieSliceText.Label,
+                     new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8", "Value9", "Value10", "Value11", "Value12" },
+                     new[] { 1.0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+                    "PieSliceContentRenderingTestTwelve" )]
+        [InlineData( PieSliceText.Label,
+                     new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8", "Value9", "Value10", "Value11", "Value12", "Value13", "Value14", "Value15", "Value16" },
+                     new[] { 1.0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+                    "PieSliceContentRenderingTestSixteen" )]
+        public void PieSliceContentRenderingTest( PieSliceText sliceText, string[] slices, double[] values, string fileName )
+        {
+            Assert.Equal( slices.Length, values.Length );
+
+            var doc = new StitchDocument();
+            var graph = new PieChart();
+            for (int i = 0; i < slices.Length; i++)
+            {
+                graph.AddSlice( slices[i], values[i] );
+            }
+
+            graph.PieSliceText = sliceText;
+            doc.Add( graph );
+            IntegrationHelpers.SaveToTemp( fileName, doc );
+        }
+
         [Theory( DisplayName = "Simple2DPieTestPieHole" )]
         [InlineData( 0, "Simple2DPieTestPieHole0" )]
         [InlineData( 1, "Simple2DPieTestPieHole100" )]
@@ -132,7 +165,7 @@ namespace Stitch.Tests
             graph.AddSlice( "Tamil", 61 );      // #3b3eac
             graph.AddSlice( "Telugu", 74 );     // #b77322
             graph.AddSlice( "Urdu", 52 );       // #16d620
-            
+
             doc.Add( graph );
 
             IntegrationHelpers.SaveToTemp( "ExplodeSliceTest", doc );
@@ -256,7 +289,7 @@ namespace Stitch.Tests
             chart.AxisOrientation = Orientation.Vertical;
             foreach (DataRow row in data.Rows)
             {
-                chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString().Remove(0,1) ) );
+                chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString().Remove( 0, 1 ) ) );
             }
             var container = doc.AddBodyContainer();
             container.Children.Add( chart );

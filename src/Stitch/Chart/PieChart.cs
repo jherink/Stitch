@@ -227,9 +227,9 @@ namespace Stitch.Chart
         {
             if (!string.IsNullOrWhiteSpace( ChartTitle ))
             {
-                SvgTitle.StyleList.Add( "font-family", TitleTextStyle.FontName );
-                SvgTitle.StyleList.Add( "font-weight", TitleTextStyle.Bold ? "bold" : string.Empty );
-                SvgTitle.StyleList.Add( "font-style", TitleTextStyle.Italic ? "italic" : string.Empty );
+                //SvgTitle.StyleList.Add( "font-family", TitleTextStyle.FontName );
+                //SvgTitle.StyleList.Add( "font-weight", TitleTextStyle.Bold ? "bold" : string.Empty );
+                //SvgTitle.StyleList.Add( "font-style", TitleTextStyle.Italic ? "italic" : string.Empty );
                 SvgTitle.X = ((Width - ChartTitle.Length * (FontSize / 2)) / 4);
                 SvgTitle.Y = (.05 * Height);
                 SvgTitle.Fill = TitleTextStyle.Color;
@@ -436,7 +436,7 @@ namespace Stitch.Chart
                 }
 
                 //var newCoords = CalculateSliceTextCoordinates( text.GetContent(), ChartTextStyle.FontSize, pct, _tAngle, _cx, _cy, x1, y1, x2, y2, text.X, text.Y );
-                var newCoords = CalculateSliceTextCoordinates( text.GetContent(), _cx, _cy, x1, y1, x2, y2, 
+                var newCoords = CalculateSliceTextCoordinates( text.GetContent(), radius, _cx, _cy, x1, y1, x2, y2, 
                     ChartTextStyle.FontSize, text.X, text.Y, _tAngle );
                 text.X = newCoords.Item1;
                 text.Y= newCoords.Item2;
@@ -446,51 +446,54 @@ namespace Stitch.Chart
             }
         }
 
-        private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double cx, double cy, 
+        private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double radius, double cx, double cy, 
                                                                            double x1, double y1, double x2, double y2, 
-                                                                           double fontSize, double x, double y, double angle )
+                                                                           double fontSize, double x, double y, double angle  )
         {
             var deltaCX1 = Math.Abs( cx - x1 );
             var deltaCY1 = Math.Abs( cy - y1 );
             var deltaCX2 = Math.Abs( cx - x2 );
             var deltaCY2 = Math.Abs( cy - y2 );
+            var drawableWidth = Math.Abs( radius * Math.Cos( (angle - 90) * (Math.PI / 180) ) );
+            drawableWidth = Math.Max( deltaCX1, deltaCX2 );
 
-            var width = content.Length * fontSize;
+            var width = (content.Length - 2) * fontSize;
             var height = 2 * fontSize;
 
             var deltaX = (width / 2) * Math.Cos( angle * (Math.PI / 180) );
             var deltaY = height * Math.Sin( angle * (Math.PI / 180) );
             var newX = x - deltaX;
             var newY = y - deltaY;
-
+            
             var show = width < deltaCX1 && width < deltaCX2 &&
                        height < deltaCY1 && height < deltaCY2;
             show = true;
+            show = width < drawableWidth;
 
             return new Tuple<double, double, bool>( newX, newY, show );
         }
 
-        private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double fontSize, double slicePct, double angle, double cx, double cy, double x1, double y1, double x2, double y2, double x, double y ) {
-            var width = content.Length * fontSize;
-            var height = 2 * fontSize;
-            var show = true;
-            var xSpan = Math.Abs( cx - x1 );
-            var ySpan = Math.Abs( cy - y1 );
-            var xSpanW = Math.Abs( x2 - x1 );
-            var ySpanH = Math.Abs( y2 - y1 );
+        //private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double fontSize, double slicePct, double angle, double cx, double cy, double x1, double y1, double x2, double y2, double x, double y ) {
+        //    var width = content.Length * fontSize;
+        //    var height = 2 * fontSize;
+        //    var show = true;
+        //    var xSpan = Math.Abs( cx - x1 );
+        //    var ySpan = Math.Abs( cy - y1 );
+        //    var xSpanW = Math.Abs( x2 - x1 );
+        //    var ySpanH = Math.Abs( y2 - y1 );
             
-            var deltaX = (width / 2) * Math.Cos( angle * (Math.PI / 180) );
-            var deltaY = height * Math.Sin( angle * (Math.PI / 180) );
+        //    var deltaX = (width / 2) * Math.Cos( angle * (Math.PI / 180) );
+        //    var deltaY = height * Math.Sin( angle * (Math.PI / 180) );
 
-            var newX = x - deltaX;
-            var newY = y - deltaY;
-            //if (slicePct < 10 && content.Length > 5)
-            //{
-            //    newX = x + deltaX;
-            //    newY = y + deltaY;
-            //}
-            return new Tuple<double, double, bool>( newX, newY, show );
-        }
+        //    var newX = x - deltaX;
+        //    var newY = y - deltaY;
+        //    //if (slicePct < 10 && content.Length > 5)
+        //    //{
+        //    //    newX = x + deltaX;
+        //    //    newY = y + deltaY;
+        //    //}
+        //    return new Tuple<double, double, bool>( newX, newY, show );
+        //}
 
         private static double Quantative0To1Check( double newValue, double oldValue )
         {
