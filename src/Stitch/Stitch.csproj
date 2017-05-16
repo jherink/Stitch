@@ -56,6 +56,7 @@
     <Compile Include="Chart\Formatters\NumericFormat.cs" />
     <Compile Include="Chart\Formatters\ScientificFormat.cs" />
     <Compile Include="Chart\Formatters\UnitFormat.cs" />
+    <Compile Include="Chart\Trig.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Chart\Interface\IChartArea.cs" />
     <Compile Include="Chart\LineChart.cs" />

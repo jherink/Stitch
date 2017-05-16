@@ -61,7 +61,7 @@ namespace Stitch.Chart
             Path.Stroke = "white";
             //Text.Fill = "white";
             Path.StrokeWidth = 1;
-            Text.StyleList.Add( "text-anchor", "middle" );
+            //Text.StyleList.Add( "text-anchor", "middle" );
             Children.Add( Path );
             Children.Add( Text );
         }
@@ -450,6 +450,52 @@ namespace Stitch.Chart
                                                                            double x1, double y1, double x2, double y2, 
                                                                            double fontSize, double x, double y, double angle  )
         {
+            /* What do we know?
+             * The pie slice lines will intersect at the point (cx, cy) 
+             * we will refer to the points:
+             * (cx, cy) as Q
+             * (x1, y1) as R
+             * (x2, y2) as S
+             * top left of content rectangle as A
+             * bottom left of content rectangle as B
+             * bottom right of content rectangle as C
+             * top right of content rectangle as D
+             * 
+             * The equation for the first line of the slice:
+             * y - y1 = m * (x - x1) where m = (y1 - cy) / (x1 - cx)
+             * 
+             * The equation for the second line of the slice:
+             * y - y2 = m * (x - x2) where m = (y2 - cx) / (x2 - cx)
+             * 
+             * The text then will be composed of four lines.  One for
+             * each side of the bounding box holding the text in. 
+             * 
+             * 
+             * 
+             */
+
+            var width = (content.Length - 2) * fontSize;
+            var height = 2 * fontSize;
+            var show = true;
+
+            var Q = new SVGPoint( cx, cy );
+            var R = new SVGPoint( x1, y1 );
+            var S = new SVGPoint( x2, y2 );
+            var A = new SVGPoint( x - width / 2 , y1 - height / 2 );
+            var B = new SVGPoint( x - width / 2 , y1 + height / 2 );
+            var C = new SVGPoint( x + width / 2 , y1 - height / 2 );
+            var D = new SVGPoint( x + width / 2 , y1 + height / 2 );
+
+            var QRxAD = Trig.CaclulateIntersection( Q, R, A, D );
+            var QRxAB = Trig.CaclulateIntersection( Q, R, A, B );
+            var QSxAB = Trig.CaclulateIntersection( Q, S, A, B );
+            var QSxBC = Trig.CaclulateIntersection( Q, S, B, C );
+            var QRxDC = Trig.CaclulateIntersection( Q, R, D, C );
+            var QSxDC = Trig.CaclulateIntersection( Q, R, D, C );
+            var QSxAD = Trig.CaclulateIntersection( Q, S, A, D );
+
+
+
             var deltaCX1 = Math.Abs( cx - x1 );
             var deltaCY1 = Math.Abs( cy - y1 );
             var deltaCX2 = Math.Abs( cx - x2 );
@@ -457,18 +503,21 @@ namespace Stitch.Chart
             var drawableWidth = Math.Abs( radius * Math.Cos( (angle - 90) * (Math.PI / 180) ) );
             drawableWidth = Math.Max( deltaCX1, deltaCX2 );
 
-            var width = (content.Length - 2) * fontSize;
-            var height = 2 * fontSize;
+            
 
             var deltaX = (width / 2) * Math.Cos( angle * (Math.PI / 180) );
             var deltaY = height * Math.Sin( angle * (Math.PI / 180) );
             var newX = x - deltaX;
             var newY = y - deltaY;
             
-            var show = width < deltaCX1 && width < deltaCX2 &&
-                       height < deltaCY1 && height < deltaCY2;
+            show = width < deltaCX1 && width < deltaCX2 &&
+                   height < deltaCY1 && height < deltaCY2;
             show = true;
             show = width < drawableWidth;
+
+            newX = x1;
+            newY = y1;
+            show = true;
 
             return new Tuple<double, double, bool>( newX, newY, show );
         }
