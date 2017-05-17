@@ -53,20 +53,28 @@ namespace Stitch.Tests
         }
 
         [Theory( DisplayName = "PieSliceContentRenderingTest" )]
-        [InlineData( PieSliceText.Label, 
+        [InlineData( PieSliceText.Percentage,
+                     new[] { "Value1" },
+                     new[] { 1.0 },
+                    "PieSliceContentRenderingTestOne" )]
+        [InlineData( PieSliceText.Percentage,
+                     new[] { "Value1", "Value2"},
+                     new[] { 1.0, 1 },
+                    "PieSliceContentRenderingTestTwo" )]
+        [InlineData( PieSliceText.Percentage, 
                      new[] { "Value1", "Value2", "Value3", "Value4" }, 
                      new[] { 1.0, 1, 1, 1 }, 
                     "PieSliceContentRenderingTestFour" )]
-        [InlineData( PieSliceText.Label,
+        [InlineData( PieSliceText.Percentage,
                      new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8" },
                      new[] { 1.0, 1, 1, 1, 1, 1, 1, 1 },
                     "PieSliceContentRenderingTestEight" )]
-        [InlineData( PieSliceText.Label,
+        [InlineData( PieSliceText.Percentage,
                      new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8", "Value9", "Value10", "Value11", "Value12" },
                      new[] { 1.0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
                     "PieSliceContentRenderingTestTwelve" )]
         [InlineData( PieSliceText.Label,
-                     new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8", "Value9", "Value10", "Value11", "Value12", "Value13", "Value14", "Value15", "Value16" },
+                     new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8", "Value9", "Value10", "Value11", "Value12", "Value13", "Value14", "Value15", "Value1666" },
                      new[] { 1.0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
                     "PieSliceContentRenderingTestSixteen" )]
         public void PieSliceContentRenderingTest( PieSliceText sliceText, string[] slices, double[] values, string fileName )

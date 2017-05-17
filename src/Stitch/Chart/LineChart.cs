@@ -77,7 +77,7 @@ namespace Stitch.Chart
             foreach (var line in Lines) line.Sort();
         }
 
-        protected override void RenderChartImpl()
+        protected override void RenderAxisChartImpl()
         {
             // labeled axis is on the bottom.
 
@@ -149,7 +149,7 @@ namespace Stitch.Chart
                 ChartGroup.Add( svgLine );
             }
         }
-
+        
         private IEnumerable<T1> GetHorizontalSet()
         {
             var set = new List<T1>();

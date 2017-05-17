@@ -53,5 +53,10 @@ namespace Stitch.Chart
 
             return new SVGPoint( AB_CD_XInterceptSolved, AB_CD_YInterceptSolved );
         }
+
+        public static double Distance( SVGPoint A, SVGPoint B )
+        {
+            return Math.Sqrt( Math.Pow( B.Y - A.Y, 2 ) + Math.Pow( B.X - A.X, 2 ) );
+        }
     }
 }

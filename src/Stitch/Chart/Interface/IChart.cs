@@ -34,9 +34,9 @@ namespace Stitch.Chart
     {
         double Width { get; set; }
         double Height { get; set; }
+        LegendPosition LegendPosition { get; set; }
         ITextStyle TitleTextStyle { get; set; }
         ITextStyle ChartTextStyle { get; set; }
         string ChartTitle { get; set; }
-        List<string> Colors { get; }
     }
 }

@@ -26,18 +26,15 @@ namespace Stitch.Chart
     }
 
     public class BarChart : AxisChart<string, double>
-    {        
-        private readonly List<Bar> Bars = new List<Bar>();       
+    {
+        private readonly List<Bar> Bars = new List<Bar>();
 
         public Orientation AxisOrientation { get; set; }
 
-        // TODO?
-        //public LegendPosition LegendPosition { get; set; } = LegendPosition.Right;
-        
         #region Constructor
 
         public BarChart() : this( 900, 500 )
-        {            
+        {
         }
 
         public BarChart( int width, int height ) : base( width, height )
@@ -63,10 +60,10 @@ namespace Stitch.Chart
         }
 
         #endregion
-        
-        protected override void RenderChartImpl()
+
+        protected override void RenderAxisChartImpl()
         {
-            LabeledAxis.SetTicks( Bars.Select( t => t.Label ) );            
+            LabeledAxis.SetTicks( Bars.Select( t => t.Label ) );
 
             switch (AxisOrientation)
             {
@@ -79,7 +76,7 @@ namespace Stitch.Chart
 
             }
         }
-       
+
         private void RenderChartHorizontally()
         {
             // Bars going --->>
@@ -89,7 +86,7 @@ namespace Stitch.Chart
             var horizontalAxisLocations = new double[] { };
             var verticalAxisLocations = new double[] { };
             var measuredIntervals = SVGAxisHelpers.SuggestIntervals( Width );
-            var min = MeasuredAxis.IncludeDefault ? default(double) : Bars.Min( t => t.Value );
+            var min = MeasuredAxis.IncludeDefault ? default( double ) : Bars.Min( t => t.Value );
             //MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( min, Bars.Max( t => t.Value ), measuredIntervals ) );
             var set = new List<double>() { 0 };
             set.AddRange( Bars.Select( t => t.Value ) );
@@ -100,8 +97,8 @@ namespace Stitch.Chart
             ticks.Add( string.Empty );
             labeledClone.SetTicks( ticks );
 
-            SVGAxisHelpers.RenderAxis( labeledClone, MeasuredAxis, Width, Height, 0, GetTitleHeight(),                                     
-                                       VerticalAxisGroup, HorizontalAxisGroup, out verticalAxisLocations, 
+            SVGAxisHelpers.RenderAxis( labeledClone, MeasuredAxis, Width, Height, 0, GetTitleHeight(),
+                                       VerticalAxisGroup, HorizontalAxisGroup, out verticalAxisLocations,
                                        out horizontalAxisLocations );
 
             var horizontalSpace = (horizontalAxisLocations.Max() - horizontalAxisLocations.Min()) / horizontalAxisLocations.Length;
@@ -154,7 +151,7 @@ namespace Stitch.Chart
             horizontalClone.SetTicks( ticks );
 
             SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, Width, Height, 0, GetTitleHeight(),
-                                       VerticalAxisGroup, HorizontalAxisGroup, 
+                                       VerticalAxisGroup, HorizontalAxisGroup,
                                        out verticalAxisLocations, out horizontalAxisLocations );
 
             var verticalSpace = (verticalAxisLocations.Max() - verticalAxisLocations.Min()) / verticalAxisLocations.Length;
@@ -173,7 +170,7 @@ namespace Stitch.Chart
                     X = barX,
                     Y = baseLineY - barHeight,
                     Height = barHeight,
-                    Width = 2* verticalSpace,
+                    Width = 2 * verticalSpace,
                     Fill = bar.Color
                 };
                 svgBar.ClassList.Add( "stitch-theme" );
