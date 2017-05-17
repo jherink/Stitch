@@ -83,10 +83,13 @@
     <Compile Include="IntegrationHelpers.cs" />
     <Compile Include="ExamplesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SHA1Comparison.cs" />
     <Compile Include="SVGTests.cs" />
     <Compile Include="ChartTests.cs" />
     <Compile Include="TickAlgorithmTests.cs" />
     <Compile Include="ThemeTests.cs" />
+    <Compile Include="MathTests.cs" />
+    <Compile Include="VectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

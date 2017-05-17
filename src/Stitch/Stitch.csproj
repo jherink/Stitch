@@ -57,6 +57,15 @@
     <Compile Include="Chart\Formatters\NumericFormat.cs" />
     <Compile Include="Chart\Formatters\ScientificFormat.cs" />
     <Compile Include="Chart\Formatters\UnitFormat.cs" />
+    <Compile Include="Chart\Math\Compare.cs" />
+    <Compile Include="Chart\Math\IPoint.cs" />
+    <Compile Include="Chart\Math\Plane.cs" />
+    <Compile Include="Chart\Math\Point.cs" />
+    <Compile Include="Chart\Math\Point3D.cs" />
+    <Compile Include="Chart\Math\PolarCoordinate.cs" />
+    <Compile Include="Chart\Math\SphericalCoordinate.cs" />
+    <Compile Include="Chart\Math\Trig.cs" />
+    <Compile Include="Chart\Math\Vector.cs" />
     <Compile Include="Chart\Trig.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Chart\Interface\IChartArea.cs" />

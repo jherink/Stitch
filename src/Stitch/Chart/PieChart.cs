@@ -459,18 +459,36 @@ namespace Stitch.Chart
             newX = x - deltaX;
             newY = y - deltaY;
 
-            var Q = new SVGPoint( cx, cy );
-            var R = new SVGPoint( x1, y1 );
-            var S = new SVGPoint( x2, y2 );
+            //var Q = new SVGPoint( cx, cy );
+            //var R = new SVGPoint( x1, y1 );
+            //var S = new SVGPoint( x2, y2 );
 
-            var A = new SVGPoint( x - width / 2, y - height / 2 );
-            var B = new SVGPoint( x + width / 2, y - height / 2 );
+            //var A = new SVGPoint( x - width / 2, y - height / 2 );
+            //var B = new SVGPoint( x + width / 2, y - height / 2 );
 
-            var intersectionPt1 = Trig.CaclulateIntersection( Q, R, A, B );
-            var intersectionPt2 = Trig.CaclulateIntersection( Q, S, A, B );
+            var Q = new Point( cx, cy );
+            var R = new Point( x1, x2 );
+            var S = new Point( x1, y2 );
+
+            var A = new Point( x - width / 2, y - height / 2 );
+            var B = new Point( x + width / 2, y - height / 2 );
+
+            var QR = new Vector( Q, R );
+            var QS = new Vector( Q, S );
+
+            var line = new Vector( R, S );
+            var aSideOfLine = Trig.SideOfLine( Q, R, A );
+            var bSideOfLine = Trig.SideOfLine( Q, S, B );
+
+            show = aSideOfLine < 0 && bSideOfLine > 0;
             
-            var length1 = Trig.Distance( A, intersectionPt1 );
-            var length2 = Trig.Distance( B, intersectionPt2 ); 
+            //var intersectionPt1 = Trig.CaclulateIntersection( Q, R, A, B );
+            //var intersectionPt2 = Trig.CaclulateIntersection( Q, S, A, B );
+            
+            //var length1 = Trig.Distance( A, intersectionPt1 );
+            //var length2 = Trig.Distance( B, intersectionPt2 );
+            //var tmp = Trig.Distance( A, B );
+
 
             return new Tuple<double, double, bool>( newX, newY, show );
         }
