@@ -297,7 +297,7 @@ namespace Stitch.Chart
 
                     Legend.Children.Add( item );
                 }
-                
+
             }
         }
 
@@ -467,24 +467,107 @@ namespace Stitch.Chart
             //var B = new SVGPoint( x + width / 2, y - height / 2 );
 
             var Q = new Point( cx, cy );
-            var R = new Point( x1, x2 );
-            var S = new Point( x1, y2 );
+            var R = new Point( x1, y1 );
+            var S = new Point( x2, y2 );
 
-            var A = new Point( x - width / 2, y - height / 2 );
-            var B = new Point( x + width / 2, y - height / 2 );
+            var A = new Point( newX - width / 2, newY - height / 2 );
+            var B = new Point( newX + width / 2, newY - height / 2 );
 
-            var QR = new Vector( Q, R );
-            var QS = new Vector( Q, S );
+            //var QR = new Vector( Q, R );
+            //var QS = new Vector( Q, S );            
 
-            var line = new Vector( R, S );
-            var aSideOfLine = Trig.SideOfLine( Q, R, A );
-            var bSideOfLine = Trig.SideOfLine( Q, S, B );
-
-            show = aSideOfLine < 0 && bSideOfLine > 0;
-            
             //var intersectionPt1 = Trig.CaclulateIntersection( Q, R, A, B );
             //var intersectionPt2 = Trig.CaclulateIntersection( Q, S, A, B );
-            
+
+            //var distance1 = A.Distance( intersectionPt1 );
+            //var distance2 = B.Distance( intersectionPt2 );
+
+            var QR = new Line( Q, R );
+            var QS = new Line( Q, S );
+            var AB = new Line( A, B );
+
+            //if (double.IsNaN( QR.Slope ))
+            //{ // vertical line
+            //    show = false;
+            //    show = width < R.Distance( new Point( x, 0 ) );
+            //}
+            //else if (double.IsNaN( QS.Slope ))
+            //{ // vertical line
+            //    show = false;
+            //    show = width < S.Distance( new Point( x, 0 ) );
+            //}
+            //else 
+            if (Compare.IsZero( QR.Slope ))
+            { // horizontal line
+                show = width < S.Distance( R );
+            }
+            else if (Compare.IsZero( QS.Slope ))
+            { // horizontal line.
+                show = width < Q.Distance( R );
+            }
+            else {
+
+                //show = width < intersectionPt1.Distance( A );
+                //show = width < A.Distance( intersectionPt1 ) || width < A.Distance( intersectionPt1 );
+                //show = true;
+
+                var intersectionPt1 = QR.FindIntersectionPoint( AB );
+                var intersectionPt2 = QS.FindIntersectionPoint( AB );
+                var tmpAng = angle + 90;
+
+                System.Diagnostics.Debug.WriteLine( $"Angle: {tmpAng}, Dist: {A.Distance( intersectionPt1 )}" );
+
+                if (tmpAng >= 0 && tmpAng < 20)
+                {
+                    show = width < A.Distance( new Point(x2, y2 ) );
+                }
+                else if (tmpAng >= 20 && tmpAng < 45)
+                {
+                    show = width < A.Distance( intersectionPt2 );
+                }
+                else if (tmpAng >= 45 && tmpAng < 90)
+                {
+                    show = width < A.Distance( intersectionPt2 );
+                }
+                else if (tmpAng >= 90 && tmpAng < 135)
+                {
+                    show = width < A.Distance( intersectionPt1 );
+                }
+                else if (tmpAng >= 135 && tmpAng < 155)
+                {
+                    show = width < A.Distance( intersectionPt1 );
+                }
+                else if (tmpAng >= 155 && tmpAng < 180)
+                {
+                    show = width < A.Distance( new Point( x1, y1 ) );
+                }
+                else if (tmpAng >= 180 && tmpAng < 215)
+                {
+                    show = width < B.Distance( new Point( x2, y2 ) );
+                }
+                else if (tmpAng >= 180 && tmpAng < 225)
+                {
+                    show = width < B.Distance( intersectionPt2 );
+                }
+                else if (tmpAng >= 225 && tmpAng < 270)
+                {
+                    show = width < B.Distance( intersectionPt2 );
+                }
+                else if (tmpAng >= 270 && tmpAng < 315)
+                {
+                    show = width < B.Distance( intersectionPt1 );
+                }
+                else if (tmpAng >= 315 && tmpAng < 335)
+                {
+                    show = width < B.Distance( intersectionPt1 );
+                }
+                else if (tmpAng >= 335 && tmpAng <= 360)
+                {
+                    show = width < B.Distance( new Point( x2, y2 ) );
+                }
+            }
+            //show = width < 1000;
+
             //var length1 = Trig.Distance( A, intersectionPt1 );
             //var length2 = Trig.Distance( B, intersectionPt2 );
             //var tmp = Trig.Distance( A, B );
@@ -633,6 +716,7 @@ namespace Stitch.Chart
 
         protected override void RenderChart()
         {
+            System.Diagnostics.Debug.Indent();
             CalculateSliceSizes();
         }
     }

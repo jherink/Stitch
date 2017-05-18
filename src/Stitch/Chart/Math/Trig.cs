@@ -64,18 +64,44 @@ namespace Stitch.Chart
             return normalizedAngle;
         }
 
-        //public static int SideOfLine( Point a, Point b, Point c )
-        //{
-        //    var val = (b.X - a.X) * (c.Y - c.Y) - (b.Y - a.Y) * (c.X - a.X);
-        //    return val < 0 ? -1 : 1;
-        //}
-
-        public static int test( Point lineStart, Point lineEnd, Point examPoint )
+        /// <summary>
+        /// Calculate the intersection point between lines AB and CD.
+        /// </summary>
+        /// <param name="A">Point A of line AB.</param>
+        /// <param name="B">Point B of line AB.</param>
+        /// <param name="C">Point C of line CD.</param>
+        /// <param name="D">Point  of line CD.</param>
+        /// <returns></returns>
+        public static Point CaclulateIntersection( Point A, Point B, Point C, Point D )
         {
-            var normal = new Vector( lineStart, lineEnd ).UnitVector;
+            var ABSlope = (B.Y - A.Y) / (B.X - A.X);
+            var CDSlope = (D.Y - C.Y) / (D.X - C.X);
 
+            var AB_CD_XInterceptSolved = 0.0;
+            var AB_CD_YInterceptSolved = 0.0;
+            if (double.IsInfinity( ABSlope ) && double.IsInfinity( CDSlope ))
+            { // both lines are vertical.  They will never intersect.
+                AB_CD_XInterceptSolved = double.PositiveInfinity;
+                AB_CD_YInterceptSolved = double.PositiveInfinity;
+            }
+            else if (double.IsInfinity( ABSlope ))
+            { // vertical
+                AB_CD_XInterceptSolved = A.X; // A & B have the same x
+                AB_CD_YInterceptSolved = CDSlope * (AB_CD_XInterceptSolved - A.X) + A.Y;
+            }
+            else if (double.IsInfinity( CDSlope ))
+            { // vertical
+                AB_CD_XInterceptSolved = C.X; // C & D have the same X
+                AB_CD_YInterceptSolved = ABSlope * (AB_CD_XInterceptSolved - C.X) + C.Y;
+            }
+            else
+            { // normal
+                AB_CD_XInterceptSolved = ((-CDSlope * D.X) + D.Y + (ABSlope * B.X) - B.Y) / (ABSlope - CDSlope);
+                AB_CD_YInterceptSolved = ABSlope * (AB_CD_XInterceptSolved - A.X) + A.Y;
+            }
 
-            return 0;
+            return new Point( AB_CD_XInterceptSolved, AB_CD_YInterceptSolved );
         }
+
     }
 }

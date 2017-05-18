@@ -59,6 +59,7 @@
     <Compile Include="Chart\Formatters\UnitFormat.cs" />
     <Compile Include="Chart\Math\Compare.cs" />
     <Compile Include="Chart\Math\IPoint.cs" />
+    <Compile Include="Chart\Math\Line.cs" />
     <Compile Include="Chart\Math\Plane.cs" />
     <Compile Include="Chart\Math\Point.cs" />
     <Compile Include="Chart\Math\Point3D.cs" />

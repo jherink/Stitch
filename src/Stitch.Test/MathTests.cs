@@ -10,6 +10,17 @@ namespace Stitch.Tests
     public class MathTests
     {
 
+        [Theory( DisplayName = "LineTest" )]
+        [InlineData( 4, 5, 8, 1, 9, -1, 6, 3 )]
+        [InlineData( 4, -5, 8, 1, -11, 1.5, 6, -2 )]
+        public void LineTest( double x1, double y1, double x2, double y2, double exptectedYIntercept, double expectedSlope, double onX, double onY )
+        {
+            var line = new Line( new Point( x1, y1 ), new Point( x2, y2 ) );
+            Assert.Equal( expectedSlope, line.Slope );
+            Assert.Equal( exptectedYIntercept, line.YIntercept );
+            Assert.Equal( onY, line.CalculateY( onX ) );
+        }
+
         [Theory( DisplayName = "Distance2DPoints" )]
         [InlineData( 10, 5, 23, 4, 13.0384 )]
         [InlineData( -18, 5, 23, -2, 41.5933 )]
