@@ -23,10 +23,10 @@ namespace Stitch.Chart
 
         public ITickAlgorithm<T2> MeasuredAxisTickAlgorithm { get; set; }
 
-        #endregion        
+        #endregion
 
         #region SVGMembers 
-        
+
         protected readonly SVGGroup HorizontalAxisGroup = new SVGGroup();
         protected readonly SVGGroup VerticalAxisGroup = new SVGGroup();
 
@@ -37,9 +37,9 @@ namespace Stitch.Chart
         }
 
         protected AxisChart( int width, int height ) : base( height, width )
-        {            
+        {
             Children.Add( VerticalAxisGroup );
-            Children.Add( HorizontalAxisGroup );              
+            Children.Add( HorizontalAxisGroup );
 
             var txtDummy = new SVGText();
             ChartTextStyle.ApplyStyle( txtDummy );
@@ -54,16 +54,16 @@ namespace Stitch.Chart
 
         protected abstract void RenderAxisChartImpl();
 
-        protected override void RenderChart()
+        public override void RenderChart()
         {
             ChartGroup.Children.Clear();
             HorizontalAxisGroup.Children.Clear();
             VerticalAxisGroup.Children.Clear();
 
-            
             RenderAxisChartImpl();
+            RenderLegend();
         }
-        
+
         private ITickAlgorithm<T> ChooseDefaultTickAlgorithm<T>( Type type ) where T : IComparable<T>
         {
             if (type == typeof( double ) ||
@@ -81,7 +81,7 @@ namespace Stitch.Chart
 
             return null;
         }
-        
+
         public override IEnumerable<IElement> GetAllNodes()
         {
             RenderChart();
@@ -94,10 +94,9 @@ namespace Stitch.Chart
             return base.GetNodes( tagFilter );
         }
 
-        protected override void RenderLegend()
+        protected double GetChartableAreaWidth()
         {
-            throw new NotImplementedException();
-        }
-
+            return .9 * Width - Math.Max( GetLegendLeftOffset(), GetLegendRightOffset() );
+        }                
     }
 }

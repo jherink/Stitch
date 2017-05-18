@@ -18,13 +18,18 @@ namespace Stitch.Chart.Axis
             return !string.IsNullOrWhiteSpace( format ) ? string.Format( "{0:" + format + "}", value ) : value.ToString();
         }
 
+        public static int MaxTickLength<T>( IAxis<T> axis ) where T : IComparable<T>
+        {
+            return axis.Any() ? axis.Max( t => FormatValueToAxisSpecification( t, axis.Format ).Length ) : 0;
+        }
+
         public static double[] RenderAxisVertically<T>( IAxis<T> axis, ISVGGroup group, double x,
                                                         double startY,
                                                         double horizontalSpacing,
                                                         double chartWidth ) where T : IComparable<T>
         {
             var locations = new double[axis.Ticks.Count];
-            var maxTickLength = axis.Ticks.Max( t => FormatValueToAxisSpecification( t, axis.Format ).Length );
+            var maxTickLength = MaxTickLength( axis );
             var i = 0;
 
             foreach (var tick in axis.Ticks)
@@ -71,7 +76,7 @@ namespace Stitch.Chart.Axis
             var locations = new double[axis.Ticks.Count];
             var i = 0;
             var rotation = string.Empty;
-            var maxTickLength = axis.Ticks.Max( t => FormatValueToAxisSpecification( t, axis.Format ).Length );
+            var maxTickLength = MaxTickLength( axis );
             var textY = gridBottomY + axis.AxisTextStyle.FontSize;
 
             foreach (var label in axis.Ticks)
@@ -140,10 +145,10 @@ namespace Stitch.Chart.Axis
             var verticalTicks = verticalAxis.ReverseDirection ? verticalAxis.Ticks.Reverse() : verticalAxis.Ticks;
             verticalAxis.SetTicks( verticalTicks );
 
-            var maxTickLength = verticalAxis.Ticks.Max( t => FormatValueToAxisSpecification( t, verticalAxis.Format ).Length );
+            var maxTickLength = MaxTickLength( verticalAxis );
 
             // Render vertical axis
-            labeledAxisX = 1.125 * verticalAxis.AxisTextStyle.FontSize;
+            labeledAxisX = 1.125 * verticalAxis.AxisTextStyle.FontSize + startX;
             horizontalSpace = (chartHeight - titleHeight - space - verticalOffset) / verticalAxis.Ticks.Count;
 
             if (!string.IsNullOrWhiteSpace( verticalAxis.AxisTitle ))
@@ -165,7 +170,8 @@ namespace Stitch.Chart.Axis
             // Render Vertical Axis. We need to render this first so we know where the final grid line is at.
             verticalAxisLocations = RenderAxisVertically( verticalAxis, verticalGroup,
                                                           labeledAxisX,
-                                                          titleHeight + horizontalSpace / 2,
+                                                          //titleHeight + horizontalSpace / 2,
+                                                          titleHeight,
                                                           horizontalSpace,
                                                           chartWidth );
 

@@ -83,7 +83,7 @@ namespace Stitch.Chart
 
             var horizontalAxisLocations = new double[] { };
             var verticalAxisLocations = new double[] { };
-            var horizontalIntervals = SVGAxisHelpers.SuggestIntervals( Width );
+            var horizontalIntervals = SVGAxisHelpers.SuggestIntervals( GetChartableAreaWidth() );
             var verticalIntervals = SVGAxisHelpers.SuggestIntervals( Height );
             //T1 horizontalMin, horizontalMax;
             //T2 verticalMin, verticalMax;
@@ -101,7 +101,8 @@ namespace Stitch.Chart
             var measuredClone = MeasuredAxis.Clone() as IAxis<T2>;
             measuredClone.SetTicks( measuredClone.Ticks.Reverse() );
 
-            SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, Width, Height, 0, GetTitleHeight(),
+            SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, GetChartableAreaWidth(), Height - GetLegendBottomOffset() - GetLegendTopOffset(), 
+                                       GetLegendLeftOffset(), GetTitleHeight(),
                                        VerticalAxisGroup, HorizontalAxisGroup,
                                        out verticalAxisLocations, out horizontalAxisLocations );
 
@@ -110,7 +111,7 @@ namespace Stitch.Chart
             var horizSpace = verticalAxisLocations.Min();
             var chartableWidth = horizontalAxisLocations.Max() - horizontalAxisLocations.Min();
             var chartableHeight = verticalAxisLocations.Max() - verticalAxisLocations.Min();
-            var i = 0;
+            var i = 1;
             foreach (var line in Lines)
             {
                 var svgLine = new SVGPath()
@@ -120,7 +121,7 @@ namespace Stitch.Chart
                     Stroke = line.Color,
                     Fill = "none"
                 };
-                svgLine.ClassList.Add( GetChartTheme( i++ ) );
+                svgLine.ClassList.Add( GetChartStrokeTheme( i++ ) );
                 int lineI = 0;
 
                 foreach (var point in line.Values)
@@ -157,7 +158,7 @@ namespace Stitch.Chart
             {
                 set.AddRange( line.Values.Select( t => t.Item1 ) );
             }
-            return set;
+            return set.Distinct();
         }
 
         private IEnumerable<T2> GetVerticalSet()
@@ -167,7 +168,78 @@ namespace Stitch.Chart
             {
                 set.AddRange( line.Values.Select( t => t.Item2 ) );
             }
-            return set;
-        }       
+            return set.Distinct();
+        }
+
+        public override double GetLegendLeftOffset()
+        {
+            return LegendPosition == LegendPosition.Left ? Lines.Max(t => t.LineName.Length - 2 ) * ChartTextStyle.FontSize : 0;            
+        }
+
+        public override double GetLegendRightOffset()
+        {
+            return LegendPosition == LegendPosition.Right ? Lines.Max( t => t.LineName.Length - 2 ) * ChartTextStyle.FontSize : 0;
+        }
+
+        public override void RenderLegend()
+        {
+            Legend.Children.Clear();
+            if (LegendPosition != LegendPosition.None)
+            {
+                var i = 1;
+
+                double _cx = ChartTextStyle.FontSize / 2, _cy = 0;
+
+                switch (LegendPosition)
+                {
+                    case LegendPosition.Top:
+                        _cy = GetTitleHeight();
+                        break;
+                    case LegendPosition.Bottom:
+                        _cy = Height - GetLegendBottomOffset();
+                        break;
+                    case LegendPosition.Left:
+                        _cy = GetTitleHeight();
+                        break;
+                    case LegendPosition.Right:
+                        _cx = 1.25 * GetChartableAreaWidth();
+                        _cy = GetTitleHeight();
+                        break;
+                }
+
+                var j = 1;
+                foreach (var line in Lines)
+                {
+                    var item = CreateLegendLine( line.LineName, line.Color, j++ );
+                    var circle = item.Children.ToList()[0] as SVGCircle;
+                    var text = item.Children.ToList()[1] as SVGText;
+                    circle.ClassList.Add( GetChartTheme( i++ ) );
+
+                    switch (LegendPosition)
+                    {
+                        case LegendPosition.Bottom:
+                        case LegendPosition.Top:
+                            circle.Cx = _cx;
+                            text.X = _cx + 2 * circle.R;
+                            circle.Cy = _cy;
+                            text.Y = _cy + ChartTextStyle.FontSize / 3.0;
+                            _cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
+                            break;
+                        case LegendPosition.Right:
+                        case LegendPosition.Left:
+                            circle.Cx = _cx;
+                            text.X = _cx + 2 * circle.R;
+                            circle.Cy = _cy;
+                            text.Y = _cy + ChartTextStyle.FontSize / 3.0;
+                            _cy += 1.75 * ChartTextStyle.FontSize;
+                            break;
+
+                    }
+
+                    Legend.Children.Add( item );
+                }
+
+            }
+        }
     }
 }

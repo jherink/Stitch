@@ -36,6 +36,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +58,7 @@
     <Compile Include="Chart\Formatters\NumericFormat.cs" />
     <Compile Include="Chart\Formatters\ScientificFormat.cs" />
     <Compile Include="Chart\Formatters\UnitFormat.cs" />
+    <Compile Include="Chart\GraphicsHelper.cs" />
     <Compile Include="Chart\Math\Compare.cs" />
     <Compile Include="Chart\Math\IPoint.cs" />
     <Compile Include="Chart\Math\Line.cs" />

@@ -45,6 +45,19 @@ namespace Stitch.Chart
             }
         }
 
+        public abstract void RenderChart();
+        public abstract void RenderLegend();
+        public virtual double GetLegendBottomOffset()
+        {
+            return LegendPosition == LegendPosition.Bottom ? ChartTextStyle.FontSize : 0;
+        }
+        public virtual double GetLegendTopOffset()
+        {
+            return LegendPosition == LegendPosition.Top ? ChartTextStyle.FontSize : 0;
+        }
+        public abstract double GetLegendLeftOffset();
+        public abstract double GetLegendRightOffset();
+
         #endregion
 
         #region SVGMembers 
@@ -86,18 +99,15 @@ namespace Stitch.Chart
             return $"stitch-chart-theme-{(id % 23)}";
         }
 
+        protected string GetChartStrokeTheme( int id )
+        {
+            return $"stitch-chart-stroke-theme-{(id % 23)}";
+        }
+
         protected string GetChartTextTheme( int id )
         {
             return $"stitch-chart-text-theme-{(id % 23)}";
         }
-
-        protected abstract void RenderChart();
-
-        /// <summary>
-        /// Compile a list of tuples consisting of the text to show in the legend and the color to render the legend indicator in.
-        /// </summary>
-        /// <returns>Compile a list of tuples consisting of the text to show in the legend and the color to render the legend indicator in.</returns>
-        //protected abstract IEnumerable<Tuple<string, string>> CompileLegendContent();
 
         protected void RenderChartTitle()
         {
@@ -108,9 +118,7 @@ namespace Stitch.Chart
                 SvgTitle.StyleList.Add( "text-anchor", "middle" );
             }
         }
-
-        protected abstract void RenderLegend();
-
+        
         protected SVGGroup CreateLegendLine( string label, string color, int id )
         {
             var g = new SVGGroup();

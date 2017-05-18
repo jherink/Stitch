@@ -38,5 +38,11 @@ namespace Stitch.Chart
         ITextStyle TitleTextStyle { get; set; }
         ITextStyle ChartTextStyle { get; set; }
         string ChartTitle { get; set; }
+        double GetLegendBottomOffset();
+        double GetLegendTopOffset();
+        double GetLegendLeftOffset();
+        double GetLegendRightOffset();
+        void RenderLegend();
+        void RenderChart();
     }
 }

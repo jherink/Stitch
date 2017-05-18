@@ -31,6 +31,8 @@ namespace Stitch.Chart
 
         public Orientation AxisOrientation { get; set; }
 
+        private readonly Dictionary<string, List<Bar>> BarGroups = new Dictionary<string, List<Bar>>();
+
         #region Constructor
 
         public BarChart() : this( 900, 500 )
@@ -56,7 +58,7 @@ namespace Stitch.Chart
         public void AddBar( Bar bar )
         {
             Bars.Add( bar );
-            //RenderChart();
+            RenderChart();
         }
 
         #endregion
@@ -85,7 +87,7 @@ namespace Stitch.Chart
             // Render bars
             var horizontalAxisLocations = new double[] { };
             var verticalAxisLocations = new double[] { };
-            var measuredIntervals = SVGAxisHelpers.SuggestIntervals( Width );
+            var measuredIntervals = SVGAxisHelpers.SuggestIntervals( GetChartableAreaWidth() );
             var min = MeasuredAxis.IncludeDefault ? default( double ) : Bars.Min( t => t.Value );
             //MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( min, Bars.Max( t => t.Value ), measuredIntervals ) );
             var set = new List<double>() { 0 };
@@ -97,7 +99,7 @@ namespace Stitch.Chart
             ticks.Add( string.Empty );
             labeledClone.SetTicks( ticks );
 
-            SVGAxisHelpers.RenderAxis( labeledClone, MeasuredAxis, Width, Height, 0, GetTitleHeight(),
+            SVGAxisHelpers.RenderAxis( labeledClone, MeasuredAxis, GetChartableAreaWidth(), Height, GetLegendLeftOffset(), GetTitleHeight(),
                                        VerticalAxisGroup, HorizontalAxisGroup, out verticalAxisLocations,
                                        out horizontalAxisLocations );
 
@@ -138,10 +140,11 @@ namespace Stitch.Chart
             var verticalAxisLocations = new double[] { };
             var intervals = SVGAxisHelpers.SuggestIntervals( Height );
             var min = MeasuredAxis.IncludeDefault ? default( double ) : Bars.Min( t => t.Value );
-            //MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( min, Bars.Max( t => t.Value ), intervals ) );
+
             var set = new List<double>() { 0 };
             set.AddRange( Bars.Select( t => t.Value ) );
             MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( set, intervals ) );
+
             // Because of how SVG renders we must reverse the measured values first.
             var measuredClone = MeasuredAxis.Clone() as IAxis<double>;
             measuredClone.SetTicks( measuredClone.Ticks.Reverse() );
@@ -150,7 +153,7 @@ namespace Stitch.Chart
             ticks.Insert( 0, string.Empty );
             horizontalClone.SetTicks( ticks );
 
-            SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, Width, Height, 0, GetTitleHeight(),
+            SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, GetChartableAreaWidth(), Height, GetLegendLeftOffset(), GetTitleHeight(),
                                        VerticalAxisGroup, HorizontalAxisGroup,
                                        out verticalAxisLocations, out horizontalAxisLocations );
 
@@ -176,6 +179,76 @@ namespace Stitch.Chart
                 svgBar.ClassList.Add( "stitch-theme" );
 
                 ChartGroup.Add( svgBar );
+            }
+        }
+
+        public override double GetLegendLeftOffset()
+        {
+            return LegendPosition == LegendPosition.Left && LabeledAxis.Visible ? Bars.Max( t => t.Label.Length ) * ChartTextStyle.FontSize : 0;
+        }
+
+        public override double GetLegendRightOffset()
+        {
+            return LegendPosition == LegendPosition.Right && LabeledAxis.Visible ? Bars.Max( t => t.Label.Length ) * ChartTextStyle.FontSize : 0;            
+        }
+
+        public override void RenderLegend()
+        {
+            Legend.Children.Clear();
+            if (LegendPosition != LegendPosition.None)
+            {
+                var i = 1;
+
+                double _cx = ChartTextStyle.FontSize / 2, _cy = 0;
+
+                switch (LegendPosition)
+                {
+                    case LegendPosition.Top:
+                        _cy = GetTitleHeight();
+                        break;
+                    case LegendPosition.Bottom:
+                        _cy = Height - GetLegendBottomOffset();
+                        break;
+                    case LegendPosition.Left:
+                        _cy = 1.5 * GetTitleHeight() ;
+                        break;
+                    case LegendPosition.Right:
+                        _cx = GetChartableAreaWidth() + 2 * ChartTextStyle.FontSize;
+                        _cy = 1.5 * GetTitleHeight();
+                        break;
+                }
+
+                var j = 1;
+                foreach (var bar in Bars)
+                {
+                    //var item = CreateLegendLine( bar.Label, bar.Color, j++ ); 
+                    var item = CreateLegendLine( bar.Label, bar.Color, j ); // until multiple bars there is only one theme.
+                    var circle = item.Children.ToList()[0] as SVGCircle;
+                    var text = item.Children.ToList()[1] as SVGText;
+
+                    switch (LegendPosition)
+                    {
+                        case LegendPosition.Bottom:
+                        case LegendPosition.Top:
+                            circle.Cx = _cx;
+                            text.X = _cx + 2 * circle.R;
+                            circle.Cy = _cy;
+                            text.Y = _cy + ChartTextStyle.FontSize / 3.0;
+                            _cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
+                            break;
+                        case LegendPosition.Right:
+                        case LegendPosition.Left:
+                            circle.Cx = _cx;
+                            text.X = _cx + 2 * circle.R;
+                            circle.Cy = _cy;
+                            text.Y = _cy + ChartTextStyle.FontSize / 3.0;
+                            _cy += 1.75 * ChartTextStyle.FontSize;
+                            break;
+
+                    }
+
+                    Legend.Children.Add( item );
+                }
             }
         }
     }

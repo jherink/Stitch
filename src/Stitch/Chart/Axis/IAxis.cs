@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Stitch.Chart.Axis
 {
-    public interface IAxis<T> : ICloneable where T : IComparable<T>
+    public interface IAxis<T> : ICloneable, IEnumerable<T> where T : IComparable<T>
     {
         bool IncludeDefault { get; set; }
         string BaselineColor { get; set; }

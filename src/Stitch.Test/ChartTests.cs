@@ -3,6 +3,7 @@ using Stitch.Chart;
 using Xunit;
 using System.Data;
 using System.Collections.Generic;
+using Stitch.Elements;
 
 namespace Stitch.Tests
 {
@@ -27,6 +28,77 @@ namespace Stitch.Tests
             graph.AddSlice( "Sleep", 7 );
             graph.LegendPosition = position;
             doc.Add( graph );
+
+            IntegrationHelpers.SaveToTemp( fileName, doc );
+        }
+
+        [Theory( DisplayName = "SimpleBarChartLegendPositions" )]
+        [InlineData( LegendPosition.Right, "SimpleBarChartLegendTestRight" )]
+        [InlineData( LegendPosition.Left, "SimpleBarChartLegendTestLeft" )]
+        [InlineData( LegendPosition.Top, "SimpleBarChartLegendTestTop" )]
+        [InlineData( LegendPosition.Bottom, "SimpleBarChartLegendTestBottom" )]
+        [InlineData( LegendPosition.None, "SimpleBarChartLegendTestNone" )]
+        public void SimpleBarChartLegendPositions( LegendPosition position, string fileName )
+        {
+            var doc = new StitchDocument();
+            var chart = new BarChart( 900, 400 );
+            chart.AxisOrientation = Orientation.Horizontal;
+            chart.LegendPosition = position;
+            chart.MeasuredAxis.Visible = false;
+            chart.MeasuredAxis.GridLines = false;
+            chart.ChartTitle = "Browser market share June 2015";
+            chart.AddBar( "IE 11: 11.33%", 11.33 );
+            chart.AddBar( "Chrome: 49.77%", 49.77 );
+            chart.AddBar( "Firefox: 16.09%", 16.09 );
+            chart.AddBar( "Safari: 5.41%", 5.41 );
+            chart.AddBar( "Opera: 1.62%", 1.62 );
+            chart.AddBar( "Android 4.4: 2%", 2 );
+            doc.Add( chart );
+
+            var chart2 = chart.Clone() as BarChart;
+            chart2.AxisOrientation = Orientation.Vertical;
+            var div = new Div();
+            div.StyleList.Add( "margin: 30px" );
+            doc.Add( div, chart2 );
+
+            IntegrationHelpers.SaveToTemp( fileName, doc );
+        }
+
+        [Theory( DisplayName = "SimpleLineChartLegendPositions" )]
+        [InlineData( LegendPosition.Right, "SimpleLineChartLegendTestRight" )]
+        [InlineData( LegendPosition.Left, "SimpleLineChartLegendTestLeft" )]
+        [InlineData( LegendPosition.Top, "SimpleLineChartLegendTestTop" )]
+        [InlineData( LegendPosition.Bottom, "SimpleLineChartLegendTestBottom" )]
+        [InlineData( LegendPosition.None, "SimpleLineChartLegendTestNone" )]
+        public void SimpleLineChartLegendPositions( LegendPosition position, string fileName )
+        {
+            var doc = new StitchDocument();
+            var chart = new LineChart<string, double>();
+            chart.ChartTitle = "Temperatures in US Cities";
+            chart.LegendPosition = position;
+
+            chart.AddPoint( "Temperatures In NY City", "Monday", 43 );
+            chart.AddPoint( "Temperatures In NY City", "Tuesday", 53 );
+            chart.AddPoint( "Temperatures In NY City", "Wednesday", 50 );
+            chart.AddPoint( "Temperatures In NY City", "Thursday", 57 );
+            chart.AddPoint( "Temperatures In NY City", "Friday", 59 );
+            chart.AddPoint( "Temperatures In NY City", "Saturday", 69 );
+
+            chart.AddPoint( "Temperatures In Chicago", "Monday", 22 );
+            chart.AddPoint( "Temperatures In Chicago", "Tuesday", 47 );
+            chart.AddPoint( "Temperatures In Chicago", "Wednesday", 24 );
+            chart.AddPoint( "Temperatures In Chicago", "Thursday", 36 );
+            chart.AddPoint( "Temperatures In Chicago", "Friday", 59 );
+            chart.AddPoint( "Temperatures In Chicago", "Saturday", 81 );
+
+            chart.AddPoint( "Temperatures In Los Angeles", "Monday", 67 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Tuesday", 71 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Wednesday", 72 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Thursday", 84 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Friday", 64 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Saturday", 88 );
+
+            doc.Add( chart );
 
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
@@ -398,12 +470,12 @@ namespace Stitch.Tests
 
             var chart2 = new LineChart<string, double>();
             chart.ChartTitle = "Temperatures in NY City";
-            chart2.AddPoint( "Temperatures In NY City", "Monday", 43 );
-            chart2.AddPoint( "Temperatures In NY City", "Tuesday", 53 );
-            chart2.AddPoint( "Temperatures In NY City", "Wednesday", 50 );
-            chart2.AddPoint( "Temperatures In NY City", "Thursday", 57 );
-            chart2.AddPoint( "Temperatures In NY City", "Friday", 59 );
-            chart2.AddPoint( "Temperatures In NY City", "Saturday", 69 );
+            chart2.AddPoint( "Temperatures In NY City", "Monday"    , 43 );
+            chart2.AddPoint( "Temperatures In NY City", "Tuesday"   , 53 );
+            chart2.AddPoint( "Temperatures In NY City", "Wednesday" , 50 );
+            chart2.AddPoint( "Temperatures In NY City", "Thursday"  , 57 );
+            chart2.AddPoint( "Temperatures In NY City", "Friday"    , 59 );
+            chart2.AddPoint( "Temperatures In NY City", "Saturday"  , 69 );
             chart2.AddPoint( "Temperatures In NY City", "Sunday", 51 );
             chart2.LabeledAxis.IncludeDefault = false;
 
@@ -412,6 +484,40 @@ namespace Stitch.Tests
 
             doc.Add( chart, chart2, chart.Clone() as LineChart<double, double> );
             IntegrationHelpers.SaveToTemp( "TemperaturesLineGraphTest", doc );
+        }
+
+        [Fact( DisplayName = "MultiLinesChartTest" )]
+        public void MultiLinesChartTest()
+        {
+            var doc = new StitchDocument();
+            var chart = new LineChart<string, double>();
+            chart.ChartTitle = "Temperatures in US Cities";
+            chart.LegendPosition = LegendPosition.Right;
+
+            chart.AddPoint( "Temperatures In NY City", "Monday"    , 43 );
+            chart.AddPoint( "Temperatures In NY City", "Tuesday"   , 53 );
+            chart.AddPoint( "Temperatures In NY City", "Wednesday" , 50 );
+            chart.AddPoint( "Temperatures In NY City", "Thursday"  , 57 );
+            chart.AddPoint( "Temperatures In NY City", "Friday"    , 59 );
+            chart.AddPoint( "Temperatures In NY City", "Saturday", 69 );
+
+            chart.AddPoint( "Temperatures In Chicago", "Monday"    , 22 );
+            chart.AddPoint( "Temperatures In Chicago", "Tuesday"   , 47 );
+            chart.AddPoint( "Temperatures In Chicago", "Wednesday" , 24 );
+            chart.AddPoint( "Temperatures In Chicago", "Thursday"  , 36 );
+            chart.AddPoint( "Temperatures In Chicago", "Friday"    , 59 );
+            chart.AddPoint( "Temperatures In Chicago", "Saturday", 81 );
+
+            chart.AddPoint( "Temperatures In Los Angeles", "Monday"    , 67 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Tuesday"   , 71 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Wednesday" , 72 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Thursday"  , 84 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Friday"    , 64 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Saturday", 88 );
+
+            doc.Add( chart );
+
+            IntegrationHelpers.SaveToTemp( "MultiLinesChartTest", doc );
         }
     }
 }
