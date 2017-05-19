@@ -53,7 +53,7 @@ namespace Stitch.Chart
         }
         public virtual double GetLegendTopOffset()
         {
-            return LegendPosition == LegendPosition.Top ? ChartTextStyle.FontSize : 0;
+            return LegendPosition == LegendPosition.Top ? 2 * GraphicsHelper.MeasureStringHeight( ChartTitle, TitleTextStyle) : 0;
         }
         public abstract double GetLegendLeftOffset();
         public abstract double GetLegendRightOffset();
@@ -76,7 +76,7 @@ namespace Stitch.Chart
             Children.Add( TitleGroup );
 
             SvgTitle = new SVGText();
-            TitleTextStyle = new TextStyle( SvgTitle );
+            TitleTextStyle = new TextStyle( SvgTitle ) { Bold = true };
             ChartTextStyle = new TextStyle( this );
 
             TitleGroup.Add( SvgTitle );

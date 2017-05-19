@@ -51,7 +51,7 @@
     <Compile Include="Chart\Axis\Algorithms\StringTickAlgorithm.cs" />
     <Compile Include="Chart\Axis\Axis.cs" />
     <Compile Include="Chart\Axis\IAxis.cs" />
-    <Compile Include="Chart\Axis\SVGAxisHelpers.cs" />
+    <Compile Include="Chart\Axis\AxisHelper.cs" />
     <Compile Include="Chart\BarChart.cs" />
     <Compile Include="Chart\ChartBase.cs" />
     <Compile Include="Chart\Formatters\Format.cs" />

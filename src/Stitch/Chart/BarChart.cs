@@ -87,9 +87,9 @@ namespace Stitch.Chart
             // Render bars
             var horizontalAxisLocations = new double[] { };
             var verticalAxisLocations = new double[] { };
-            var measuredIntervals = SVGAxisHelpers.SuggestIntervals( GetChartableAreaWidth() );
+            var measuredIntervals = AxisHelper.SuggestIntervals( GetChartableAreaWidth() );
             var min = MeasuredAxis.IncludeDefault ? default( double ) : Bars.Min( t => t.Value );
-            //MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( min, Bars.Max( t => t.Value ), measuredIntervals ) );
+
             var set = new List<double>() { 0 };
             set.AddRange( Bars.Select( t => t.Value ) );
             MeasuredAxis.SetTicks( MeasuredAxisTickAlgorithm.SuggestTicks( set, measuredIntervals ) );
@@ -99,9 +99,10 @@ namespace Stitch.Chart
             ticks.Add( string.Empty );
             labeledClone.SetTicks( ticks );
 
-            SVGAxisHelpers.RenderAxis( labeledClone, MeasuredAxis, GetChartableAreaWidth(), Height, GetLegendLeftOffset(), GetTitleHeight(),
-                                       VerticalAxisGroup, HorizontalAxisGroup, out verticalAxisLocations,
-                                       out horizontalAxisLocations );
+            AxisHelper.RenderAxis( labeledClone, MeasuredAxis, GetChartableAreaWidth() - GetLegendRightOffset() - GetLegendLeftOffset(),
+                                   Height, GetLegendLeftOffset(), GetTitleHeight() + GetLegendTopOffset(),
+                                   VerticalAxisGroup, HorizontalAxisGroup, out verticalAxisLocations,
+                                   out horizontalAxisLocations );
 
             var horizontalSpace = (horizontalAxisLocations.Max() - horizontalAxisLocations.Min()) / horizontalAxisLocations.Length;
             var verticalSpace = (verticalAxisLocations.Max() - verticalAxisLocations.Min()) / verticalAxisLocations.Length;
@@ -110,7 +111,7 @@ namespace Stitch.Chart
             {
                 var label = labeledClone.Ticks[i];
                 var bar = Bars.First( t => t.Label == label );
-                var physicalChartSize = horizontalAxisLocations.Max() - baseLineX;
+                var physicalChartSize = (horizontalAxisLocations.Max() - baseLineX);
                 var barWidth = bar.Value * physicalChartSize / MeasuredAxis.MaxValue;
                 var barY = verticalAxisLocations[i] - (verticalSpace / 2);
                 var svgBar = new SVGRectangle
@@ -138,7 +139,7 @@ namespace Stitch.Chart
 
             var horizontalAxisLocations = new double[] { };
             var verticalAxisLocations = new double[] { };
-            var intervals = SVGAxisHelpers.SuggestIntervals( Height );
+            var intervals = AxisHelper.SuggestIntervals( Height );
             var min = MeasuredAxis.IncludeDefault ? default( double ) : Bars.Min( t => t.Value );
 
             var set = new List<double>() { 0 };
@@ -153,11 +154,16 @@ namespace Stitch.Chart
             ticks.Insert( 0, string.Empty );
             horizontalClone.SetTicks( ticks );
 
-            SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, GetChartableAreaWidth(), Height, GetLegendLeftOffset(), GetTitleHeight(),
-                                       VerticalAxisGroup, HorizontalAxisGroup,
-                                       out verticalAxisLocations, out horizontalAxisLocations );
+            AxisHelper.RenderAxis( measuredClone, horizontalClone, GetChartableAreaWidth(),
+                                   Height - GetLegendBottomOffset() - GetLegendTopOffset(),
+                                   GetLegendLeftOffset(), GetTitleHeight() + GetLegendTopOffset(),
+                                   VerticalAxisGroup, HorizontalAxisGroup,
+                                   out verticalAxisLocations, out horizontalAxisLocations );
 
-            var verticalSpace = (verticalAxisLocations.Max() - verticalAxisLocations.Min()) / verticalAxisLocations.Length;
+            //var totalVerticalSpace = verticalAxisLocations.Max() - verticalAxisLocations.Min();
+            //var categorySpace = totalVerticalSpace / verticalAxisLocations.Length;
+            //var verticalBarSpace = categorySpace - .1 * categorySpace; // 10 % space between bars.
+            var verticalBarSpace = (verticalAxisLocations.Max() - verticalAxisLocations.Min()) / verticalAxisLocations.Length;
 
             // Render bars.
             var baseLineY = verticalAxisLocations.Max();
@@ -167,13 +173,13 @@ namespace Stitch.Chart
                 var bar = Bars.First( t => t.Label == label );
                 var physicalChartSize = baseLineY - verticalAxisLocations.Min();
                 var barHeight = bar.Value * physicalChartSize / MeasuredAxis.MaxValue;
-                var barX = horizontalAxisLocations[i] - (verticalSpace); // center bar on grid line
+                var barX = horizontalAxisLocations[i] - verticalBarSpace; // center bar on grid line
                 var svgBar = new SVGRectangle
                 {
                     X = barX,
                     Y = baseLineY - barHeight,
                     Height = barHeight,
-                    Width = 2 * verticalSpace,
+                    Width = 2 * verticalBarSpace,
                     Fill = bar.Color
                 };
                 svgBar.ClassList.Add( "stitch-theme" );
@@ -184,12 +190,35 @@ namespace Stitch.Chart
 
         public override double GetLegendLeftOffset()
         {
-            return LegendPosition == LegendPosition.Left && LabeledAxis.Visible ? Bars.Max( t => t.Label.Length ) * ChartTextStyle.FontSize : 0;
+            if (LegendPosition == LegendPosition.Left)
+            {
+                var baseWidth = GraphicsHelper.MeasureStringWidth( Bars.Select( t => t.Label ), ChartTextStyle );
+                switch (AxisOrientation)
+                {
+                    case Orientation.Vertical:
+                        return baseWidth + (MeasuredAxis.Visible ? GraphicsHelper.MeasureStringWidth( AxisHelper.LongestTick( MeasuredAxis ), MeasuredAxis.AxisTextStyle ) : 0);
+                    case Orientation.Horizontal:
+                        return baseWidth + (LabeledAxis.Visible ? GraphicsHelper.MeasureStringWidth( AxisHelper.LongestTick( LabeledAxis ), LabeledAxis.AxisTextStyle ) : 0);
+                }
+            }
+            return 0;
+            //return LegendPosition == LegendPosition.Left && LabeledAxis.Visible ? GraphicsHelper.MeasureStringWidth( Bars.Select( t => t.Label ), ChartTextStyle ) : 0;
         }
 
         public override double GetLegendRightOffset()
         {
-            return LegendPosition == LegendPosition.Right && LabeledAxis.Visible ? Bars.Max( t => t.Label.Length ) * ChartTextStyle.FontSize : 0;            
+            if (LegendPosition == LegendPosition.Right)
+            {
+                var baseWidth = GraphicsHelper.MeasureStringWidth( Bars.Select( t => t.Label ), ChartTextStyle );
+                switch (AxisOrientation)
+                {
+                    case Orientation.Vertical:
+                        return baseWidth + (MeasuredAxis.Visible ? GraphicsHelper.MeasureStringWidth( AxisHelper.LongestTick( MeasuredAxis ), MeasuredAxis.AxisTextStyle ) : 0);
+                    case Orientation.Horizontal:
+                        return baseWidth + (LabeledAxis.Visible ? GraphicsHelper.MeasureStringWidth( AxisHelper.LongestTick( LabeledAxis ), LabeledAxis.AxisTextStyle ) : 0);
+                }
+            }
+            return 0;
         }
 
         public override void RenderLegend()
@@ -207,14 +236,15 @@ namespace Stitch.Chart
                         _cy = GetTitleHeight();
                         break;
                     case LegendPosition.Bottom:
-                        _cy = Height - GetLegendBottomOffset();
+                        //_cy = Height - 1.25 * ChartTextStyle.FontSize;
+                        _cy = Height - GraphicsHelper.MeasureStringHeight( "W", ChartTextStyle );
                         break;
                     case LegendPosition.Left:
-                        _cy = 1.5 * GetTitleHeight() ;
+                        _cy = GetTitleHeight();
                         break;
                     case LegendPosition.Right:
-                        _cx = GetChartableAreaWidth() + 2 * ChartTextStyle.FontSize;
-                        _cy = 1.5 * GetTitleHeight();
+                        _cx = 1.15 * GetChartableAreaWidth();
+                        _cy = GetTitleHeight();
                         break;
                 }
 
@@ -234,7 +264,8 @@ namespace Stitch.Chart
                             text.X = _cx + 2 * circle.R;
                             circle.Cy = _cy;
                             text.Y = _cy + ChartTextStyle.FontSize / 3.0;
-                            _cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
+                            //_cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
+                            _cx += GraphicsHelper.MeasureStringWidth( text.Text.Text, ChartTextStyle ) + circle.R;
                             break;
                         case LegendPosition.Right:
                         case LegendPosition.Left:
@@ -242,7 +273,8 @@ namespace Stitch.Chart
                             text.X = _cx + 2 * circle.R;
                             circle.Cy = _cy;
                             text.Y = _cy + ChartTextStyle.FontSize / 3.0;
-                            _cy += 1.75 * ChartTextStyle.FontSize;
+                            //_cy += 1.75 * ChartTextStyle.FontSize;
+                            _cy += GraphicsHelper.MeasureStringHeight( text.Text.Text, ChartTextStyle );
                             break;
 
                     }

@@ -10,13 +10,13 @@ namespace Stitch.Tests
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class ChartTests
     {
-        [Theory( DisplayName = "Simple2DPieTestLegendPositions" )]
-        [InlineData( LegendPosition.Right, "Simple2DPieTestRight" )]
-        [InlineData( LegendPosition.Left, "Simple2DPieTestLeft" )]
-        [InlineData( LegendPosition.Top, "Simple2DPieTestTop" )]
-        [InlineData( LegendPosition.Bottom, "Simple2DPieTestBottom" )]
-        [InlineData( LegendPosition.None, "Simple2DPieTestNone" )]
-        public void Simple2DPieTestLegendPositions( LegendPosition position, string fileName )
+        [Theory( DisplayName = "PieTestLegendPositions" )]
+        [InlineData( LegendPosition.Right, "Pie2DLegendTestRight" )]
+        [InlineData( LegendPosition.Left, "Pie2DLegendTestLeft" )]
+        [InlineData( LegendPosition.Top, "Pie2DLegendTestTop" )]
+        [InlineData( LegendPosition.Bottom, "Pie2DLegendTestBottom" )]
+        [InlineData( LegendPosition.None, "Pie2DLegendTestNone" )]
+        public void Pie2DTestLegendPositions( LegendPosition position, string fileName )
         {
             var doc = new StitchDocument();
             var graph = new PieChart();
@@ -32,13 +32,13 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
-        [Theory( DisplayName = "SimpleBarChartLegendPositions" )]
-        [InlineData( LegendPosition.Right, "SimpleBarChartLegendTestRight" )]
-        [InlineData( LegendPosition.Left, "SimpleBarChartLegendTestLeft" )]
-        [InlineData( LegendPosition.Top, "SimpleBarChartLegendTestTop" )]
-        [InlineData( LegendPosition.Bottom, "SimpleBarChartLegendTestBottom" )]
-        [InlineData( LegendPosition.None, "SimpleBarChartLegendTestNone" )]
-        public void SimpleBarChartLegendPositions( LegendPosition position, string fileName )
+        [Theory( DisplayName = "BarChartLegendPositions" )]
+        [InlineData( LegendPosition.Right, "BarChartLegendTestRight" )]
+        [InlineData( LegendPosition.Left, "BarChartLegendTestLeft" )]
+        [InlineData( LegendPosition.Top, "BarChartLegendTestTop" )]
+        [InlineData( LegendPosition.Bottom, "BarChartLegendTestBottom" )]
+        [InlineData( LegendPosition.None, "BarChartLegendTestNone" )]
+        public void BarChartLegendPositions( LegendPosition position, string fileName )
         {
             var doc = new StitchDocument();
             var chart = new BarChart( 900, 400 );
@@ -64,13 +64,13 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
-        [Theory( DisplayName = "SimpleLineChartLegendPositions" )]
-        [InlineData( LegendPosition.Right, "SimpleLineChartLegendTestRight" )]
-        [InlineData( LegendPosition.Left, "SimpleLineChartLegendTestLeft" )]
-        [InlineData( LegendPosition.Top, "SimpleLineChartLegendTestTop" )]
-        [InlineData( LegendPosition.Bottom, "SimpleLineChartLegendTestBottom" )]
-        [InlineData( LegendPosition.None, "SimpleLineChartLegendTestNone" )]
-        public void SimpleLineChartLegendPositions( LegendPosition position, string fileName )
+        [Theory( DisplayName = "LineChartLegendPositions" )]
+        [InlineData( LegendPosition.Right, "LineChartLegendTestRight" )]
+        [InlineData( LegendPosition.Left, "LineChartLegendTestLeft" )]
+        [InlineData( LegendPosition.Top, "LineChartLegendTestTop" )]
+        [InlineData( LegendPosition.Bottom, "LineChartLegendTestBottom" )]
+        [InlineData( LegendPosition.None, "LineChartLegendTestNone" )]
+        public void LineChartLegendPositions( LegendPosition position, string fileName )
         {
             var doc = new StitchDocument();
             var chart = new LineChart<string, double>();
@@ -103,12 +103,12 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
-        [Theory( DisplayName = "Simple2DPieTestLabels" )]
-        [InlineData( PieSliceText.Label, "Simple2DPieTestLabelsLabel" )]
-        [InlineData( PieSliceText.Percentage, "Simple2DPieTestLabelsPercentage" )]
-        [InlineData( PieSliceText.Value, "Simple2DPieTestLabelsValue" )]
-        [InlineData( PieSliceText.None, "Simple2DPieTestLabelsNone" )]
-        public void Simple2DPieTestLabels( PieSliceText sliceText, string fileName )
+        [Theory( DisplayName = "2DPieTestLabels" )]
+        [InlineData( PieSliceText.Label, "2DPieTestLabelsLabel" )]
+        [InlineData( PieSliceText.Percentage, "2DPieTestLabelsPercentage" )]
+        [InlineData( PieSliceText.Value, "2DPieTestLabelsValue" )]
+        [InlineData( PieSliceText.None, "2DPieTestLabelsNone" )]
+        public void Pie2DTestLabels( PieSliceText sliceText, string fileName )
         {
             var doc = new StitchDocument();
             var graph = new PieChart();
@@ -165,15 +165,15 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
-        [Theory( DisplayName = "Simple2DPieTestPieHole" )]
-        [InlineData( 0, "Simple2DPieTestPieHole0" )]
-        [InlineData( 1, "Simple2DPieTestPieHole100" )]
-        [InlineData( .4, "Simple2DPieTestPieHole50" )]
-        [InlineData( .25, "Simple2DPieTestPieHole25" )]
-        [InlineData( .75, "Simple2DPieTestPieHole75" )]
-        [InlineData( .10, "Simple2DPieTestPieHole10" )]
-        [InlineData( .9, "Simple2DPieTestPieHole90" )]
-        public void Simple2DPieTestPieHole( double pieHole, string fileName )
+        [Theory( DisplayName = "Pie2DTestPieHole" )]
+        [InlineData( 0, "Pie2DTestPieHole0" )]
+        [InlineData( 1, "Pie2DTestPieHole100" )]
+        [InlineData( .4, "Pie2DTestPieHole50" )]
+        [InlineData( .25, "Pie2DTestPieHole25" )]
+        [InlineData( .75, "Pie2DTestPieHole75" )]
+        [InlineData( .10, "Pie2DTestPieHole10" )]
+        [InlineData( .9, "Pie2DTestPieHole90" )]
+        public void Pie2DTestPieHole( double pieHole, string fileName )
         {
             var doc = new StitchDocument();
             var graph = new PieChart();

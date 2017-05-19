@@ -83,8 +83,8 @@ namespace Stitch.Chart
 
             var horizontalAxisLocations = new double[] { };
             var verticalAxisLocations = new double[] { };
-            var horizontalIntervals = SVGAxisHelpers.SuggestIntervals( GetChartableAreaWidth() );
-            var verticalIntervals = SVGAxisHelpers.SuggestIntervals( Height );
+            var horizontalIntervals = AxisHelper.SuggestIntervals( GetChartableAreaWidth() );
+            var verticalIntervals = AxisHelper.SuggestIntervals( Height );
             //T1 horizontalMin, horizontalMax;
             //T2 verticalMin, verticalMax;
             Sort();
@@ -101,8 +101,8 @@ namespace Stitch.Chart
             var measuredClone = MeasuredAxis.Clone() as IAxis<T2>;
             measuredClone.SetTicks( measuredClone.Ticks.Reverse() );
 
-            SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, GetChartableAreaWidth(), Height - GetLegendBottomOffset() - GetLegendTopOffset(), 
-                                       GetLegendLeftOffset(), GetTitleHeight(),
+            AxisHelper.RenderAxis( measuredClone, horizontalClone, GetChartableAreaWidth(), Height - GetLegendBottomOffset() - GetLegendTopOffset(),
+                                       GetLegendLeftOffset(), GetTitleHeight() + GetLegendTopOffset(),
                                        VerticalAxisGroup, HorizontalAxisGroup,
                                        out verticalAxisLocations, out horizontalAxisLocations );
 
@@ -139,7 +139,7 @@ namespace Stitch.Chart
                         {
                             svgLine.MoveTo( baseLineX, py );
                         }
-                        else 
+                        else
                         {
                             svgLine.MoveTo( baseLineX, baseLineY );
                         }
@@ -150,7 +150,7 @@ namespace Stitch.Chart
                 ChartGroup.Add( svgLine );
             }
         }
-        
+
         private IEnumerable<T1> GetHorizontalSet()
         {
             var set = new List<T1>();
@@ -173,12 +173,12 @@ namespace Stitch.Chart
 
         public override double GetLegendLeftOffset()
         {
-            return LegendPosition == LegendPosition.Left ? Lines.Max(t => t.LineName.Length - 2 ) * ChartTextStyle.FontSize : 0;            
+            return LegendPosition == LegendPosition.Left ? GraphicsHelper.MeasureStringWidth( Lines.Select( t => t.LineName ), ChartTextStyle ) : 0;
         }
 
         public override double GetLegendRightOffset()
         {
-            return LegendPosition == LegendPosition.Right ? Lines.Max( t => t.LineName.Length - 2 ) * ChartTextStyle.FontSize : 0;
+            return LegendPosition == LegendPosition.Right ? GraphicsHelper.MeasureStringWidth( Lines.Select( t => t.LineName ), ChartTextStyle ) : 0;
         }
 
         public override void RenderLegend()
@@ -196,13 +196,14 @@ namespace Stitch.Chart
                         _cy = GetTitleHeight();
                         break;
                     case LegendPosition.Bottom:
-                        _cy = Height - GetLegendBottomOffset();
+                        //_cy = Height - 1.25 * ChartTextStyle.FontSize;
+                        _cy = Height - GraphicsHelper.MeasureStringHeight( "W", ChartTextStyle );
                         break;
                     case LegendPosition.Left:
                         _cy = GetTitleHeight();
                         break;
                     case LegendPosition.Right:
-                        _cx = 1.25 * GetChartableAreaWidth();
+                        _cx = 1.15 * GetChartableAreaWidth();
                         _cy = GetTitleHeight();
                         break;
                 }
@@ -223,7 +224,8 @@ namespace Stitch.Chart
                             text.X = _cx + 2 * circle.R;
                             circle.Cy = _cy;
                             text.Y = _cy + ChartTextStyle.FontSize / 3.0;
-                            _cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
+                            //_cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
+                            _cx += GraphicsHelper.MeasureStringWidth( text.Text.Text, ChartTextStyle ) + circle.R;
                             break;
                         case LegendPosition.Right:
                         case LegendPosition.Left:
@@ -231,7 +233,8 @@ namespace Stitch.Chart
                             text.X = _cx + 2 * circle.R;
                             circle.Cy = _cy;
                             text.Y = _cy + ChartTextStyle.FontSize / 3.0;
-                            _cy += 1.75 * ChartTextStyle.FontSize;
+                            //_cy += 1.75 * ChartTextStyle.FontSize;
+                            _cy += GraphicsHelper.MeasureStringHeight( text.Text.Text, ChartTextStyle );
                             break;
 
                     }

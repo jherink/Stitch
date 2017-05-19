@@ -94,9 +94,19 @@ namespace Stitch.Chart
             return base.GetNodes( tagFilter );
         }
 
-        protected double GetChartableAreaWidth()
+        public override double GetLegendBottomOffset()
+        {
+            if (LegendPosition == LegendPosition.Bottom)
+            {
+                var longestTick = AxisHelper.LongestTick( LabeledAxis );
+                return longestTick.Length < AxisHelper.MaxHorizontalAxisLength ? base.GetLegendBottomOffset() : GraphicsHelper.MeasureStringWidth(longestTick, LabeledAxis.AxisTextStyle);
+            }
+            return 0;
+        }
+
+        protected virtual double GetChartableAreaWidth()
         {
             return .9 * Width - Math.Max( GetLegendLeftOffset(), GetLegendRightOffset() );
-        }                
+        }
     }
 }

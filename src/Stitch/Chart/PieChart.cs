@@ -197,7 +197,8 @@ namespace Stitch.Chart
                             text.X = _cx + 2 * circle.R;
                             circle.Cy = _cy;
                             text.Y = _cy + ChartTextStyle.FontSize / 3.0;
-                            _cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
+                            //_cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
+                            _cx += GraphicsHelper.MeasureStringWidth( text.Text.Text, ChartTextStyle ) + circle.R;
                             break;
                         case LegendPosition.Right:
                         case LegendPosition.Left:
@@ -205,7 +206,8 @@ namespace Stitch.Chart
                             text.X = _cx + 2 * circle.R;
                             circle.Cy = _cy;
                             text.Y = _cy + ChartTextStyle.FontSize / 3.0;
-                            _cy += 1.75 * ChartTextStyle.FontSize;
+                            //_cy += 1.75 * ChartTextStyle.FontSize;
+                            _cy += GraphicsHelper.MeasureStringHeight( text.Text.Text, ChartTextStyle );
                             break;
 
                     }
