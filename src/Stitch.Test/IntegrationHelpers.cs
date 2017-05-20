@@ -33,21 +33,39 @@ namespace Stitch.Tests
             return directory;
         }
 
-        public static void SaveToTemp( string name, StitchDocument doc )
+        private static string _masterPath = string.Empty;
+
+        public static string MasterPath
+        {
+            get
+            {
+                if (_masterPath == string.Empty)
+                {
+                    _masterPath = Path.Combine( EnsuredTempDirectory(), "Master" );
+                }
+                return _masterPath;
+            }
+        }
+
+        public static void SaveToTemp( string name, StitchDocument doc, bool ignoreRegression = false )
         {
             if (!name.EndsWith( ".html" )) name += ".html";
 
             var path = Path.Combine( EnsuredTempDirectory(), name );
+            var master = Path.Combine( MasterPath, name );
             doc.Save( path );
+
+            if(ignoreRegression == false) Microsoft.VisualStudio.TestTools.UnitTesting.Assert.IsTrue( SHA1Comparison.Equal( path, master ), $"File comparison of \"{Path.GetFileName( path )}\" with master file \"{master}\" are not equal." );
         }
 
-        public static void ExportPdfToTemp( string name, StitchDocument doc )
+        public static void ExportPdfToTemp( string name, StitchDocument doc, bool ignoreRegression = false )
         {
-            SaveToTemp( name, doc );
             if (!name.EndsWith( ".pdf" )) name += ".pdf";
 
             var path = Path.Combine( EnsuredTempDirectory(), name );
-            doc.ExportToPdf( path );
+            doc.Export( new PDFExporter(), File.Create( path ) );
+
+            SaveToTemp( name.Remove(name.Length - ".pdf".Length), doc, ignoreRegression );
         }
 
         public static string CreateLocalResource( string resourcePath )

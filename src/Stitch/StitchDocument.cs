@@ -225,8 +225,10 @@ namespace Stitch
                 IndentChars = "\t"
             };
 
-            var writer = XmlWriter.Create( path, settings );
-            xml.Save( writer );
+            using (var writer = XmlWriter.Create( path, settings ))
+            {
+                xml.Save( writer );
+            }
         }
 
         public void ExportToPdf( string path )

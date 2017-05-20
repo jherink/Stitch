@@ -61,7 +61,6 @@ namespace Stitch.Tests
                 var pieChart = new PieChart();
                 //chart.LegendPosition = LegendPosition.Left;
                 pieChart.ChartTitle = "Pie Chart";
-                pieChart.TitleTextStyle.Bold = true;
                 foreach (DataRow row in pieData.Rows)
                 {
                     pieChart.AddSlice( row[0].ToString(), double.Parse( row[1].ToString().Remove( 0, 1 ) ) );
@@ -85,7 +84,7 @@ namespace Stitch.Tests
                 //pieChart.PieHole = .4; // just add this
                 //doc.Add( pieChart );
 
-                IntegrationHelpers.ExportPdfToTemp( $"Themes\\{theme}", doc );
+                IntegrationHelpers.ExportPdfToTemp( $"Themes\\{theme}", doc, true );
             }
         }
 
@@ -176,10 +175,10 @@ namespace Stitch.Tests
             div.Add( CreatePageHeader( "Category Sales Summary" ) );
 
             var data = IntegrationHelpers.GetCategorySalesSummary();
-            var chart = new PieChart( 900, 400 );
+            var chart = new PieChart( 500, 750 );
             //chart.LegendPosition = LegendPosition.Left;
             chart.ChartTitle = "Total Sales By Category";
-            chart.PieSliceText = PieSliceText.None;
+            chart.PieSliceText = PieSliceText.Percentage;
             chart.TitleTextStyle.Bold = true;
             foreach (DataRow row in data.Rows)
             {

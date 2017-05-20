@@ -111,6 +111,86 @@
     <Content Include="Data\Northwind_Log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Master\2DPieTestLabelsLabel.html" />
+    <Content Include="Master\2DPieTestLabelsNone.html" />
+    <Content Include="Master\2DPieTestLabelsPercentage.html" />
+    <Content Include="Master\2DPieTestLabelsValue.html" />
+    <Content Include="Master\AxisRenderSizeTests.html" />
+    <Content Include="Master\BarChartLegendTestBottom.html" />
+    <Content Include="Master\BarChartLegendTestLeft.html" />
+    <Content Include="Master\BarChartLegendTestNone.html" />
+    <Content Include="Master\BarChartLegendTestRight.html" />
+    <Content Include="Master\BarChartLegendTestTop.html" />
+    <Content Include="Master\ColorSwatch.html" />
+    <Content Include="Master\complexSamplePage.html" />
+    <Content Include="Master\CustomCSSRuleTest.html" />
+    <Content Include="Master\ExplodeSliceTest.html" />
+    <Content Include="Master\ExportTest01.html" />
+    <Content Include="Master\headingLevelTests.html" />
+    <Content Include="Master\helloworld.html" />
+    <Content Include="Master\helloworldincolor.html" />
+    <Content Include="Master\HorizontalBarChartTest.html" />
+    <Content Include="Master\imageInTableTests.html" />
+    <Content Include="Master\LineChartLegendTestBottom.html" />
+    <Content Include="Master\LineChartLegendTestLeft.html" />
+    <Content Include="Master\LineChartLegendTestNone.html" />
+    <Content Include="Master\LineChartLegendTestRight.html" />
+    <Content Include="Master\LineChartLegendTestTop.html" />
+    <Content Include="Master\LineChartWithNumbersTest1.html" />
+    <Content Include="Master\linkTests.html" />
+    <Content Include="Master\MultiLinesChartTest.html" />
+    <Content Include="Master\MultipleBarChartTest2.html" />
+    <Content Include="Master\MultipleVerticalBarChartTest.html" />
+    <Content Include="Master\MultipleVerticalBarChartTest2.html" />
+    <Content Include="Master\NorthwindReportTestOutput.html" />
+    <Content Include="Master\NorthwindSalesByYearTest.html" />
+    <Content Include="Master\Pie2DLegendTestBottom.html" />
+    <Content Include="Master\Pie2DLegendTestLeft.html" />
+    <Content Include="Master\Pie2DLegendTestNone.html" />
+    <Content Include="Master\Pie2DLegendTestRight.html" />
+    <Content Include="Master\Pie2DLegendTestTop.html" />
+    <Content Include="Master\Pie2DTestPieHole0.html" />
+    <Content Include="Master\Pie2DTestPieHole10.html" />
+    <Content Include="Master\Pie2DTestPieHole100.html" />
+    <Content Include="Master\Pie2DTestPieHole25.html" />
+    <Content Include="Master\Pie2DTestPieHole50.html" />
+    <Content Include="Master\Pie2DTestPieHole75.html" />
+    <Content Include="Master\Pie2DTestPieHole90.html" />
+    <Content Include="Master\PieSliceContentRenderingTestEight.html" />
+    <Content Include="Master\PieSliceContentRenderingTestFour.html" />
+    <Content Include="Master\PieSliceContentRenderingTestOne.html" />
+    <Content Include="Master\PieSliceContentRenderingTestSixteen.html" />
+    <Content Include="Master\PieSliceContentRenderingTestTwelve.html" />
+    <Content Include="Master\PieSliceContentRenderingTestTwo.html" />
+    <Content Include="Master\PracticalAxisRenderSizeTests.html" />
+    <Content Include="Master\SingleHorizontalBarChartTest.html" />
+    <Content Include="Master\SingleVerticalBarChartTest.html" />
+    <Content Include="Master\SVGCircleTest.html" />
+    <Content Include="Master\SVGEllipse1Test.html" />
+    <Content Include="Master\SVGEllipse2Test.html" />
+    <Content Include="Master\SVGEllipse3Test.html" />
+    <Content Include="Master\SVGLineTest.html" />
+    <Content Include="Master\SVGPath1Test.html" />
+    <Content Include="Master\SVGPath2Test.html" />
+    <Content Include="Master\SVGPolygon1Test.html" />
+    <Content Include="Master\SVGPolygon2Test.html" />
+    <Content Include="Master\SVGPolygon3Test.html" />
+    <Content Include="Master\SVGPolyLineTest.html" />
+    <Content Include="Master\SVGRectangle2Test.html" />
+    <Content Include="Master\SVGRectangle3Test.html" />
+    <Content Include="Master\SVGRectangleTest.html" />
+    <Content Include="Master\SVGStrokeTest.html" />
+    <Content Include="Master\SVGTextTest1.html" />
+    <Content Include="Master\SVGTextTest2.html" />
+    <Content Include="Master\SVGTextTest3.html" />
+    <Content Include="Master\tabletest1.html" />
+    <Content Include="Master\tablewithcaptiontest.html" />
+    <Content Include="Master\TemperaturesLineGraphTest.html" />
+    <Content Include="Master\Test2PieRotation100.html" />
+    <Content Include="Master\tiger.jpg" />
+    <Content Include="Master\unorderedListTest1.html" />
+    <Content Include="Master\VerticalBarChartTest.html" />
+    <Content Include="Master\W3CSSSampleTest.html" />
     <Content Include="Resources\Css3.css" />
     <Content Include="Resources\Css3Friendly.css" />
     <Content Include="Resources\Css3Min.css" />
@@ -144,6 +224,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)\Master" "%25temp%25\Stitch\Master" /h/i/c/k/e/r/y
+xcopy "$(ProjectDir)\Data" "%25temp%25\Stitch\Data" /h/i/c/k/e/r/y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

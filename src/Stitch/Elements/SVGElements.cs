@@ -401,7 +401,7 @@ namespace Stitch.Elements
 
     public class SVGGroup : SVGBaseElement, ISVGGroup, IParentElement, INodeQueryable
     {
-        public ICollection<IElement> Children { get; set; } = new List<IElement>();
+        public IList<IElement> Children { get; set; } = new List<IElement>();
 
         public void Add( IElement element ) { Children.Add( element ); }
 

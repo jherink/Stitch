@@ -4,6 +4,7 @@ using Xunit;
 using System.Data;
 using System.Collections.Generic;
 using Stitch.Elements;
+using Stitch.Elements.Interface;
 
 namespace Stitch.Tests
 {
@@ -60,6 +61,21 @@ namespace Stitch.Tests
             var div = new Div();
             div.StyleList.Add( "margin: 30px" );
             doc.Add( div, chart2 );
+
+            var chart3 = new BarChart( 900, 400 );
+            chart3.ChartTitle = "Quarterly Results";
+            chart3.Width = 600;
+            chart3.MeasuredAxis.Format = "C0";
+            chart3.LegendPosition = position;
+            chart3.AddBar( "Q1", 18450 );
+            chart3.AddBar( "Q2", 34340.72 );
+            chart3.AddBar( "Q3", 43145.52 );
+            chart3.AddBar( "Q4", 18415 );
+
+            var chart4 = chart3.Clone() as BarChart;
+            chart4.AxisOrientation = Orientation.Horizontal;
+
+            doc.Add( div.Clone() as IElement, chart3, div.Clone() as IElement, chart4 );
 
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
@@ -343,12 +359,12 @@ namespace Stitch.Tests
                             chart.AddBar( labels[i], axisData[i], colors != null ? colors[i] : string.Empty );
                         }
                         doc.Add( chart );
-                        doc.Add( new Elements.LineBreak() );
+                        doc.Add( new LineBreak() );
 
                         var verticalClone = chart.Clone() as BarChart;
                         verticalClone.AxisOrientation = Orientation.Vertical;
                         doc.Add( verticalClone );
-                        doc.Add( new Elements.LineBreak() );
+                        doc.Add( new LineBreak() );
                     }
                 }
             }
@@ -377,7 +393,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "NorthwindSalesByYearTest", doc );
         }
 
-        [Fact( DisplayName = "HorizontalBarChartTest" )]
+        [Fact( DisplayName = "SingleHorizontalBarChartTest" )]
         public void HorizontalBarChartTest()
         {
             var doc = new StitchDocument();
@@ -394,11 +410,11 @@ namespace Stitch.Tests
             chart.AddBar( "Android 4.4: 2%", 2 );
             doc.Add( chart );
 
-            IntegrationHelpers.SaveToTemp( "HorizontalBarChartTest", doc );
+            IntegrationHelpers.SaveToTemp( "SingleHorizontalBarChartTest", doc );
         }
 
-        [Fact( DisplayName = "VerticalBarChartTest" )]
-        public void VerticalBarChartTest()
+        [Fact( DisplayName = "SingleVerticalBarChartTest" )]
+        public void SingleVerticalBarChartTest()
         {
             var doc = new StitchDocument();
             var chart = new BarChart();
@@ -414,7 +430,71 @@ namespace Stitch.Tests
             chart.AddBar( "Q4", 18415 );
             cont.Add( chart );
 
-            IntegrationHelpers.SaveToTemp( "VerticalBarChartTest", doc );
+            IntegrationHelpers.SaveToTemp( "SingleVerticalBarChartTest", doc );
+        }
+
+        [Fact( DisplayName = "MultipleVerticalBarChartTest" )]
+        public void MultipleVerticalBarChartTest()
+        {
+            var doc = new StitchDocument();
+            var chart = new BarChart();
+            chart.LegendPosition = LegendPosition.Right;
+            var cont = doc.AddBodyContainer();
+            chart.ChartTitle = "Quarterly Results";
+            chart.MeasuredAxis.Format = "C0";
+
+            chart.AddToBarGroup( "Invoiced", "Q1", 18450 );
+            chart.AddToBarGroup( "Invoiced", "Q2", 34340.72 );
+            chart.AddToBarGroup( "Invoiced", "Q3", 43145.52 );
+            chart.AddToBarGroup( "Invoiced", "Q4", 18415.95 );
+
+            chart.AddToBarGroup( "Collected", "Q1", 16500 );
+            chart.AddToBarGroup( "Collected", "Q2", 32340.72 );
+            chart.AddToBarGroup( "Collected", "Q3", 32225.52 );
+            chart.AddToBarGroup( "Collected", "Q4", 32425 );
+            
+            cont.Add( chart );
+
+            IntegrationHelpers.SaveToTemp( "MultipleVerticalBarChartTest", doc );
+        }
+
+        [Fact( DisplayName = "MultipleBarChartTest2" )]
+        public void MultipleBarChartTest2()
+        {
+            var doc = new StitchDocument();
+            var chart = new BarChart();
+            chart.LegendPosition = LegendPosition.Right;
+            //var cont = doc.AddBodyContainer();
+            chart.ChartTitle = "Quarterly Results";
+            chart.MeasuredAxis.Format = "C0";
+
+            chart.AddToBarGroup( "Sales", "2014", 1000 );
+            chart.AddToBarGroup( "Sales", "2015", 1170 );
+            chart.AddToBarGroup( "Sales", "2016", 660 );
+            chart.AddToBarGroup( "Sales", "2017", 1030 );
+
+            chart.AddToBarGroup( "Expenses", "2014", 400 );
+            chart.AddToBarGroup( "Expenses", "2015", 460 );
+            chart.AddToBarGroup( "Expenses", "2016", 1120 );
+            chart.AddToBarGroup( "Expenses", "2017", 540 );
+
+            chart.AddToBarGroup( "Profit", "2014", 200 );
+            chart.AddToBarGroup( "Profit", "2015", 250 );
+            chart.AddToBarGroup( "Profit", "2016", 300 );
+            chart.AddToBarGroup( "Profit", "2017", 350);
+
+            chart.SetBarGroupColor( "Profit", "purple" );
+
+            doc.Add( chart );
+
+            var div = new Div();
+            div.StyleList.Add( "margin: 10px" );
+
+            var chart2 = chart.Clone() as BarChart;
+            chart2.AxisOrientation = Orientation.Horizontal;
+
+            doc.Add( div, chart2 );
+            IntegrationHelpers.SaveToTemp( "MultipleBarChartTest2", doc );
         }
 
         [Theory( DisplayName = "LineChartWithNumbersTest" )]

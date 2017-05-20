@@ -22,7 +22,7 @@ namespace Stitch
 
         public string Text { get { return Render(); } }
 
-        public ICollection<IElement> Elements { get; private set; }
+        public IList<IElement> Elements { get; private set; }
 
         public string Render()
         {

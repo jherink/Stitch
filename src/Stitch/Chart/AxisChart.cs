@@ -38,8 +38,8 @@ namespace Stitch.Chart
 
         protected AxisChart( int width, int height ) : base( height, width )
         {
-            Children.Add( VerticalAxisGroup );
-            Children.Add( HorizontalAxisGroup );
+            Children.Insert(0, VerticalAxisGroup );
+            Children.Insert(1, HorizontalAxisGroup );
 
             var txtDummy = new SVGText();
             ChartTextStyle.ApplyStyle( txtDummy );
@@ -81,19 +81,7 @@ namespace Stitch.Chart
 
             return null;
         }
-
-        public override IEnumerable<IElement> GetAllNodes()
-        {
-            RenderChart();
-            return base.GetAllNodes();
-        }
-
-        public override IEnumerable<IElement> GetNodes( string tagFilter )
-        {
-            RenderChart();
-            return base.GetNodes( tagFilter );
-        }
-
+        
         public override double GetLegendBottomOffset()
         {
             if (LegendPosition == LegendPosition.Bottom)
@@ -103,8 +91,8 @@ namespace Stitch.Chart
             }
             return 0;
         }
-
-        protected virtual double GetChartableAreaWidth()
+       
+        protected override double GetChartableAreaWidth()
         {
             return .9 * Width - Math.Max( GetLegendLeftOffset(), GetLegendRightOffset() );
         }

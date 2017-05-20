@@ -180,69 +180,11 @@ namespace Stitch.Chart
         {
             return LegendPosition == LegendPosition.Right ? GraphicsHelper.MeasureStringWidth( Lines.Select( t => t.LineName ), ChartTextStyle ) : 0;
         }
-
-        public override void RenderLegend()
+               
+        protected override IEnumerable<Tuple<string, string>> GetLegendItems()
         {
-            Legend.Children.Clear();
-            if (LegendPosition != LegendPosition.None)
-            {
-                var i = 1;
-
-                double _cx = ChartTextStyle.FontSize / 2, _cy = 0;
-
-                switch (LegendPosition)
-                {
-                    case LegendPosition.Top:
-                        _cy = GetTitleHeight();
-                        break;
-                    case LegendPosition.Bottom:
-                        //_cy = Height - 1.25 * ChartTextStyle.FontSize;
-                        _cy = Height - GraphicsHelper.MeasureStringHeight( "W", ChartTextStyle );
-                        break;
-                    case LegendPosition.Left:
-                        _cy = GetTitleHeight();
-                        break;
-                    case LegendPosition.Right:
-                        _cx = 1.15 * GetChartableAreaWidth();
-                        _cy = GetTitleHeight();
-                        break;
-                }
-
-                var j = 1;
-                foreach (var line in Lines)
-                {
-                    var item = CreateLegendLine( line.LineName, line.Color, j++ );
-                    var circle = item.Children.ToList()[0] as SVGCircle;
-                    var text = item.Children.ToList()[1] as SVGText;
-                    circle.ClassList.Add( GetChartTheme( i++ ) );
-
-                    switch (LegendPosition)
-                    {
-                        case LegendPosition.Bottom:
-                        case LegendPosition.Top:
-                            circle.Cx = _cx;
-                            text.X = _cx + 2 * circle.R;
-                            circle.Cy = _cy;
-                            text.Y = _cy + ChartTextStyle.FontSize / 3.0;
-                            //_cx += (1.75 + text.Text.Text.Length) * ChartTextStyle.FontSize;
-                            _cx += GraphicsHelper.MeasureStringWidth( text.Text.Text, ChartTextStyle ) + circle.R;
-                            break;
-                        case LegendPosition.Right:
-                        case LegendPosition.Left:
-                            circle.Cx = _cx;
-                            text.X = _cx + 2 * circle.R;
-                            circle.Cy = _cy;
-                            text.Y = _cy + ChartTextStyle.FontSize / 3.0;
-                            //_cy += 1.75 * ChartTextStyle.FontSize;
-                            _cy += GraphicsHelper.MeasureStringHeight( text.Text.Text, ChartTextStyle );
-                            break;
-
-                    }
-
-                    Legend.Children.Add( item );
-                }
-
-            }
+            return Lines.Select( t => new Tuple<string, string>( t.LineName, t.Color ) );
         }
     }
 }
+

@@ -50,12 +50,12 @@ namespace Stitch.Chart
         {
             return MeasureString( text, textStyle.FontSize, textStyle.FontName ).Height;
         }
-
+        
         public static SizeF MeasureString( IEnumerable<string> text, double fontSize = -1, string fontName = "" )
         {
             if (text.Any())
             {
-                var limitText = text.OrderBy( t => t.Length ).FirstOrDefault();
+                var limitText = text.OrderByDescending( t => t.Length ).FirstOrDefault();
                 return MeasureString( limitText, fontSize, fontName );
             }
             return new SizeF(0,0);
