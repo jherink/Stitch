@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 namespace Stitch.Chart.Axis
 {
@@ -26,7 +27,7 @@ namespace Stitch.Chart.Axis
 
         #region Ticks
 
-        private List<T> _ticks = null;
+        private List<T> _ticks = new List<T>();
 
         public IReadOnlyList<T> Ticks { get { return _ticks; } }
 
@@ -92,6 +93,16 @@ namespace Stitch.Chart.Axis
             if (this.Ticks != null) foreach (var t in this.Ticks) ticks.Add( t );
             clone.SetTicks( ticks );
             return clone;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return Ticks.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Ticks.GetEnumerator();
         }
     }
 }

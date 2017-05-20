@@ -1,4 +1,5 @@
-﻿using Stitch.Elements;
+﻿using Stitch.Chart.Axis;
+using Stitch.Elements;
 using Stitch.Elements.Interface;
 using System;
 using System.Collections.Generic;
@@ -37,25 +38,6 @@ namespace Stitch.Chart
 
         internal SVGPath Path { get; set; } = new SVGPath();
 
-        internal SVGGroup CreateLegendLine( string colorOverride = "" )
-        {
-            var g = new SVGGroup();
-
-            var text = new SVGText() { Text = Label };
-
-            var circle = new SVGCircle()
-            {
-                R = 7,
-                Fill = !string.IsNullOrWhiteSpace( colorOverride ) ? colorOverride : Color,
-                Stroke = "none"
-            };
-
-            g.Children.Add( circle );
-            g.Children.Add( text );
-
-            return g;
-        }
-
         public PieSlice()
         {
             Path.Stroke = "white";
@@ -67,20 +49,8 @@ namespace Stitch.Chart
         }
     }
 
-    public class PieChart : SVG, IChart
+    public class PieChart : ChartBase
     {
-        #region IChart Implementation
-
-        public ITextStyle TitleTextStyle { get; set; }
-
-        public ITextStyle ChartTextStyle { get; set; }
-
-        public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
-
-        public List<string> Colors { get; private set; } = Helpers.GetDefaultColors();
-
-        #endregion
-
         #region Properties
 
         //#region SliceVisibilityThreshold
@@ -116,35 +86,18 @@ namespace Stitch.Chart
 
         #endregion
 
-        #region LegendPosition
-
-        private LegendPosition _legendPosition = LegendPosition.Right;
-
-        public LegendPosition LegendPosition
-        {
-
-            get { return _legendPosition; }
-            set { _legendPosition = value; }
-        }
-
-        #endregion
-
-        public string BackgroundColor { get; set; }
-
-        public IChartArea ChartArea { get; set; }
+        //public IChartArea ChartArea { get; set; }
 
         //public bool Is3D { get; set; }
 
         public string FontName { get; set; }
-
-        public int FontSize { get; set; } = 14;
 
         //public string PieResidueSliceLabel { get; set; } = "Other";
 
         //public string PieResidueSliceColor { get; set; } = "#ccc";
 
         public int PieStartAngle { get; set; }
-        
+
         #region PieSliceText
 
         private PieSliceText _pieSliceText = PieSliceText.Percentage;
@@ -172,7 +125,7 @@ namespace Stitch.Chart
         {
             Slices.Add( slice );
             Children.Add( slice );
-            CalculateSliceSizes();
+            //CalculateSliceSizes();
         }
 
         public void SetOffset( string label, double offset )
@@ -187,34 +140,14 @@ namespace Stitch.Chart
 
         #region Constructor
 
-        public PieChart() : this( 900, 500 )
+        public PieChart() : this( 500, 800 )
         {
         }
 
-        public PieChart( int width, int height ) : base( height, width )
+        public PieChart( int height, int width ) : base( height, width )
         {
-            StyleList.Add( "overflow: hidden;" );
-            Children.Add( TitleGroup );
-            Children.Add( Legend );
-
-            SvgTitle = new SVGText();
-            TitleTextStyle = new TextStyle( SvgTitle );
-            ChartTextStyle = new TextStyle( this );
-            ChartTextStyle.FontSize = 15;
-
-            StyleList.Add( "margin-top", "30px" );
-            StyleList.Add( "margin-bottom", "30px" );
-
-            TitleGroup.Add( SvgTitle );
+            LegendPosition = LegendPosition.Right;
         }
-
-        #endregion
-
-        #region SVG Members 
-
-        private readonly SVGGroup TitleGroup = new SVGGroup();
-        private readonly SVGText SvgTitle = new SVGText();
-        private readonly SVGGroup Legend = new SVGGroup();
 
         #endregion
 
@@ -223,87 +156,37 @@ namespace Stitch.Chart
             return (slice.Value / Slices.Sum( t => t.Value )) * 100;
         }
 
-        private void RenderTitle()
+        private Point CalculateChartCenterPoint()
         {
-            if (!string.IsNullOrWhiteSpace( ChartTitle ))
+            var radius = GetChartRadius();
+            var startAngle = PieStartAngle - 90.0;
+            var endAngle = PieStartAngle - 90.0;
+            var total = Slices.Sum( t => t.Value );
+            var cx = radius + GetLegendLeftOffset();
+            var cy = GetTitleHeight() + radius + GetLegendTopOffset();
+            var center = new Point( cx, cy );
+            var worstX = 0.0;
+            var worstY = 0.0;
+            var worstXAngle = 0.0;
+            var worstYAngle = 0.0;
+
+            foreach (var slice in Slices)
             {
-                SvgTitle.StyleList.Add( "font-family", TitleTextStyle.FontName );
-                SvgTitle.StyleList.Add( "font-weight", TitleTextStyle.Bold ? "bold" : string.Empty );
-                SvgTitle.StyleList.Add( "font-style", TitleTextStyle.Italic ? "italic" : string.Empty );
-                SvgTitle.X = ((Width - ChartTitle.Length * (FontSize / 2)) / 4);
-                SvgTitle.Y = (.05 * Height);
-                SvgTitle.Fill = TitleTextStyle.Color;
-            }
-        }
+                startAngle = endAngle; // start angle becomes the old end angle.
+                endAngle += (360.0 * slice.Value / total); // calculate new end angle for slice.
 
-        private void RenderLegend()
-        {
-            Legend.Children.Clear();
-            if (LegendPosition != LegendPosition.None)
-            {
-                var i = 1;
-
-                double _cx = 0, _cy = 0;
-
-                switch (LegendPosition)
-                {
-                    case LegendPosition.Top:
-                        _cx = Width / 8;
-                        _cy = (.05 * Height) + 1.75 * FontSize;
-                        break;
-                    case LegendPosition.Bottom:
-                        _cx = Width / 8;
-                        _cy = (.95 * Height);
-                        break;
-                    case LegendPosition.Left:
-                        _cx = .05 * Width;
-                        _cy = .15 * Height;
-                        break;
-                    case LegendPosition.Right:
-                        _cx = (Width / 1.75);
-                        _cy = .15 * Height;
-                        break;
-                }
-
-
-                foreach (var slice in Slices)
-                {
-                    var item = slice.CreateLegendLine( slice.Color );
-                    var circle = item.Children.ToList()[0] as SVGCircle;
-                    var text = item.Children.ToList()[1] as SVGText;
-                    circle.ClassList.Add( GetChartSliceTheme( i++ ) );
-
-                    switch (LegendPosition)
-                    {
-                        case LegendPosition.Bottom:
-                        case LegendPosition.Top:
-                            circle.Cx = _cx;
-                            text.X = _cx + 2 * circle.R;
-                            circle.Cy = _cy;
-                            text.Y = _cy + FontSize / 3.0;
-                            _cx += (1.75 + text.Text.Text.Length) * FontSize;
-                            break;
-                        case LegendPosition.Right:
-                        case LegendPosition.Left:
-                            circle.Cx = _cx;
-                            text.X = _cx + 2 * circle.R;
-                            circle.Cy = _cy;
-                            text.Y = _cy + FontSize / 3.0;
-                            _cy += 1.75 * FontSize;
-                            break;
-
-                    }
-
-                    Legend.Children.Add( item );
-                }
-
-                switch (LegendPosition)
-                {
-                    case LegendPosition.Right:
-
-                        break;
+                if (slice.Offset > 0)
+                { // only examine if there is an offset.
+                    var angleDifference = endAngle - startAngle;
+                    var _tAngle = Trig.DegToRad( (endAngle + startAngle) / 2 );
+                    var x = slice.Offset * radius * Math.Cos( _tAngle );
+                    var y = slice.Offset * radius * Math.Sin( _tAngle );
+                    if (Math.Abs( x ) > worstX) worstX = x; worstXAngle = _tAngle;
+                    if (Math.Abs( y ) > worstY) worstY = y; worstYAngle = _tAngle;
                 }
             }
+
+            return new Point( cx - worstX, cy + worstY );
         }
 
         private void CalculateSliceSizes()
@@ -312,49 +195,48 @@ namespace Stitch.Chart
              * facing the tip.
              */
 
-            var radius = .4 * Math.Min( Width, Height );
+            var radius = GetChartRadius();
             var startAngle = PieStartAngle - 90.0;
             var endAngle = PieStartAngle - 90.0;
-            var cx = 1.5 * radius;
-            var cy = (1.05 * Height) / 2;
-            if (LegendPosition == LegendPosition.Left)
-            { // If the legend is on the left then we need to move the graph right so it will fit.
-                cx += Slices.Max( t => t.Text.Text.Text.Length ) * FontSize + .15 * Width;
-            }
+            var center = CalculateChartCenterPoint();
+
             var margin = .05 * Height;
             var total = Slices.Sum( t => t.Value );
             var i = 1;
             foreach (var slice in Slices)
             {
                 startAngle = endAngle; // start angle becomes the old end angle.
-                endAngle += Math.Ceiling( 360 * slice.Value / total ); // calculate new end angle for slice.
+                endAngle += (360.0 * slice.Value / total); // calculate new end angle for slice.
                 var angleDifference = endAngle - startAngle;
 
-                var _cx = cx;
-                var _cy = cy;
+                // There is only one slice.  Remove the stroke.  Other wise make it white.
+                slice.Path.Stroke = angleDifference >= 360.0 ? "none" : "#fff";
+
+                var _cx = center.X;
+                var _cy = center.Y;
                 if (slice.Offset > 0)
                 {   // if offsetting slice then we need to calculate the angle between
                     // the start and end angle and calculate a new origin for the slice's tip.
                     var midAngle = startAngle + ((endAngle - startAngle) / 2);
-                    _cx += slice.Offset * radius * Math.Cos( Math.PI * midAngle / 180 );
-                    _cy += slice.Offset * radius * Math.Sin( Math.PI * midAngle / 180 );
+                    _cx += slice.Offset * radius * Math.Cos( Trig.DegToRad( midAngle ) );
+                    _cy += slice.Offset * radius * Math.Sin( Trig.DegToRad( midAngle ) );
                 }
 
                 // Calculate the left-most point of the slice.
-                var x1 = _cx + radius * Math.Cos( Math.PI * startAngle / 180 );
-                var y1 = _cy + radius * Math.Sin( Math.PI * startAngle / 180 );
+                var x1 = _cx + radius * Math.Cos( Trig.DegToRad( startAngle ) );
+                var y1 = _cy + radius * Math.Sin( Trig.DegToRad( startAngle ) );
 
                 // Calculate the right-most point of the slice.
-                var x2 = _cx + radius * Math.Cos( Math.PI * endAngle / 180 );
-                var y2 = _cy + radius * Math.Sin( Math.PI * endAngle / 180 );
+                var x2 = _cx + radius * Math.Cos( Trig.DegToRad( endAngle ) );
+                var y2 = _cy + radius * Math.Sin( Trig.DegToRad( endAngle ) );
 
                 double x5 = 0, y5 = 0;
                 if (angleDifference >= 180)
                 {   // If the angle difference is greater than or equal to 50% of the graph then 
                     // it will render incorrectly.  Add two points at the midpoint of the circle so it
                     // will render correctly.
-                    x5 = _cx + radius * Math.Cos( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
-                    y5 = _cy + radius * Math.Sin( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
+                    x5 = _cx + radius * Math.Cos( Trig.DegToRad( startAngle + (angleDifference / 2) ) );
+                    y5 = _cy + radius * Math.Sin( Trig.DegToRad( startAngle + (angleDifference / 2) ) );
                 }
 
                 var path = slice.Path;
@@ -364,20 +246,20 @@ namespace Stitch.Chart
                     var r2 = (1 - PieHole) * radius; // r2 is the new radius with the pie hole factored in.
 
                     // Calculate a point for the left-most inner pie hole point.
-                    var x3 = x1 - r2 * Math.Cos( Math.PI * startAngle / 180 );
-                    var y3 = y1 - r2 * Math.Sin( Math.PI * startAngle / 180 );
+                    var x3 = x1 - r2 * Math.Cos( Trig.DegToRad( startAngle ) );
+                    var y3 = y1 - r2 * Math.Sin( Trig.DegToRad( startAngle ) );
 
                     // Calculate a point for the right-most inner pie hole point.
-                    var x4 = x2 - r2 * Math.Cos( Math.PI * endAngle / 180 );
-                    var y4 = y2 - r2 * Math.Sin( Math.PI * endAngle / 180 );
+                    var x4 = x2 - r2 * Math.Cos( Trig.DegToRad( endAngle ) );
+                    var y4 = y2 - r2 * Math.Sin( Trig.DegToRad( endAngle ) );
 
                     // move to the left-most inner pie hole point instead of the radius.
                     path.MoveTo( x3, y3 );
 
                     if (angleDifference >= 180)
                     {   // See note above about case where slice is 50% or more of graph.
-                        var x6 = x5 - r2 * Math.Cos( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
-                        var y6 = y5 - r2 * Math.Sin( Math.PI * (startAngle + (angleDifference / 2)) / 180 );
+                        var x6 = x5 - r2 * Math.Cos( Trig.DegToRad( startAngle + (angleDifference / 2) ) );
+                        var y6 = y5 - r2 * Math.Sin( Trig.DegToRad( startAngle + (angleDifference / 2) ) );
                         path.EllipticalArc( radius - r2, radius - r2, false, false, 1, x6, y6 );
                     }
 
@@ -407,12 +289,12 @@ namespace Stitch.Chart
                     path.EllipticalArc( radius, radius, false, false, 1, x2, y2 );
                 }
                 path.ClosePath(); // Complete the slice.
-                path.ClassList.Add( GetChartSliceTheme( i++ ) );
+                path.ClassList.Add( GetChartTheme( i++ ) );
                 path.Fill = string.IsNullOrWhiteSpace( slice.Color ) ? string.Empty : slice.Color;
 
                 var text = slice.Text;
                 //text.Fill = "#fff";
-                text.ClassList.Add( GetChartSliceTextTheme( i - 1 ) );
+                text.ClassList.Add( GetChartTextTheme( i - 1 ) );
                 ChartTextStyle.ApplyStyle( text );
                 text.Text.Clear();
 
@@ -420,8 +302,8 @@ namespace Stitch.Chart
                 // of the text so that it fits in the slice better.
                 var _tAngle = (endAngle + startAngle) / 2;
                 var pct = CalculateSlicePercentage( slice );
-                text.X = _cx + radius * Math.Cos( Math.PI * _tAngle / 180 );
-                text.Y = _cy + radius * Math.Sin( Math.PI * _tAngle / 180 );
+                text.X = _cx + radius * Math.Cos( Trig.DegToRad( _tAngle ) );
+                text.Y = _cy + radius * Math.Sin( Trig.DegToRad( _tAngle ) );
                 switch (PieSliceText)
                 {
                     case PieSliceText.Label:
@@ -435,61 +317,75 @@ namespace Stitch.Chart
                         break;
                 }
 
-                //var newCoords = CalculateSliceTextCoordinates( text.GetContent(), ChartTextStyle.FontSize, pct, _tAngle, _cx, _cy, x1, y1, x2, y2, text.X, text.Y );
-                var newCoords = CalculateSliceTextCoordinates( text.GetContent(), _cx, _cy, x1, y1, x2, y2, 
-                    ChartTextStyle.FontSize, text.X, text.Y, _tAngle );
+                var newCoords = CalculateSliceTextCoordinates( text.GetContent(), radius, _cx, _cy, x1, y1, x2, y2, text.X, text.Y, _tAngle );
                 text.X = newCoords.Item1;
-                text.Y= newCoords.Item2;
+                text.Y = newCoords.Item2;
                 if (!newCoords.Item3) text.StyleList.Add( "display", "none" );
                 else text.StyleList.Remove( "display" );
-                //text.Fill = newCoords.Item3;
             }
         }
 
-        private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double cx, double cy, 
-                                                                           double x1, double y1, double x2, double y2, 
-                                                                           double fontSize, double x, double y, double angle )
+        private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double radius, double cx, double cy,
+                                                                           double x1, double y1, double x2, double y2, double x, double y, double angle )
         {
-            var deltaCX1 = Math.Abs( cx - x1 );
-            var deltaCY1 = Math.Abs( cy - y1 );
-            var deltaCX2 = Math.Abs( cx - x2 );
-            var deltaCY2 = Math.Abs( cy - y2 );
+            var newX = 0.0;
+            var newY = 0.0;
+            var show = true;
+            //var width = (content.Length - 2) * fontSize;
+            //var height = 2 * fontSize;
 
-            var width = content.Length * fontSize;
-            var height = 2 * fontSize;
+            var width = (content.Length - 2) * ChartTextStyle.FontSize;
+            var height = GraphicsHelper.MeasureStringHeight( content, ChartTextStyle );
 
-            var deltaX = (width / 2) * Math.Cos( angle * (Math.PI / 180) );
-            var deltaY = height * Math.Sin( angle * (Math.PI / 180) );
-            var newX = x - deltaX;
-            var newY = y - deltaY;
+            //var calcWidth = (content.Length - 1) * fontSize;
+            var calcWidth = GraphicsHelper.MeasureStringWidth( content.Length > 1 ? content.Substring( 0, content.Length - 1 ) : content, ChartTextStyle );
 
-            var show = width < deltaCX1 && width < deltaCX2 &&
-                       height < deltaCY1 && height < deltaCY2;
-            show = true;
+            var deltaX = (calcWidth / 2) * Math.Cos( Trig.DegToRad( angle ) );
+            var deltaY = height * Math.Sin( Trig.DegToRad( angle ) );
+            newX = x - deltaX;
+            newY = y - deltaY;
+
+            var R = new Point( x1, y1 );
+            var S = new Point( x2, y2 );
+
+            var worstCase = R.Distance( S );
+            show = width < worstCase || Slices.Count == 1; // just show it when one slice because the S will be R
 
             return new Tuple<double, double, bool>( newX, newY, show );
         }
 
-        private Tuple<double, double, bool> CalculateSliceTextCoordinates( string content, double fontSize, double slicePct, double angle, double cx, double cy, double x1, double y1, double x2, double y2, double x, double y ) {
-            var width = content.Length * fontSize;
-            var height = 2 * fontSize;
-            var show = true;
-            var xSpan = Math.Abs( cx - x1 );
-            var ySpan = Math.Abs( cy - y1 );
-            var xSpanW = Math.Abs( x2 - x1 );
-            var ySpanH = Math.Abs( y2 - y1 );
-            
-            var deltaX = (width / 2) * Math.Cos( angle * (Math.PI / 180) );
-            var deltaY = height * Math.Sin( angle * (Math.PI / 180) );
+        public override double GetLegendLeftOffset()
+        {
+            return LegendPosition == LegendPosition.Left ? GraphicsHelper.MeasureStringWidth( Slices.Select( t => t.Label ), ChartTextStyle ) : 0;
+        }
 
-            var newX = x - deltaX;
-            var newY = y - deltaY;
-            //if (slicePct < 10 && content.Length > 5)
-            //{
-            //    newX = x + deltaX;
-            //    newY = y + deltaY;
-            //}
-            return new Tuple<double, double, bool>( newX, newY, show );
+        public override double GetLegendRightOffset()
+        {
+            return LegendPosition == LegendPosition.Right ? GraphicsHelper.MeasureStringWidth( Slices.Select( t => t.Label ), ChartTextStyle ) : 0;
+        }
+
+        private double GetChartRadius()
+        {
+            var minH = Math.Max( GetLegendLeftOffset(), GetLegendRightOffset() );
+            var minV = Math.Max( GetLegendTopOffset(), GetLegendBottomOffset() ) + GetTitleHeight();
+            var maxExplode = Slices.Max( t => t.Offset );
+            return .45 * Math.Min( Width - minH, Height - minV );
+        }
+
+        private double GetExplodedOffset()
+        {
+            var maxExplode = Slices.Max( t => t.Offset );
+            return GetChartRadius() * maxExplode;
+        }
+
+        protected override double GetChartableAreaWidth()
+        {
+            return 2 * GetChartRadius();
+        }
+
+        protected override IEnumerable<Tuple<string, string>> GetLegendItems()
+        {
+            return Slices.Select( t => new Tuple<string, string>( t.Label, t.Color ) );
         }
 
         private static double Quantative0To1Check( double newValue, double oldValue )
@@ -497,21 +393,9 @@ namespace Stitch.Chart
             return (newValue >= 0 && newValue <= 1) ? newValue : oldValue;
         }
 
-        private string GetChartSliceTheme( int id )
-        {
-            return $"stitch-chart-theme-{(id % 23)}";
-        }
-
-        private string GetChartSliceTextTheme( int id ) {
-            return $"stitch-chart-text-theme-{(id % 23)}";
-        }
-
-        public override string Render()
+        public override void RenderChart()
         {
             CalculateSliceSizes();
-            RenderTitle();
-            RenderLegend();
-            return base.Render();
         }
     }
 }

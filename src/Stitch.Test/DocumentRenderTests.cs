@@ -421,7 +421,7 @@ namespace Stitch.Tests
             container.Children.Add( new HorizontalRule() );
 
             var salesData = IntegrationHelpers.GetSalesByCategory( "Beverages" );
-            var chart = new PieChart( 850, 400 );
+            var chart = new PieChart( 400, 800 );
             chart.LegendPosition = LegendPosition.Right;
             foreach (DataRow row in salesData.Rows)
             {

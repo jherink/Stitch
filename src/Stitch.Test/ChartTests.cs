@@ -3,19 +3,21 @@ using Stitch.Chart;
 using Xunit;
 using System.Data;
 using System.Collections.Generic;
+using Stitch.Elements;
+using Stitch.Elements.Interface;
 
 namespace Stitch.Tests
 {
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class ChartTests
     {
-        [Theory( DisplayName = "Simple2DPieTestLegendPositions" )]
-        [InlineData( LegendPosition.Right, "Simple2DPieTestRight" )]
-        [InlineData( LegendPosition.Left, "Simple2DPieTestLeft" )]
-        [InlineData( LegendPosition.Top, "Simple2DPieTestTop" )]
-        [InlineData( LegendPosition.Bottom, "Simple2DPieTestBottom" )]
-        [InlineData( LegendPosition.None, "Simple2DPieTestNone" )]
-        public void Simple2DPieTestLegendPositions( LegendPosition position, string fileName )
+        [Theory( DisplayName = "PieTestLegendPositions" )]
+        [InlineData( LegendPosition.Right, "Pie2DLegendTestRight" )]
+        [InlineData( LegendPosition.Left, "Pie2DLegendTestLeft" )]
+        [InlineData( LegendPosition.Top, "Pie2DLegendTestTop" )]
+        [InlineData( LegendPosition.Bottom, "Pie2DLegendTestBottom" )]
+        [InlineData( LegendPosition.None, "Pie2DLegendTestNone" )]
+        public void Pie2DTestLegendPositions( LegendPosition position, string fileName )
         {
             var doc = new StitchDocument();
             var graph = new PieChart();
@@ -31,12 +33,98 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
-        [Theory( DisplayName = "Simple2DPieTestLabels" )]
-        [InlineData( PieSliceText.Label, "Simple2DPieTestLabelsLabel" )]
-        [InlineData( PieSliceText.Percentage, "Simple2DPieTestLabelsPercentage" )]
-        [InlineData( PieSliceText.Value, "Simple2DPieTestLabelsValue" )]
-        [InlineData( PieSliceText.None, "Simple2DPieTestLabelsNone" )]
-        public void Simple2DPieTestLabels( PieSliceText sliceText, string fileName )
+        [Theory( DisplayName = "BarChartLegendPositions" )]
+        [InlineData( LegendPosition.Right, "BarChartLegendTestRight" )]
+        [InlineData( LegendPosition.Left, "BarChartLegendTestLeft" )]
+        [InlineData( LegendPosition.Top, "BarChartLegendTestTop" )]
+        [InlineData( LegendPosition.Bottom, "BarChartLegendTestBottom" )]
+        [InlineData( LegendPosition.None, "BarChartLegendTestNone" )]
+        public void BarChartLegendPositions( LegendPosition position, string fileName )
+        {
+            var doc = new StitchDocument();
+            var chart = new BarChart( 900, 400 );
+            chart.AxisOrientation = Orientation.Horizontal;
+            chart.LegendPosition = position;
+            chart.MeasuredAxis.Visible = false;
+            chart.MeasuredAxis.GridLines = false;
+            chart.ChartTitle = "Browser market share June 2015";
+            chart.AddBar( "IE 11: 11.33%", 11.33 );
+            chart.AddBar( "Chrome: 49.77%", 49.77 );
+            chart.AddBar( "Firefox: 16.09%", 16.09 );
+            chart.AddBar( "Safari: 5.41%", 5.41 );
+            chart.AddBar( "Opera: 1.62%", 1.62 );
+            chart.AddBar( "Android 4.4: 2%", 2 );
+            doc.Add( chart );
+
+            var chart2 = chart.Clone() as BarChart;
+            chart2.AxisOrientation = Orientation.Vertical;
+            var div = new Div();
+            div.StyleList.Add( "margin: 30px" );
+            doc.Add( div, chart2 );
+
+            var chart3 = new BarChart( 900, 400 );
+            chart3.ChartTitle = "Quarterly Results";
+            chart3.Width = 600;
+            chart3.MeasuredAxis.Format = "C0";
+            chart3.LegendPosition = position;
+            chart3.AddBar( "Q1", 18450 );
+            chart3.AddBar( "Q2", 34340.72 );
+            chart3.AddBar( "Q3", 43145.52 );
+            chart3.AddBar( "Q4", 18415 );
+
+            var chart4 = chart3.Clone() as BarChart;
+            chart4.AxisOrientation = Orientation.Horizontal;
+
+            doc.Add( div.Clone() as IElement, chart3, div.Clone() as IElement, chart4 );
+
+            IntegrationHelpers.SaveToTemp( fileName, doc );
+        }
+
+        [Theory( DisplayName = "LineChartLegendPositions" )]
+        [InlineData( LegendPosition.Right, "LineChartLegendTestRight" )]
+        [InlineData( LegendPosition.Left, "LineChartLegendTestLeft" )]
+        [InlineData( LegendPosition.Top, "LineChartLegendTestTop" )]
+        [InlineData( LegendPosition.Bottom, "LineChartLegendTestBottom" )]
+        [InlineData( LegendPosition.None, "LineChartLegendTestNone" )]
+        public void LineChartLegendPositions( LegendPosition position, string fileName )
+        {
+            var doc = new StitchDocument();
+            var chart = new LineChart<string, double>();
+            chart.ChartTitle = "Temperatures in US Cities";
+            chart.LegendPosition = position;
+
+            chart.AddPoint( "Temperatures In NY City", "Monday", 43 );
+            chart.AddPoint( "Temperatures In NY City", "Tuesday", 53 );
+            chart.AddPoint( "Temperatures In NY City", "Wednesday", 50 );
+            chart.AddPoint( "Temperatures In NY City", "Thursday", 57 );
+            chart.AddPoint( "Temperatures In NY City", "Friday", 59 );
+            chart.AddPoint( "Temperatures In NY City", "Saturday", 69 );
+
+            chart.AddPoint( "Temperatures In Chicago", "Monday", 22 );
+            chart.AddPoint( "Temperatures In Chicago", "Tuesday", 47 );
+            chart.AddPoint( "Temperatures In Chicago", "Wednesday", 24 );
+            chart.AddPoint( "Temperatures In Chicago", "Thursday", 36 );
+            chart.AddPoint( "Temperatures In Chicago", "Friday", 59 );
+            chart.AddPoint( "Temperatures In Chicago", "Saturday", 81 );
+
+            chart.AddPoint( "Temperatures In Los Angeles", "Monday", 67 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Tuesday", 71 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Wednesday", 72 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Thursday", 84 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Friday", 64 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Saturday", 88 );
+
+            doc.Add( chart );
+
+            IntegrationHelpers.SaveToTemp( fileName, doc );
+        }
+
+        [Theory( DisplayName = "2DPieTestLabels" )]
+        [InlineData( PieSliceText.Label, "2DPieTestLabelsLabel" )]
+        [InlineData( PieSliceText.Percentage, "2DPieTestLabelsPercentage" )]
+        [InlineData( PieSliceText.Value, "2DPieTestLabelsValue" )]
+        [InlineData( PieSliceText.None, "2DPieTestLabelsNone" )]
+        public void Pie2DTestLabels( PieSliceText sliceText, string fileName )
         {
             var doc = new StitchDocument();
             var graph = new PieChart();
@@ -52,15 +140,56 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
-        [Theory( DisplayName = "Simple2DPieTestPieHole" )]
-        [InlineData( 0, "Simple2DPieTestPieHole0" )]
-        [InlineData( 1, "Simple2DPieTestPieHole100" )]
-        [InlineData( .4, "Simple2DPieTestPieHole50" )]
-        [InlineData( .25, "Simple2DPieTestPieHole25" )]
-        [InlineData( .75, "Simple2DPieTestPieHole75" )]
-        [InlineData( .10, "Simple2DPieTestPieHole10" )]
-        [InlineData( .9, "Simple2DPieTestPieHole90" )]
-        public void Simple2DPieTestPieHole( double pieHole, string fileName )
+        [Theory( DisplayName = "PieSliceContentRenderingTest" )]
+        [InlineData( PieSliceText.Percentage,
+                     new[] { "Value1" },
+                     new[] { 1.0 },
+                    "PieSliceContentRenderingTestOne" )]
+        [InlineData( PieSliceText.Percentage,
+                     new[] { "Value1", "Value2"},
+                     new[] { 1.0, 1 },
+                    "PieSliceContentRenderingTestTwo" )]
+        [InlineData( PieSliceText.Percentage, 
+                     new[] { "Value1", "Value2", "Value3", "Value4" }, 
+                     new[] { 1.0, 1, 1, 1 }, 
+                    "PieSliceContentRenderingTestFour" )]
+        [InlineData( PieSliceText.Percentage,
+                     new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8" },
+                     new[] { 1.0, 1, 1, 1, 1, 1, 1, 1 },
+                    "PieSliceContentRenderingTestEight" )]
+        [InlineData( PieSliceText.Percentage,
+                     new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8", "Value9", "Value10", "Value11", "Value12" },
+                     new[] { 1.0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+                    "PieSliceContentRenderingTestTwelve" )]
+        [InlineData( PieSliceText.Label,
+                     new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8", "Value9", "Value10", "Value11", "Value12", "Value13", "Value14", "Value15", "Value1666" },
+                     new[] { 1.0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+                    "PieSliceContentRenderingTestSixteen" )]
+        public void PieSliceContentRenderingTest( PieSliceText sliceText, string[] slices, double[] values, string fileName )
+        {
+            Assert.Equal( slices.Length, values.Length );
+
+            var doc = new StitchDocument();
+            var graph = new PieChart();
+            for (int i = 0; i < slices.Length; i++)
+            {
+                graph.AddSlice( slices[i], values[i] );
+            }
+
+            graph.PieSliceText = sliceText;
+            doc.Add( graph );
+            IntegrationHelpers.SaveToTemp( fileName, doc );
+        }
+
+        [Theory( DisplayName = "Pie2DTestPieHole" )]
+        [InlineData( 0, "Pie2DTestPieHole0" )]
+        [InlineData( 1, "Pie2DTestPieHole100" )]
+        [InlineData( .4, "Pie2DTestPieHole50" )]
+        [InlineData( .25, "Pie2DTestPieHole25" )]
+        [InlineData( .75, "Pie2DTestPieHole75" )]
+        [InlineData( .10, "Pie2DTestPieHole10" )]
+        [InlineData( .9, "Pie2DTestPieHole90" )]
+        public void Pie2DTestPieHole( double pieHole, string fileName )
         {
             var doc = new StitchDocument();
             var graph = new PieChart();
@@ -132,7 +261,7 @@ namespace Stitch.Tests
             graph.AddSlice( "Tamil", 61 );      // #3b3eac
             graph.AddSlice( "Telugu", 74 );     // #b77322
             graph.AddSlice( "Urdu", 52 );       // #16d620
-            
+
             doc.Add( graph );
 
             IntegrationHelpers.SaveToTemp( "ExplodeSliceTest", doc );
@@ -230,12 +359,12 @@ namespace Stitch.Tests
                             chart.AddBar( labels[i], axisData[i], colors != null ? colors[i] : string.Empty );
                         }
                         doc.Add( chart );
-                        doc.Add( new Elements.LineBreak() );
+                        doc.Add( new LineBreak() );
 
                         var verticalClone = chart.Clone() as BarChart;
                         verticalClone.AxisOrientation = Orientation.Vertical;
                         doc.Add( verticalClone );
-                        doc.Add( new Elements.LineBreak() );
+                        doc.Add( new LineBreak() );
                     }
                 }
             }
@@ -256,7 +385,7 @@ namespace Stitch.Tests
             chart.AxisOrientation = Orientation.Vertical;
             foreach (DataRow row in data.Rows)
             {
-                chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString().Remove(0,1) ) );
+                chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString().Remove( 0, 1 ) ) );
             }
             var container = doc.AddBodyContainer();
             container.Children.Add( chart );
@@ -264,7 +393,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "NorthwindSalesByYearTest", doc );
         }
 
-        [Fact( DisplayName = "HorizontalBarChartTest" )]
+        [Fact( DisplayName = "SingleHorizontalBarChartTest" )]
         public void HorizontalBarChartTest()
         {
             var doc = new StitchDocument();
@@ -281,11 +410,11 @@ namespace Stitch.Tests
             chart.AddBar( "Android 4.4: 2%", 2 );
             doc.Add( chart );
 
-            IntegrationHelpers.SaveToTemp( "HorizontalBarChartTest", doc );
+            IntegrationHelpers.SaveToTemp( "SingleHorizontalBarChartTest", doc );
         }
 
-        [Fact( DisplayName = "VerticalBarChartTest" )]
-        public void VerticalBarChartTest()
+        [Fact( DisplayName = "SingleVerticalBarChartTest" )]
+        public void SingleVerticalBarChartTest()
         {
             var doc = new StitchDocument();
             var chart = new BarChart();
@@ -301,7 +430,71 @@ namespace Stitch.Tests
             chart.AddBar( "Q4", 18415 );
             cont.Add( chart );
 
-            IntegrationHelpers.SaveToTemp( "VerticalBarChartTest", doc );
+            IntegrationHelpers.SaveToTemp( "SingleVerticalBarChartTest", doc );
+        }
+
+        [Fact( DisplayName = "MultipleVerticalBarChartTest" )]
+        public void MultipleVerticalBarChartTest()
+        {
+            var doc = new StitchDocument();
+            var chart = new BarChart();
+            chart.LegendPosition = LegendPosition.Right;
+            var cont = doc.AddBodyContainer();
+            chart.ChartTitle = "Quarterly Results";
+            chart.MeasuredAxis.Format = "C0";
+
+            chart.AddToBarGroup( "Invoiced", "Q1", 18450 );
+            chart.AddToBarGroup( "Invoiced", "Q2", 34340.72 );
+            chart.AddToBarGroup( "Invoiced", "Q3", 43145.52 );
+            chart.AddToBarGroup( "Invoiced", "Q4", 18415.95 );
+
+            chart.AddToBarGroup( "Collected", "Q1", 16500 );
+            chart.AddToBarGroup( "Collected", "Q2", 32340.72 );
+            chart.AddToBarGroup( "Collected", "Q3", 32225.52 );
+            chart.AddToBarGroup( "Collected", "Q4", 32425 );
+            
+            cont.Add( chart );
+
+            IntegrationHelpers.SaveToTemp( "MultipleVerticalBarChartTest", doc );
+        }
+
+        [Fact( DisplayName = "MultipleBarChartTest2" )]
+        public void MultipleBarChartTest2()
+        {
+            var doc = new StitchDocument();
+            var chart = new BarChart();
+            chart.LegendPosition = LegendPosition.Right;
+            //var cont = doc.AddBodyContainer();
+            chart.ChartTitle = "Quarterly Results";
+            chart.MeasuredAxis.Format = "C0";
+
+            chart.AddToBarGroup( "Sales", "2014", 1000 );
+            chart.AddToBarGroup( "Sales", "2015", 1170 );
+            chart.AddToBarGroup( "Sales", "2016", 660 );
+            chart.AddToBarGroup( "Sales", "2017", 1030 );
+
+            chart.AddToBarGroup( "Expenses", "2014", 400 );
+            chart.AddToBarGroup( "Expenses", "2015", 460 );
+            chart.AddToBarGroup( "Expenses", "2016", 1120 );
+            chart.AddToBarGroup( "Expenses", "2017", 540 );
+
+            chart.AddToBarGroup( "Profit", "2014", 200 );
+            chart.AddToBarGroup( "Profit", "2015", 250 );
+            chart.AddToBarGroup( "Profit", "2016", 300 );
+            chart.AddToBarGroup( "Profit", "2017", 350);
+
+            chart.SetBarGroupColor( "Profit", "purple" );
+
+            doc.Add( chart );
+
+            var div = new Div();
+            div.StyleList.Add( "margin: 10px" );
+
+            var chart2 = chart.Clone() as BarChart;
+            chart2.AxisOrientation = Orientation.Horizontal;
+
+            doc.Add( div, chart2 );
+            IntegrationHelpers.SaveToTemp( "MultipleBarChartTest2", doc );
         }
 
         [Theory( DisplayName = "LineChartWithNumbersTest" )]
@@ -357,12 +550,12 @@ namespace Stitch.Tests
 
             var chart2 = new LineChart<string, double>();
             chart.ChartTitle = "Temperatures in NY City";
-            chart2.AddPoint( "Temperatures In NY City", "Monday", 43 );
-            chart2.AddPoint( "Temperatures In NY City", "Tuesday", 53 );
-            chart2.AddPoint( "Temperatures In NY City", "Wednesday", 50 );
-            chart2.AddPoint( "Temperatures In NY City", "Thursday", 57 );
-            chart2.AddPoint( "Temperatures In NY City", "Friday", 59 );
-            chart2.AddPoint( "Temperatures In NY City", "Saturday", 69 );
+            chart2.AddPoint( "Temperatures In NY City", "Monday"    , 43 );
+            chart2.AddPoint( "Temperatures In NY City", "Tuesday"   , 53 );
+            chart2.AddPoint( "Temperatures In NY City", "Wednesday" , 50 );
+            chart2.AddPoint( "Temperatures In NY City", "Thursday"  , 57 );
+            chart2.AddPoint( "Temperatures In NY City", "Friday"    , 59 );
+            chart2.AddPoint( "Temperatures In NY City", "Saturday"  , 69 );
             chart2.AddPoint( "Temperatures In NY City", "Sunday", 51 );
             chart2.LabeledAxis.IncludeDefault = false;
 
@@ -371,6 +564,40 @@ namespace Stitch.Tests
 
             doc.Add( chart, chart2, chart.Clone() as LineChart<double, double> );
             IntegrationHelpers.SaveToTemp( "TemperaturesLineGraphTest", doc );
+        }
+
+        [Fact( DisplayName = "MultiLinesChartTest" )]
+        public void MultiLinesChartTest()
+        {
+            var doc = new StitchDocument();
+            var chart = new LineChart<string, double>();
+            chart.ChartTitle = "Temperatures in US Cities";
+            chart.LegendPosition = LegendPosition.Right;
+
+            chart.AddPoint( "Temperatures In NY City", "Monday"    , 43 );
+            chart.AddPoint( "Temperatures In NY City", "Tuesday"   , 53 );
+            chart.AddPoint( "Temperatures In NY City", "Wednesday" , 50 );
+            chart.AddPoint( "Temperatures In NY City", "Thursday"  , 57 );
+            chart.AddPoint( "Temperatures In NY City", "Friday"    , 59 );
+            chart.AddPoint( "Temperatures In NY City", "Saturday", 69 );
+
+            chart.AddPoint( "Temperatures In Chicago", "Monday"    , 22 );
+            chart.AddPoint( "Temperatures In Chicago", "Tuesday"   , 47 );
+            chart.AddPoint( "Temperatures In Chicago", "Wednesday" , 24 );
+            chart.AddPoint( "Temperatures In Chicago", "Thursday"  , 36 );
+            chart.AddPoint( "Temperatures In Chicago", "Friday"    , 59 );
+            chart.AddPoint( "Temperatures In Chicago", "Saturday", 81 );
+
+            chart.AddPoint( "Temperatures In Los Angeles", "Monday"    , 67 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Tuesday"   , 71 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Wednesday" , 72 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Thursday"  , 84 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Friday"    , 64 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Saturday", 88 );
+
+            doc.Add( chart );
+
+            IntegrationHelpers.SaveToTemp( "MultiLinesChartTest", doc );
         }
     }
 }

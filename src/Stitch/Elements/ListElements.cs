@@ -27,7 +27,7 @@ namespace Stitch.Elements
             }
         }
 
-        public override ICollection<IElement> Children
+        public override IList<IElement> Children
         {
             get
             {

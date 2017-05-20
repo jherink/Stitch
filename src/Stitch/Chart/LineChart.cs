@@ -77,14 +77,14 @@ namespace Stitch.Chart
             foreach (var line in Lines) line.Sort();
         }
 
-        protected override void RenderChartImpl()
+        protected override void RenderAxisChartImpl()
         {
             // labeled axis is on the bottom.
 
             var horizontalAxisLocations = new double[] { };
             var verticalAxisLocations = new double[] { };
-            var horizontalIntervals = SVGAxisHelpers.SuggestIntervals( Width );
-            var verticalIntervals = SVGAxisHelpers.SuggestIntervals( Height );
+            var horizontalIntervals = AxisHelper.SuggestIntervals( GetChartableAreaWidth() );
+            var verticalIntervals = AxisHelper.SuggestIntervals( Height );
             //T1 horizontalMin, horizontalMax;
             //T2 verticalMin, verticalMax;
             Sort();
@@ -101,7 +101,8 @@ namespace Stitch.Chart
             var measuredClone = MeasuredAxis.Clone() as IAxis<T2>;
             measuredClone.SetTicks( measuredClone.Ticks.Reverse() );
 
-            SVGAxisHelpers.RenderAxis( measuredClone, horizontalClone, Width, Height, 0, GetTitleHeight(),
+            AxisHelper.RenderAxis( measuredClone, horizontalClone, GetChartableAreaWidth(), Height - GetLegendBottomOffset() - GetLegendTopOffset(),
+                                       GetLegendLeftOffset(), GetTitleHeight() + GetLegendTopOffset(),
                                        VerticalAxisGroup, HorizontalAxisGroup,
                                        out verticalAxisLocations, out horizontalAxisLocations );
 
@@ -110,7 +111,7 @@ namespace Stitch.Chart
             var horizSpace = verticalAxisLocations.Min();
             var chartableWidth = horizontalAxisLocations.Max() - horizontalAxisLocations.Min();
             var chartableHeight = verticalAxisLocations.Max() - verticalAxisLocations.Min();
-            var i = 0;
+            var i = 1;
             foreach (var line in Lines)
             {
                 var svgLine = new SVGPath()
@@ -120,7 +121,7 @@ namespace Stitch.Chart
                     Stroke = line.Color,
                     Fill = "none"
                 };
-                svgLine.ClassList.Add( GetChartTheme( i++ ) );
+                svgLine.ClassList.Add( GetChartStrokeTheme( i++ ) );
                 int lineI = 0;
 
                 foreach (var point in line.Values)
@@ -138,7 +139,7 @@ namespace Stitch.Chart
                         {
                             svgLine.MoveTo( baseLineX, py );
                         }
-                        else 
+                        else
                         {
                             svgLine.MoveTo( baseLineX, baseLineY );
                         }
@@ -157,7 +158,7 @@ namespace Stitch.Chart
             {
                 set.AddRange( line.Values.Select( t => t.Item1 ) );
             }
-            return set;
+            return set.Distinct();
         }
 
         private IEnumerable<T2> GetVerticalSet()
@@ -167,7 +168,23 @@ namespace Stitch.Chart
             {
                 set.AddRange( line.Values.Select( t => t.Item2 ) );
             }
-            return set;
-        }       
+            return set.Distinct();
+        }
+
+        public override double GetLegendLeftOffset()
+        {
+            return LegendPosition == LegendPosition.Left ? GraphicsHelper.MeasureStringWidth( Lines.Select( t => t.LineName ), ChartTextStyle ) : 0;
+        }
+
+        public override double GetLegendRightOffset()
+        {
+            return LegendPosition == LegendPosition.Right ? GraphicsHelper.MeasureStringWidth( Lines.Select( t => t.LineName ), ChartTextStyle ) : 0;
+        }
+               
+        protected override IEnumerable<Tuple<string, string>> GetLegendItems()
+        {
+            return Lines.Select( t => new Tuple<string, string>( t.LineName, t.Color ) );
+        }
     }
 }
+

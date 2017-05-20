@@ -10,8 +10,8 @@ using Stitch.Elements.Interface;
 
 namespace Stitch.Chart
 {
-    public abstract class AxisChart<T1, T2> : SVG, IChart where T1 : IComparable<T1>
-                                                          where T2 : IComparable<T2>
+    public abstract class AxisChart<T1, T2> : ChartBase where T1 : IComparable<T1>
+                                                        where T2 : IComparable<T2>
     {
         #region Axis
 
@@ -25,52 +25,10 @@ namespace Stitch.Chart
 
         #endregion
 
-        #region IChart Implementation
-
-        public ITextStyle TitleTextStyle { get; set; }
-
-        public string ChartTitle { get { return SvgTitle.Text; } set { SvgTitle.Text = value; } }
-
-        public ITextStyle ChartTextStyle { get; set; }
-
-        public List<string> Colors { get; private set; } = Helpers.GetDefaultColors();
-
-        double IChart.Width
-        {
-            get
-            {
-                return Width;
-            }
-
-            set
-            {
-                Width = value;
-            }
-        }
-
-        double IChart.Height
-        {
-            get
-            {
-                return Height;
-            }
-
-            set
-            {
-                Height = value;
-            }
-        }
-
-        #endregion
-
         #region SVGMembers 
 
-        protected readonly SVGGroup TitleGroup = new SVGGroup();
-        protected readonly SVGText SvgTitle = new SVGText();
-        protected readonly SVGGroup Legend = new SVGGroup();
         protected readonly SVGGroup HorizontalAxisGroup = new SVGGroup();
         protected readonly SVGGroup VerticalAxisGroup = new SVGGroup();
-        protected readonly SVGGroup ChartGroup = new SVGGroup();
 
         #endregion
 
@@ -80,22 +38,8 @@ namespace Stitch.Chart
 
         protected AxisChart( int width, int height ) : base( height, width )
         {
-            StyleList.Add( "overflow: visible;" );
-            StyleList.Add( "width", "100%" );
-            Children.Add( TitleGroup );
-
-            SvgTitle = new SVGText();
-            TitleTextStyle = new TextStyle( SvgTitle );
-            ChartTextStyle = new TextStyle( this );
-            
-            TitleGroup.Add( SvgTitle );
-            Children.Add( VerticalAxisGroup );
-            Children.Add( HorizontalAxisGroup );
-            Children.Add( ChartGroup );
-
-            ChartTextStyle.FontSize = 15;
-            StyleList.Add( "margin-top", "30px" );
-            StyleList.Add( "margin-bottom", "30px" );
+            Children.Insert(0, VerticalAxisGroup );
+            Children.Insert(1, HorizontalAxisGroup );
 
             var txtDummy = new SVGText();
             ChartTextStyle.ApplyStyle( txtDummy );
@@ -108,28 +52,17 @@ namespace Stitch.Chart
             MeasuredAxisTickAlgorithm = ChooseDefaultTickAlgorithm<T2>( typeof( T2 ) );
         }
 
-        protected double GetTitleHeight()
-        {
-            return !string.IsNullOrWhiteSpace( ChartTitle ) ? TitleTextStyle.FontSize * 4 : 0;
-        }
+        protected abstract void RenderAxisChartImpl();
 
-        protected void RenderChart()
+        public override void RenderChart()
         {
             ChartGroup.Children.Clear();
             HorizontalAxisGroup.Children.Clear();
             VerticalAxisGroup.Children.Clear();
 
-            if (!string.IsNullOrWhiteSpace( ChartTitle ))
-            {
-                SvgTitle.X = Width / 2;
-                SvgTitle.Y = 1.5 * TitleTextStyle.FontSize;
-                SvgTitle.StyleList.Add( "text-anchor", "middle" );
-            }
-
-            RenderChartImpl();
+            RenderAxisChartImpl();
+            RenderLegend();
         }
-
-        protected abstract void RenderChartImpl();
 
         private ITickAlgorithm<T> ChooseDefaultTickAlgorithm<T>( Type type ) where T : IComparable<T>
         {
@@ -148,33 +81,20 @@ namespace Stitch.Chart
 
             return null;
         }
-
-        protected string GetChartTheme( int id )
-        {
-            return $"stitch-chart-theme-{(id % 23)}";
-        }
-
-        protected string GetChartTextTheme( int id )
-        {
-            return $"stitch-chart-text-theme-{(id % 23)}";
-        }
-
-        public override IEnumerable<IElement> GetAllNodes()
-        {
-            RenderChart();
-            return base.GetAllNodes();
-        }
-
-        public override IEnumerable<IElement> GetNodes( string tagFilter )
-        {
-            RenderChart();
-            return base.GetNodes( tagFilter );
-        }
         
-        public override string Render()
+        public override double GetLegendBottomOffset()
         {
-            RenderChart();
-            return base.Render();
+            if (LegendPosition == LegendPosition.Bottom)
+            {
+                var longestTick = AxisHelper.LongestTick( LabeledAxis );
+                return longestTick.Length < AxisHelper.MaxHorizontalAxisLength ? base.GetLegendBottomOffset() : GraphicsHelper.MeasureStringWidth(longestTick, LabeledAxis.AxisTextStyle);
+            }
+            return 0;
+        }
+       
+        protected override double GetChartableAreaWidth()
+        {
+            return .9 * Width - Math.Max( GetLegendLeftOffset(), GetLegendRightOffset() );
         }
     }
 }

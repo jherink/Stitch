@@ -235,9 +235,9 @@ namespace Stitch.Elements
 
         public SVGCircle() { }
 
-        public SVGCircle( int cx, int cy, int r ) { Cx = cx; Cy = cy; R = r; }
+        public SVGCircle( double cx, double cy, double r ) { Cx = cx; Cy = cy; R = r; }
 
-        public SVGCircle( SVGPoint center, int r ) : this( center.X, center.Y, r ) { }
+        public SVGCircle( SVGPoint center, double r ) : this( center.X, center.Y, r ) { }
     }
 
     public class SVGEllipse : SVGBaseElement, ISVGEllipse
@@ -401,7 +401,7 @@ namespace Stitch.Elements
 
     public class SVGGroup : SVGBaseElement, ISVGGroup, IParentElement, INodeQueryable
     {
-        public ICollection<IElement> Children { get; set; } = new List<IElement>();
+        public IList<IElement> Children { get; set; } = new List<IElement>();
 
         public void Add( IElement element ) { Children.Add( element ); }
 

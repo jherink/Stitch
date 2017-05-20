@@ -16,7 +16,7 @@ namespace Stitch.Elements.Interface
 
     public interface IParentElement : IElement, INodeQueryable
     {
-        ICollection<IElement> Children { get; set; }
+        IList<IElement> Children { get; set; }
     }
 
 }

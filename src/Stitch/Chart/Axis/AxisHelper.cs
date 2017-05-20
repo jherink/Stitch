@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Stitch.Chart.Axis
 {
-    public static class SVGAxisHelpers
+    public static class AxisHelper
     {
         public static int MaxHorizontalAxisLength = 4;
 
@@ -18,13 +18,24 @@ namespace Stitch.Chart.Axis
             return !string.IsNullOrWhiteSpace( format ) ? string.Format( "{0:" + format + "}", value ) : value.ToString();
         }
 
+        public static int MaxTickLength<T>( IAxis<T> axis ) where T : IComparable<T>
+        {
+            return LongestTick(axis).Length;
+        }
+
+        public static string LongestTick<T>( IAxis<T> axis ) where T : IComparable<T>
+        {
+            return axis.Any() ? axis.Max( t => FormatValueToAxisSpecification( t, axis.Format ) ) : string.Empty;
+        }
+
         public static double[] RenderAxisVertically<T>( IAxis<T> axis, ISVGGroup group, double x,
                                                         double startY,
                                                         double horizontalSpacing,
                                                         double chartWidth ) where T : IComparable<T>
         {
             var locations = new double[axis.Ticks.Count];
-            var maxTickLength = axis.Ticks.Max( t => FormatValueToAxisSpecification( t, axis.Format ).Length );
+            //var maxTickLength = MaxTickLength( axis );
+            var maxTickMeasurement = GraphicsHelper.MeasureStringWidth( LongestTick( axis ), axis.AxisTextStyle );
             var i = 0;
 
             foreach (var tick in axis.Ticks)
@@ -48,8 +59,8 @@ namespace Stitch.Chart.Axis
                 { // Add grid lines
                     var labeledRect = new SVGRectangle
                     {
-                        //X = x + maxTickLength * axis.AxisTextStyle.FontSize / 2, 
-                        X = x + Math.Max( maxTickLength, 4 ) * axis.AxisTextStyle.FontSize / 1.5,
+                        //X = x + Math.Max( maxTickLength, 4 ) * axis.AxisTextStyle.FontSize / 1.5,
+                        X = x + Math.Max( maxTickMeasurement, MaxHorizontalAxisLength * axis.AxisTextStyle.FontSize / 1.5 ),
                         Y = startY - (axis.AxisTextStyle.FontSize / 2),
                         Fill = axis.GridLineColor,
                         Width = chartWidth,
@@ -71,7 +82,9 @@ namespace Stitch.Chart.Axis
             var locations = new double[axis.Ticks.Count];
             var i = 0;
             var rotation = string.Empty;
-            var maxTickLength = axis.Ticks.Max( t => FormatValueToAxisSpecification( t, axis.Format ).Length );
+            //var maxTickLength = MaxTickLength( axis );
+            var longestTick = LongestTick( axis );
+            var maxTickMeasurement = GraphicsHelper.MeasureStringWidth( longestTick, axis.AxisTextStyle );
             var textY = gridBottomY + axis.AxisTextStyle.FontSize;
 
             foreach (var label in axis.Ticks)
@@ -83,8 +96,8 @@ namespace Stitch.Chart.Axis
                     {
                         X = startX - (formattedLabel.Length - 1) * axis.AxisTextStyle.FontSize / 2
                     };
-                    if (maxTickLength > MaxHorizontalAxisLength)
-                    {
+                    if (longestTick.Length > MaxHorizontalAxisLength)
+                    { // rotate if too long
                         text.X = startX - axis.AxisTextStyle.FontSize / 2;
                         textY = gridBottomY;
                         text.Transform = $"rotate(90 {startX - axis.AxisTextStyle.FontSize},{textY})";
@@ -140,10 +153,11 @@ namespace Stitch.Chart.Axis
             var verticalTicks = verticalAxis.ReverseDirection ? verticalAxis.Ticks.Reverse() : verticalAxis.Ticks;
             verticalAxis.SetTicks( verticalTicks );
 
-            var maxTickLength = verticalAxis.Ticks.Max( t => FormatValueToAxisSpecification( t, verticalAxis.Format ).Length );
+            //var maxTickLength = MaxTickLength( verticalAxis );
+            var maxTickMeasurement = GraphicsHelper.MeasureStringWidth( LongestTick( verticalAxis ), verticalAxis.AxisTextStyle );
 
             // Render vertical axis
-            labeledAxisX = 1.125 * verticalAxis.AxisTextStyle.FontSize;
+            labeledAxisX = 1.125 * verticalAxis.AxisTextStyle.FontSize + startX;
             horizontalSpace = (chartHeight - titleHeight - space - verticalOffset) / verticalAxis.Ticks.Count;
 
             if (!string.IsNullOrWhiteSpace( verticalAxis.AxisTitle ))
@@ -165,15 +179,18 @@ namespace Stitch.Chart.Axis
             // Render Vertical Axis. We need to render this first so we know where the final grid line is at.
             verticalAxisLocations = RenderAxisVertically( verticalAxis, verticalGroup,
                                                           labeledAxisX,
-                                                          titleHeight + horizontalSpace / 2,
+                                                          //titleHeight + horizontalSpace / 2,
+                                                          titleHeight,
                                                           horizontalSpace,
                                                           chartWidth );
 
             // Render horizontal axis
-            verticalSpace = (chartWidth - (preLabelX - horizontalAxis.AxisTitleTextStyle.FontSize)) / horizontal.Ticks.Count;
+            //verticalSpace = (chartWidth - (preLabelX - horizontalAxis.AxisTitleTextStyle.FontSize)) / horizontal.Ticks.Count;
+            verticalSpace = (chartWidth - GraphicsHelper.MeasureStringHeight( horizontalAxis.AxisTitle, horizontalAxis.AxisTitleTextStyle )) / horizontalAxis.Ticks.Count;
+
             // This increase needs to match the grid lines X calculation when rendering vertical axis.
-            //labeledAxisX += Math.Max(maxTickLength, 3) * verticalAxis.AxisTextStyle.FontSize / 1.5; 
-            labeledAxisX += Math.Max( maxTickLength, 4 ) * verticalAxis.AxisTextStyle.FontSize / 1.5;
+            //labeledAxisX += Math.Max(maxTickLength, MaxHorizontalAxisLength) * verticalAxis.AxisTextStyle.FontSize / 1.5; 
+            labeledAxisX += Math.Max( maxTickMeasurement, MaxHorizontalAxisLength * verticalAxis.AxisTextStyle.FontSize / 1.5 );
 
             if (!string.IsNullOrWhiteSpace( horizontalAxis.AxisTitle ))
             {

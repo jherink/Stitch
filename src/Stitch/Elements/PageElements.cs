@@ -57,7 +57,7 @@ namespace Stitch.Elements
 
     public abstract class BaseParentElement : BaseElement, IParentElement
     {
-        public virtual ICollection<IElement> Children { get; set; } = new List<IElement>();
+        public virtual IList<IElement> Children { get; set; } = new List<IElement>();
 
         public IElement FindById( string id )
         {
