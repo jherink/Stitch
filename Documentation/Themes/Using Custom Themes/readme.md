@@ -12,7 +12,7 @@ An example is the custom theme <bold>"Dark Knight"</bold>. [View Theme CSS](Dark
 doc.SetTheme( "Resources\\Dark-Knight.css" );
 ~~~
 
-### All Code - [See Output](Custom Theme Dark Knight Output.pdf)
+### All Code - [See Output](Dark Knight Custom Theme Sample.pdf)
 
 ~~~cs
 // Step 1: Create new StitchDocument
