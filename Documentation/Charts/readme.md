@@ -1,6 +1,8 @@
 # Charts
 
-Stitch renders charts in SVG.  Stitch can render the follwing charts:
+Stitch renders charts using SVG.  
+
+The following charts are supported:
 
 * Bar Chart
 * Line Chart
