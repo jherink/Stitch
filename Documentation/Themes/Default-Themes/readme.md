@@ -1,6 +1,6 @@
 # Default Themes
 
-There are 21 default themes to choose from:
+There are 22 default themes to choose from:
 
 * Blue 
 * Red
@@ -23,5 +23,6 @@ There are 21 default themes to choose from:
 * Flirt
 * Eggplant
 * Governor Bay
+* Tall Poppy
 
-For more information on the default Theme samples located here: 
+For more information on the default Theme samples located here: [Default Theme Demos](Default-Theme-Demos/)
