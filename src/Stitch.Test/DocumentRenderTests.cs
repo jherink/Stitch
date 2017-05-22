@@ -17,10 +17,6 @@ namespace Stitch.Tests
         {
             var doc = new StitchDocument();
             doc.Head.Title = "Hello World";
-
-            //doc.Head.Styles.Add( ElementFactory.CreateStyleFromTheme( "black" ) );
-
-            //var p = ElementFactory.CreateParagraph( "Hello " );
             var p = new Paragraph( "Hello" );
             p.Content += new Big( "World" );
             p.Content += new Bold( "!!!" );
@@ -33,9 +29,6 @@ namespace Stitch.Tests
         {
             var doc = new StitchDocument();
             doc.Head.Title = "Hello World";
-            //doc.Head.Styles.Add( ElementFactory.CreateStyleFromTheme( "green" ) );
-
-            //var div = ElementFactory.CreateDiv();
             var div = new Div();
             div.ClassList.Add( "w3-theme" );
             div.Children.Add( new Paragraph( "Hello World" ) );

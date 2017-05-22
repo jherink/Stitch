@@ -18,7 +18,7 @@ namespace Stitch
         [ThemeResource( "stitch-la-palma.css" )]
         Green,
         [ThemeResource( "stitch-wedgewood.css" )]
-        Indigo,
+        PaleBlue,
         [ThemeResource( "stitch-totem-pole.css" )]
         Brick,
         [ThemeResource( "stitch-purple-heart.css" )]
@@ -50,6 +50,8 @@ namespace Stitch
         [ThemeResource( "stitch-scarlet-gum.css" )]
         Eggplant,
         [ThemeResource( "stitch-governor-bay.css" )]
-        GovernorBay
+        GovernorBay,
+        [ThemeResource( "stitch-tall-poppy.css")]
+        TallPoppy
     }
 }

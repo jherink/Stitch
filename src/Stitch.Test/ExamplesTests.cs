@@ -13,20 +13,28 @@ namespace Stitch.Tests
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class ExamplesTests
     {
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitialize]
+        public static void OnInitializeExamples( Microsoft.VisualStudio.TestTools.UnitTesting.TestContext context )
+        {
+            var themes = System.IO.Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "Themes" );
+            var samples = System.IO.Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "Samples" );
+
+            if (!System.IO.Directory.Exists( themes )) System.IO.Directory.CreateDirectory( themes );
+            if (!System.IO.Directory.Exists( samples )) System.IO.Directory.CreateDirectory( samples );
+        }
+
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
         public void NorthwindReportTestOutput()
         {
             var report = new NorthwindReport();
-            IntegrationHelpers.ExportPdfToTemp( "NorthwindReportTestOutput", report.Report );
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Northwind-Report-Sample", report.Report, true );
         }
 
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
         public void RenderThemesTest()
         {
             var table = IntegrationHelpers.GetSampleTableData();
-            var tmp = System.IO.Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "Themes" );
             var pieData = IntegrationHelpers.GetCategorySalesSummary();
-            if (!System.IO.Directory.Exists( tmp )) System.IO.Directory.CreateDirectory( tmp );
 
             foreach (Theme theme in Enum.GetValues( typeof( Theme ) ))
             {
@@ -67,27 +75,393 @@ namespace Stitch.Tests
                 }
                 doc.Add( pieChart );
 
-                // Pie Chart
-                //var pieChart = new PieChart();
-                //pieChart.ChartTitle = "Pie Chart";
-                //pieChart.TitleTextStyle.Bold = true;
-                //pieChart.AddSlice( "Work", 11 );
-                //pieChart.AddSlice( "Eat", 2 );
-                //pieChart.AddSlice( "Commute", 2 );
-                //pieChart.AddSlice( "Watch TV", 2 );
-                //pieChart.AddSlice( "Sleep", 7 );
-                //doc.Add( pieChart );
-
-                //// Donut Chart
-                //pieChart = pieChart.Clone() as PieChart;
-                //pieChart.ChartTitle = "Donut Chart";
-                //pieChart.PieHole = .4; // just add this
-                //doc.Add( pieChart );
-
                 IntegrationHelpers.ExportPdfToTemp( $"Themes\\{theme}", doc, true );
             }
         }
 
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void CreateHelloWorldSample()
+        {
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Add elements to the document
+            doc.Add( new Paragraph( "Hello World!" ) );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void RenderThemeSample()
+        {
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Add elements to Stitch document
+            var dt = new DataTable();
+            dt.Columns.Add( "First Name" );
+            dt.Columns.Add( "Last Name" );
+            dt.Rows.Add( "John", "Doe" );
+            dt.Rows.Add( "Jane", "Doe" );
+            doc.Add( new Table( dt ) );
+
+            // Step 3: Set the theme on the document.
+            // NOTE: This can be done any time before rendering.
+            doc.SetTheme( Theme.NeonGreen );
+
+            var html = doc.Render();
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void CustomThemeSample()
+        {
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Add elements to Stitch document
+            var dt = new DataTable();
+            dt.Columns.Add( "First Name" );
+            dt.Columns.Add( "Last Name" );
+            dt.Rows.Add( "John", "Doe" );
+            dt.Rows.Add( "Jane", "Doe" );
+            doc.Add( new Table( dt ) );
+
+            // Show a pie chart to see Theme in action!
+            var chart = new PieChart();
+            for (int i = 1; i <= 9; i++)
+            {
+                chart.AddSlice( $"Line {i}", 1 );
+            }
+            doc.Add( chart );
+
+            // Step 3: Set the theme on the document.
+            var themePath = "Resources\\Dark-Knight.css";
+            doc.SetTheme( themePath );
+
+            var html = doc.Render();
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Dark-Knight-Custom-Theme-Sample", doc, true );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void PieChartSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new[] { new Tuple<string, double>( "Apple", 425 ),
+                   new Tuple<string, double>( "Blueberry", 100 ),
+                   new Tuple<string, double>( "Mixed Berry", 88 ),
+                   new Tuple<string, double>( "Cherry", 218 ),
+                   new Tuple<string, double>( "Key Lime", 172 ),
+                   new Tuple<string, double>( "Pecan", 277 ),
+                   new Tuple<string, double>( "Pumpkin", 199 )
+};
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Create the chart.
+            var chart = new PieChart();
+            chart.ChartTitle = "2017 Pie Popularity Survey";
+            foreach (var record in data)
+            { // populate chart with our data.
+                chart.AddSlice( record.Item1, record.Item2 );
+            }
+
+            // Step 3: Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Sample", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void PieChartRotatedChartSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new[] { new Tuple<string, double>( "Apple", 425 ),
+                   new Tuple<string, double>( "Blueberry", 100 ),
+                   new Tuple<string, double>( "Mixed Berry", 88 ),
+                   new Tuple<string, double>( "Cherry", 218 ),
+                   new Tuple<string, double>( "Key Lime", 172 ),
+                   new Tuple<string, double>( "Pecan", 277 ),
+                   new Tuple<string, double>( "Pumpkin", 199 )
+};
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Create the chart.
+            var chart = new PieChart();
+            chart.ChartTitle = "2017 Pie Popularity Survey";
+            chart.PieStartAngle = 90;
+            foreach (var record in data)
+            { // populate chart with our data.
+                chart.AddSlice( record.Item1, record.Item2 );
+            }
+
+            // Step 3: Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Rotation-Sample", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void DonutChartSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new[] { new Tuple<string, double>( "Apple", 425 ),
+                   new Tuple<string, double>( "Blueberry", 100 ),
+                   new Tuple<string, double>( "Mixed Berry", 88 ),
+                   new Tuple<string, double>( "Cherry", 218 ),
+                   new Tuple<string, double>( "Key Lime", 172 ),
+                   new Tuple<string, double>( "Pecan", 277 ),
+                   new Tuple<string, double>( "Pumpkin", 199 )
+};
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Create the chart.
+            var chart = new PieChart();
+            chart.ChartTitle = "2017 Pie Popularity Survey";
+            chart.PieHole = .3; // Specify how large to make the hole in the pie chart.
+            foreach (var record in data)
+            { // populate chart with our data.
+                chart.AddSlice( record.Item1, record.Item2 );
+            }
+
+            // Step 3: Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Donut-Chart-Sample", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void PieChartExplodedSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new[] { new Tuple<string, double>( "Apple", 425 ),
+                   new Tuple<string, double>( "Blueberry", 100 ),
+                   new Tuple<string, double>( "Mixed Berry", 88 ),
+                   new Tuple<string, double>( "Cherry", 218 ),
+                   new Tuple<string, double>( "Key Lime", 172 ),
+                   new Tuple<string, double>( "Pecan", 277 ),
+                   new Tuple<string, double>( "Pumpkin", 199 )
+};
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Create the chart.
+            var chart = new PieChart();
+            chart.StyleList.Add( "padding-left", "60px" );
+            chart.ChartTitle = "2017 Pie Popularity Survey";
+            chart.LegendPosition = LegendPosition.None;
+            var i = 0;
+            foreach (var record in data)
+            { // populate chart with our data.
+                var offset = (i++ % 3) == 1 ? .2 : 0;
+                chart.AddSlice( record.Item1, record.Item2, string.Empty, offset );
+            }
+
+            // Step 3: Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Exploded-Sample", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void VerticalBarChartSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new[] { new Tuple<string, double>( "Apple", 425 ),
+                               new Tuple<string, double>( "Blueberry", 100 ),
+                               new Tuple<string, double>( "Mixed Berry", 88 ),
+                               new Tuple<string, double>( "Cherry", 218 ),
+                               new Tuple<string, double>( "Key Lime", 172 ),
+                               new Tuple<string, double>( "Pecan", 277 ),
+                               new Tuple<string, double>( "Pumpkin", 199 )
+            };
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Create the chart.
+            var chart = new BarChart();
+            chart.AxisOrientation = Orientation.Vertical; // set axis orientation to vertical.
+            chart.ChartTitle = "2017 Pie Popularity Poll Results";
+            chart.MeasuredAxis.AxisTitle = "Number of People"; // Label the axis
+            foreach (var record in data)
+            { // populate the chart.
+                chart.AddBar( record.Item1, record.Item2 );
+            }
+
+            // Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Vertical-Bar-Chart-Sample", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void HorizontalBarChartSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new[] { new Tuple<string, double>( "Apple", 425 ),
+                               new Tuple<string, double>( "Blueberry", 100 ),
+                               new Tuple<string, double>( "Mixed Berry", 88 ),
+                               new Tuple<string, double>( "Cherry", 218 ),
+                               new Tuple<string, double>( "Key Lime", 172 ),
+                               new Tuple<string, double>( "Pecan", 277 ),
+                               new Tuple<string, double>( "Pumpkin", 199 )
+            };
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Create the chart.
+            var chart = new BarChart();
+            chart.AxisOrientation = Orientation.Horizontal; // set axis orientation to horizontal.
+            chart.ChartTitle = "2017 Pie Popularity Poll Results";
+            chart.MeasuredAxis.AxisTitle = "Number of People"; // Label the axis
+            foreach (var record in data)
+            { // populate the chart.
+                chart.AddBar( record.Item1, record.Item2 );
+            }
+
+            // Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Horizontal-Bar-Chart-Sample", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void MultipleBarGroupsChartSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new DataTable();
+            data.Columns.AddRange( new[] { new DataColumn( "Year", typeof( int ) ),
+                               new DataColumn( "Pie", typeof( string ) ),
+                               new DataColumn( "Votes", typeof( int ) ) } );
+
+            data.Rows.Add( 2015, "Apple", 377 );
+            data.Rows.Add( 2015, "Blueberry", 112 );
+            data.Rows.Add( 2015, "Mixed Berry", 68 );
+            data.Rows.Add( 2015, "Cherry", 225 );
+            data.Rows.Add( 2015, "Key Lime", 144 );
+            data.Rows.Add( 2015, "Pecan", 300 );
+            data.Rows.Add( 2015, "Pumpkin", 220 );
+
+            data.Rows.Add( 2016, "Apple", 398 );
+            data.Rows.Add( 2016, "Blueberry", 106 );
+            data.Rows.Add( 2016, "Mixed Berry", 75 );
+            data.Rows.Add( 2016, "Cherry", 250 );
+            data.Rows.Add( 2016, "Key Lime", 199 );
+            data.Rows.Add( 2016, "Pecan", 244 );
+            data.Rows.Add( 2016, "Pumpkin", 220 );
+
+            data.Rows.Add( 2017, "Apple", 425 );
+            data.Rows.Add( 2017, "Blueberry", 100 );
+            data.Rows.Add( 2017, "Mixed Berry", 88 );
+            data.Rows.Add( 2017, "Cherry", 218 );
+            data.Rows.Add( 2017, "Key Lime", 172 );
+            data.Rows.Add( 2017, "Pecan", 277 );
+            data.Rows.Add( 2017, "Pumpkin", 199 );
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            doc.SetTheme( Theme.Purple ); // mix it up.
+
+            // Step 2: Create the chart.
+            var chart = new BarChart();
+            chart.AxisOrientation = Orientation.Vertical;
+            chart.LegendPosition = LegendPosition.Right;
+            chart.ChartTitle = "Pie Popularity Poll Results";
+            chart.MeasuredAxis.AxisTitle = "Number of People"; // Label the axis
+            foreach (DataRow record in data.Rows)
+            { // populate the chart.
+                chart.AddToBarGroup( record["Year"].ToString(), record["Pie"] as string, (int)record["Votes"] );
+            }
+
+            // Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Multiple-Bar-Groups-Chart-Sample", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void LineChartSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new DataTable();
+            data.Columns.AddRange( new[] { new DataColumn( "City", typeof( string ) ),
+                               new DataColumn( "Day Of Week", typeof( string ) ),
+                               new DataColumn( "Tempurature", typeof( double ) ) } );
+            data.Rows.Add( "NY City", "Monday", 43 );
+            data.Rows.Add( "NY City", "Tuesday", 53 );
+            data.Rows.Add( "NY City", "Wednesday", 50 );
+            data.Rows.Add( "NY City", "Thursday", 57 );
+            data.Rows.Add( "NY City", "Friday", 59 );
+            data.Rows.Add( "NY City", "Saturday", 69 );
+
+            data.Rows.Add( "Chicago", "Monday", 22 );
+            data.Rows.Add( "Chicago", "Tuesday", 47 );
+            data.Rows.Add( "Chicago", "Wednesday", 24 );
+            data.Rows.Add( "Chicago", "Thursday", 36 );
+            data.Rows.Add( "Chicago", "Friday", 59 );
+            data.Rows.Add( "Chicago", "Saturday", 81 );
+
+            data.Rows.Add( "Los Angeles", "Monday", 67 );
+            data.Rows.Add( "Los Angeles", "Tuesday", 71 );
+            data.Rows.Add( "Los Angeles", "Wednesday", 72 );
+            data.Rows.Add( "Los Angeles", "Thursday", 84 );
+            data.Rows.Add( "Los Angeles", "Friday", 64 );
+            data.Rows.Add( "Los Angeles", "Saturday", 88 );
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+            doc.SetTheme( Theme.SeaGreen );
+
+            // Step 2: Create the chart.
+            var chart = new LineChart<string, double>();
+
+            chart.LegendPosition = LegendPosition.Right;
+            chart.ChartTitle = "This Weeks Tempuratures in Major US Cities";
+            chart.MeasuredAxis.AxisTitle = "Tempurature"; // Label the axis
+            chart.LabeledAxis.AxisTitle = "Day Of Week";
+            foreach (DataRow record in data.Rows)
+            { // populate the chart.
+                chart.AddPoint( record["City"].ToString(), record["Day Of Week"] as string, (double)record["Tempurature"] );
+            }
+
+            // Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Line-Chart-Sample", doc );
+        }
     }
 
     public class NorthwindReport

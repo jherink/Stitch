@@ -204,7 +204,8 @@ namespace Stitch.Chart
                         Y = barY,
                         Width = barWidth,
                         Height = indWidth,
-                        Fill = bar.Color
+                        Fill = bar.Color,
+                        StrokeOpacity = 0
                     };
                     svgBar.ClassList.Add( GetChartTheme( id++ ) );
                     barY += indWidth;
@@ -270,7 +271,8 @@ namespace Stitch.Chart
                         Y = baseLineY - barHeight,
                         Height = barHeight,
                         Width = indWidth,
-                        Fill = bar.Color
+                        Fill = bar.Color,
+                        StrokeOpacity = 0,
                     };
                     svgBar.ClassList.Add( GetChartTheme( id++ ) );
                     barX += indWidth;

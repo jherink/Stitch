@@ -8,33 +8,7 @@ namespace Stitch
 {
     public static class Helpers
     {
-        public static List<string> GetDefaultColors()
-        {
-            return new List<string>() {
-            "#3366cc", // "mariner"
-            "#dc3912", // "tia maria"
-            "#ff9900", // "orange peel"
-            "#109618", // "la palma"
-            "#990099", // "flirt"
-            "#0099c6", // "pacific blue"
-            "#dd4477", // "cabaret"
-            "#66aa00", // "limeade"
-            "#b82e2e", // "tall poppy"
-            "#316395", // "azure"
-            "#994499", // "plum"
-            "#22aa99", // "jungle green"
-            "#aaaa11", // "sahara"
-            "#6633cc", // "purple heart"
-            "#e67300", // "mango tango"
-            "#8b0707", // "totem pole"
-            "#651067", // "scarlet gum"
-            "#329262", // "sea green"
-            "#5574a6", // "wedgewood"
-            "#3b3eac", // "governor bay"
-            "#b77322", // "bourbon"
-            "#16d620", // "malachite"
-            };
-        }
+        
 
         private const int MAX_COLORS = 22;
 

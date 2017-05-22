@@ -206,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\README.txt" />
+    <EmbeddedResource Include="Themes\stitch-malachite.css" />
     <EmbeddedResource Include="Themes\stitch-azure.css" />
     <EmbeddedResource Include="Themes\stitch-bourbon.css" />
     <EmbeddedResource Include="Themes\stitch-cabaret.css" />
@@ -214,7 +215,6 @@
     <EmbeddedResource Include="Themes\stitch-jungle-green.css" />
     <EmbeddedResource Include="Themes\stitch-la-palma.css" />
     <EmbeddedResource Include="Themes\stitch-limeade.css" />
-    <EmbeddedResource Include="Themes\stitch-malachite.css" />
     <EmbeddedResource Include="Themes\stitch-mango-tango.css" />
     <EmbeddedResource Include="Themes\stitch-orange-peel.css" />
     <EmbeddedResource Include="Themes\stitch-pacific-blue.css" />

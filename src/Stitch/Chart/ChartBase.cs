@@ -162,12 +162,7 @@ namespace Stitch.Chart
         {
             return $"stitch-chart-theme-{(id % 23)}";
         }
-
-        protected string GetChartStrokeTheme( int id )
-        {
-            return $"stitch-chart-stroke-theme-{(id % 23)}";
-        }
-
+        
         protected string GetChartTextTheme( int id )
         {
             return $"stitch-chart-text-theme-{(id % 23)}";
