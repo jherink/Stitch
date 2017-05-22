@@ -1,6 +1,6 @@
 # Line Chart
 
-### Source Code - [See Rendered Output](Rendered-Sample/Line-Chart-Sample.pdf)
+### Source Code - [See Rendered Output](Rendered-Samples/Line-Chart-Sample.pdf)
 
 ~~~cs
 data.Rows.Add( "NY City", "Monday", 43 );
