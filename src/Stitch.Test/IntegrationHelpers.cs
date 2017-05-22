@@ -1,4 +1,5 @@
-﻿using Stitch.Export;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Stitch.Export;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,6 +12,24 @@ using System.Threading.Tasks;
 
 namespace Stitch.Tests
 {
+    [TestClass]
+    public sealed class AssemblyTestInitialize
+    {
+        [AssemblyInitialize]
+        public static void UnitTestAssemblyInitialize( TestContext tc )
+        {
+            var root = IntegrationHelpers.EnsuredTempDirectory();
+            var files = Directory.GetFiles( root );
+            var directories = Directory.GetDirectories( root );
+            foreach (var file in files) File.Delete( file );
+            foreach (var dir in directories.Where( t => !t.EndsWith( "Master", StringComparison.InvariantCultureIgnoreCase ) &&
+                                                        !t.EndsWith( "Data", StringComparison.InvariantCultureIgnoreCase ) ))
+            {
+                Directory.Delete( dir, true );
+            }
+        }
+    }
+
     public static class IntegrationHelpers
     {
         public static string EnsuredTempDirectory()
@@ -55,7 +74,7 @@ namespace Stitch.Tests
             var master = Path.Combine( MasterPath, name );
             doc.Save( path );
 
-            if(ignoreRegression == false) Microsoft.VisualStudio.TestTools.UnitTesting.Assert.IsTrue( SHA1Comparison.Equal( path, master ), $"File comparison of \"{Path.GetFileName( path )}\" with master file \"{master}\" are not equal." );
+            if (ignoreRegression == false) Assert.IsTrue( SHA1Comparison.Equal( path, master ), $"File comparison of \"{Path.GetFileName( path )}\" with master file \"{master}\" are not equal." );
         }
 
         public static void ExportPdfToTemp( string name, StitchDocument doc, bool ignoreRegression = false )
@@ -65,7 +84,7 @@ namespace Stitch.Tests
             var path = Path.Combine( EnsuredTempDirectory(), name );
             doc.Export( new PDFExporter(), File.Create( path ) );
 
-            SaveToTemp( name.Remove(name.Length - ".pdf".Length), doc, ignoreRegression );
+            SaveToTemp( name.Remove( name.Length - ".pdf".Length ), doc, ignoreRegression );
         }
 
         public static string CreateLocalResource( string resourcePath )

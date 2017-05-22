@@ -64,15 +64,12 @@ namespace Stitch
             Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName; // set to current culture.
 
             // add mobile viewport meta tag.
-            //Head.Metas.Add( ElementFactory.CreateMeta( "viewport", "width=device-width, initial-scale=1" ) );
             Head.Metas.Add( new Meta( "viewport", "width=device-width, initial-scale=1" ) );
             // add charset meta tag.
-            //Head.Metas.Add( ElementFactory.CreateMeta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
             Head.Metas.Add( new Meta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
 
 
             // add w3 resource.
-            //Head.Styles.Add( ElementFactory.CreateStyleFromResource( "w3" ) );
             Head.Styles.Add( new Style() { StyleSheet = resourceLoader.LoadTheme( "w3" ) } );
 
             SetTheme( Theme.Blue );
@@ -191,6 +188,11 @@ namespace Stitch
             SetTheme( newTheme );
         }
 
+        /// <summary>
+        /// Adds a page break after the specified element.
+        /// </summary>
+        /// <param name="element">The element to break after.</param>
+        /// <returns>The element the break was added to.</returns>
         public IElement InsertPageBreak( IElement element )
         {
             element.StyleList.Add( "page-break-after", "always" );
@@ -235,7 +237,8 @@ namespace Stitch
             var settings = new XmlWriterSettings
             {
                 Indent = true,
-                IndentChars = "\t"
+                IndentChars = "\t",
+                NewLineChars = "\n"
             };
 
             using (var writer = XmlWriter.Create( path, settings ))

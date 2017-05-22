@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NReco.PdfGenerator">
-      <HintPath>..\ThirdParty\NReco.PdfGenerator.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -70,6 +67,7 @@
     <Compile Include="Chart\Math\Trig.cs" />
     <Compile Include="Chart\Math\Vector.cs" />
     <Compile Include="Chart\Trig.cs" />
+    <Compile Include="Export\wkhtmltopdfWrapper.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Chart\Interface\IChartArea.cs" />
     <Compile Include="Chart\LineChart.cs" />
@@ -206,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\README.txt" />
+    <EmbeddedResource Include="Export\wkhtmltopdf.exe" />
     <EmbeddedResource Include="Themes\stitch-malachite.css" />
     <EmbeddedResource Include="Themes\stitch-azure.css" />
     <EmbeddedResource Include="Themes\stitch-bourbon.css" />

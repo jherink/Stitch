@@ -4,15 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22A84095-D5AF-472C-908C-D9A63DDB42E0}"
-	ProjectSection(SolutionItems) = preProject
-		ideas.txt = ideas.txt
-		names.txt = names.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdParty", "ThirdParty", "{1E733EEB-DA99-4D9B-AB35-DE08044C8A32}"
-	ProjectSection(SolutionItems) = preProject
-		ThirdParty\NReco.PdfGenerator.dll = ThirdParty\NReco.PdfGenerator.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stitch", "Stitch\Stitch.csproj", "{93AB75EF-24FB-4E01-B2B1-0F2456BF1F3F}"
 EndProject
@@ -43,7 +34,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1E733EEB-DA99-4D9B-AB35-DE08044C8A32} = {22A84095-D5AF-472C-908C-D9A63DDB42E0}
 		{D66C8A93-D1D7-48A4-876A-B85552E42FD5} = {22A84095-D5AF-472C-908C-D9A63DDB42E0}
 	EndGlobalSection
 EndGlobal
