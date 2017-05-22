@@ -1,14 +1,18 @@
 # Exporting To Other Formats
 
-We provide an interface, [IExporter](../src/Stitch/Export/IExport.cs), for exporting Stitch documents to a document format of your choice
+We provide an interface, [IExporter](../../master/src/Stitch/Export/IExporter.cs), for exporting Stitch documents to a document format of your choice
 using your own exportation methods or a third party tool. 
 
-Stitch provides a [PDF Exporter](../src/Stitch/Export/PDFExporer.cs] that uses 
+Stitch provides a [PDF Exporter](../../master/src/Stitch/Export/PDFExporter.cs) that uses 
 [wkhtmltopdf](https://wkhtmltopdf.org/) to render it's HTML content to PDF. 
 
 For example if we implemented an export method that exported the HTML to raw text:
 
 ~~~cs
+using Stitch.Export;
+
+...
+
 public class RawTextExport : IExporter
 {
     public byte[] Export( string content )
