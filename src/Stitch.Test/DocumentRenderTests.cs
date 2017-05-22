@@ -12,6 +12,12 @@ namespace Stitch.Tests
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class DocumentRenderTests
     {
+        [Fact( DisplayName = "LoadwkhtmlResource" )]
+        public void LoadwkhtmlResource()
+        {
+            Assert.NotNull( new Export.wkhtmltopdfWrapper() );
+        }
+
         [Fact( DisplayName = "HelloWorldTest" )]
         public void HelloWorldTest()
         {
