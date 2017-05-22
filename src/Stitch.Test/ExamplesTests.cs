@@ -27,7 +27,7 @@ namespace Stitch.Tests
         public void NorthwindReportTestOutput()
         {
             var report = new NorthwindReport();
-            IntegrationHelpers.ExportPdfToTemp( "Samples\\Northwind-Report-Sample", report.Report );
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Northwind-Report-Sample", report.Report, true );
         }
 
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
@@ -174,6 +174,40 @@ namespace Stitch.Tests
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Sample", doc );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void PieChartRotatedChartSample()
+        {
+            /** Data Setup - For DEMO **/
+            var data = new[] { new Tuple<string, double>( "Apple", 425 ),
+                   new Tuple<string, double>( "Blueberry", 100 ),
+                   new Tuple<string, double>( "Mixed Berry", 88 ),
+                   new Tuple<string, double>( "Cherry", 218 ),
+                   new Tuple<string, double>( "Key Lime", 172 ),
+                   new Tuple<string, double>( "Pecan", 277 ),
+                   new Tuple<string, double>( "Pumpkin", 199 )
+};
+
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Create the chart.
+            var chart = new PieChart();
+            chart.ChartTitle = "2017 Pie Popularity Survey";
+            chart.PieStartAngle = 90;
+            foreach (var record in data)
+            { // populate chart with our data.
+                chart.AddSlice( record.Item1, record.Item2 );
+            }
+
+            // Step 3: Add the chart to the Stitch doc
+            doc.Add( chart );
+
+            // Step 3: Render or the document
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Rotation-Sample", doc );
         }
 
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
