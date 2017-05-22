@@ -1,7 +1,7 @@
 # Exporting To Other Formats
 
 We provide an interface, [IExporter](../../master/src/Stitch/Export/IExporter.cs), for exporting Stitch documents to a document format of your choice
-using your own exportation methods or a third party tool. 
+using your own implementations or a third party tool. 
 
 Stitch provides a [PDF Exporter](../../master/src/Stitch/Export/PDFExporter.cs) that uses 
 [wkhtmltopdf](https://wkhtmltopdf.org/) to render it's HTML content to PDF. 
