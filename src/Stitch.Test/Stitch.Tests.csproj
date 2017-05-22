@@ -121,16 +121,19 @@
     <Content Include="Master\BarChartLegendTestNone.html" />
     <Content Include="Master\BarChartLegendTestRight.html" />
     <Content Include="Master\BarChartLegendTestTop.html" />
-    <Content Include="Master\ColorSwatch.html" />
     <Content Include="Master\complexSamplePage.html" />
     <Content Include="Master\CustomCSSRuleTest.html" />
+    <Content Include="Master\Default Themes Color Swatches.html" />
+    <Content Include="Master\Donut-Chart-Sample.html" />
     <Content Include="Master\ExplodeSliceTest.html" />
     <Content Include="Master\ExportTest01.html" />
     <Content Include="Master\headingLevelTests.html" />
     <Content Include="Master\helloworld.html" />
     <Content Include="Master\helloworldincolor.html" />
+    <Content Include="Master\Horizontal-Bar-Chart-Sample.html" />
     <Content Include="Master\HorizontalBarChartTest.html" />
     <Content Include="Master\imageInTableTests.html" />
+    <Content Include="Master\Line-Chart-Sample.html" />
     <Content Include="Master\LineChartLegendTestBottom.html" />
     <Content Include="Master\LineChartLegendTestLeft.html" />
     <Content Include="Master\LineChartLegendTestNone.html" />
@@ -139,11 +142,14 @@
     <Content Include="Master\LineChartWithNumbersTest1.html" />
     <Content Include="Master\linkTests.html" />
     <Content Include="Master\MultiLinesChartTest.html" />
+    <Content Include="Master\Multiple-Bar-Chart-Sample.html" />
+    <Content Include="Master\Multiple-Bar-Groups-Chart-Sample.html" />
     <Content Include="Master\MultipleBarChartTest2.html" />
     <Content Include="Master\MultipleVerticalBarChartTest.html" />
     <Content Include="Master\MultipleVerticalBarChartTest2.html" />
-    <Content Include="Master\NorthwindReportTestOutput.html" />
     <Content Include="Master\NorthwindSalesByYearTest.html" />
+    <Content Include="Master\Pie-Chart-Exploded-Sample.html" />
+    <Content Include="Master\Pie-Chart-Sample.html" />
     <Content Include="Master\Pie2DLegendTestBottom.html" />
     <Content Include="Master\Pie2DLegendTestLeft.html" />
     <Content Include="Master\Pie2DLegendTestNone.html" />
@@ -189,11 +195,15 @@
     <Content Include="Master\Test2PieRotation100.html" />
     <Content Include="Master\tiger.jpg" />
     <Content Include="Master\unorderedListTest1.html" />
+    <Content Include="Master\Vertical-Bar-Chart-Sample.html" />
     <Content Include="Master\VerticalBarChartTest.html" />
     <Content Include="Master\W3CSSSampleTest.html" />
     <Content Include="Resources\Css3.css" />
     <Content Include="Resources\Css3Friendly.css" />
     <Content Include="Resources\Css3Min.css" />
+    <Content Include="Resources\Dark-Knight.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Images\tiger.jpg" />
     <Content Include="Resources\ResourceResolutionResolve\css\regressiontest.css" />
     <Content Include="Resources\tiger.jpg" />

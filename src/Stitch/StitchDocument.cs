@@ -170,6 +170,13 @@ namespace Stitch
             }
         }
 
+        public void SetTheme( string themePath )
+        {
+            var css = File.ReadAllText( themePath );
+            var sheet = new Parser().Parse(css);
+            SetTheme( sheet );
+        }
+
         public void SetTheme( Theme theme )
         {
             Theme = theme;
@@ -212,6 +219,12 @@ namespace Stitch
             builder.AppendLine( Body.Render() );
             builder.AppendLine( "</html>" );
             return builder.ToString();
+        }
+
+        public void Write( Stream writeableStream )
+        {
+            var writer = new StreamWriter( writeableStream );
+            writer.Write( Render() );
         }
 
         public void Save( string path )

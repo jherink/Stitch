@@ -121,7 +121,8 @@ namespace Stitch.Chart
                     Stroke = line.Color,
                     Fill = "none"
                 };
-                svgLine.ClassList.Add( GetChartStrokeTheme( i++ ) );
+                //svgLine.ClassList.Add( GetChartStrokeTheme( i++ ) );
+                svgLine.ClassList.Add( GetChartTheme( i++ ) );
                 int lineI = 0;
 
                 foreach (var point in line.Values)
