@@ -7,7 +7,7 @@ var doc = new StitchDocument();
 // Step 2: Add elements to the document
 doc.Add( new Paragraph( "Hello World!" ) );
 
-// Step 3: Render or the document
+// Step 3: Render the document
 var html = doc.Render();
 ~~~
 
