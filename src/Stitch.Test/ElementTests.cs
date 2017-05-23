@@ -109,5 +109,28 @@ namespace Stitch.Tests
             var answer = "style=\"font-size:300%;background-color:powderblue;color:blue;font-family:verdana;text-align:center;\"";
             Assert.Equal( answer, styleList.GetStyleString() );
         }
+
+        [Theory( DisplayName = "ImageElementDownload" )]
+        [InlineData( "..\\..\\Resources\\tiger.jpg", false, "imgRenderTest1" )] /* Relative path a time of rendering. */
+        [InlineData( "tiger.jpg", true, "imgRenderTest2" )] /* Relative path at time of release (reference) */
+        [InlineData( "http://placehold.it/350x150.png", false, "imgRenderTest3" )]
+        [InlineData( "http://placehold.it/350x150.png", true, "imgRenderTest4" )]
+        public void ImageElementDownload( string file, bool reference, string name )
+        {
+            var img = new ImageElement( file );
+            img.ReferenceImage = reference;
+            if (reference)
+            {
+                Assert.True( img.Render().Contains( file ) );
+            }
+            else {
+                Assert.NotNull( img.GetBase64EncodedImage() );
+                Assert.True( !img.Render().Contains( file ) );
+            }
+
+            var doc = new StitchDocument();
+            doc.Add( img );
+            IntegrationHelpers.SaveToTemp( name, doc, true );
+        }
     }
 }

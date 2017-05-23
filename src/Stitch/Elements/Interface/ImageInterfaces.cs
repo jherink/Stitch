@@ -11,5 +11,7 @@ namespace Stitch.Elements.Interface
         int Height { get; set; }
         Uri Src { get; set; }
         int Width { get; set; }
+        bool ReferenceImage { get; set; }
+        string GetBase64EncodedImage();
     }
 }
