@@ -605,19 +605,29 @@ namespace Stitch.Tests
         {
             var doc = new StitchDocument();
             var chart = new ScatterChart<double, double>();
-            chart.AddPoint( "Boys", 7, 64 );
-            chart.AddPoint( "Boys", 9, 83 );
-            chart.AddPoint( "Boys", 4, 44 );
-            chart.AddPoint( "Boys", 5, 50 );
-            chart.AddPoint( "Boys", 11, 90 );
-            chart.AddPoint( "Boys", 0, 0 );
+            //chart.AddPoint( "Boys", 7, 64 );
+            //chart.AddPoint( "Boys", 9, 83 );
+            //chart.AddPoint( "Boys", 4, 44 );
+            //chart.AddPoint( "Boys", 5, 50 );
+            //chart.AddPoint( "Boys", 11, 90 );
+            //chart.AddPoint( "Boys", 0, 0 );
 
-            chart.AddPoint( "Girls", 7, 54 );
-            chart.AddPoint( "Girls", 9, 73 );
-            chart.AddPoint( "Girls", 4, 34 );
-            chart.AddPoint( "Girls", 5, 40 );
-            chart.AddPoint( "Girls", 11, 80 );
-            chart.AddPoint( "Girls", 0, 0 );
+            //chart.AddPoint( "Girls", 7, 54 );
+            //chart.AddPoint( "Girls", 9, 73 );
+            //chart.AddPoint( "Girls", 4, 34 );
+            //chart.AddPoint( "Girls", 5, 40 );
+            //chart.AddPoint( "Girls", 11, 80 );
+            //chart.AddPoint( "Girls", 0, 0 );
+
+            chart.AddPoint( "Boys", 8, 12 );
+            chart.AddPoint( "Boys", 4, 12 );
+            chart.AddPoint( "Boys", 11, 14 );
+            chart.AddPoint( "Boys", 4, 5 );
+            chart.AddPoint( "Boys", 6.5, 7 );
+            chart.AddPoint( "Boys", 3, 3.5 );
+
+            chart.LabeledAxis.AxisTitle = "Age";
+            chart.MeasuredAxis.AxisTitle = "Weight";
 
             doc.Add( chart );
             IntegrationHelpers.SaveToTemp( "SingleGroupScatterChartTest", doc, true );

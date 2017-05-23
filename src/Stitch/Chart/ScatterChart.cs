@@ -143,7 +143,7 @@ namespace Stitch.Chart
 
                     var svgPt = new SVGCircle()
                     {
-                        R = ChartTextStyle.FontSize / 2,
+                        R = ChartTextStyle.FontSize / 3,
                         Fill = point.Color,
                         Cx = px,
                         Cy = py
