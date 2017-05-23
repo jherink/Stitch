@@ -241,7 +241,7 @@ namespace Stitch.Tests
 
             // relative
             rowClone = (ITableRowElement)row.Clone();
-            rowClone[0].Content = new DOMString( new ImageElement( System.IO.Path.GetFileName( fullPath ) ) );
+            rowClone[0].Content = new DOMString( new ImageElement( System.IO.Path.GetFileName( fullPath ) ) { ReferenceImage = true } );
             body.Children.Add( rowClone );
 
             container.Children.Add( table );
