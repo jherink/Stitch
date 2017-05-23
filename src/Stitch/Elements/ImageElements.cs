@@ -28,20 +28,22 @@ namespace Stitch.Elements
             set
             {
                 _src = value;
-                if (!ReferenceImage && _src != default( Uri ))
+                if (_src != default( Uri ))
                 {
-                    var mimeType = Helpers.GetMIMEType( _src.IsAbsoluteUri ? _src.AbsoluteUri : _src.OriginalString );
-                    _downloadTask = Task.Factory.StartNew( () =>
-                     {
-                         _base64Image = $"data:{mimeType};base64,{Convert.ToBase64String( DownloadImage() )}";
+                    if (IsBase64String( value.OriginalString ))
+                    {
+                        _base64Image = value.OriginalString;
+                    }
+                    else if (!ReferenceImage)
+                    {
+                        var mimeType = Helpers.GetMIMEType( _src.IsAbsoluteUri ? _src.AbsoluteUri : _src.OriginalString );
+                        _downloadTask = Task.Factory.StartNew( () =>
+                         {
+                             _base64Image = $"data:{mimeType};base64,{Convert.ToBase64String( DownloadImage() )}";
 
-                     } );
-                    _downloadTask.ContinueWith( t => t.Dispose() );
-                    //_downloadTask = DownloadImage();
-                    //_downloadTask.ContinueWith( t =>
-                    //{
-                    //    if (t.Result != null && t.Result.Length > 0) _base64Image = Convert.ToBase64String( t.Result );
-                    //} );
+                         } );
+                        _downloadTask.ContinueWith( t => t.Dispose() );
+                    }
                 }
             }
         }
@@ -62,14 +64,12 @@ namespace Stitch.Elements
 
         public ImageElement( string src, string alt = "", int width = -1, int height = -1 ) : this( default( Uri ), alt, width, height )
         {
-            var isB = IsBase64String( src );
-
             var uri = default( Uri );
-            // first try absolute and releative
+            // first try absolute and relative
             if (!Uri.TryCreate( src, UriKind.Absolute, out uri ) &&
                 !Uri.TryCreate( src, UriKind.Relative, out uri ))
             {
-                // if those didnt work try a hail mary. If that fails let the exceptions rain...
+                // if those didn't work try a hail mary. If that fails let the exceptions rain...
                 uri = new Uri( src, UriKind.RelativeOrAbsolute );
             }
             Src = uri;
@@ -95,7 +95,15 @@ namespace Stitch.Elements
             {
                 using (var client = new WebClient())
                 {
-                    data = client.DownloadData( _src );
+                    try
+                    {
+                        data = client.DownloadData( _src );
+                    }
+                    catch (Exception)
+                    {   // if the download failed maybe we don't have network access
+                        // or permissions.  Switch to reference.
+                        ReferenceImage = true;
+                    }
                 }
             }
             else
@@ -107,8 +115,20 @@ namespace Stitch.Elements
 
         private bool IsBase64String( string input )
         {
-            var regex = new Regex( "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$" );
-            return regex.IsMatch( input );
+            try
+            {
+                var containsBase64 = input.Contains( "base64" );
+                if (containsBase64)
+                {
+                    var values = Helpers.GetMimeValues();
+                    foreach (var v in values) if (input.StartsWith( v ) || input.StartsWith($"data:{v}")) return true;
+                }
+                //return input.StartsWith( Helpers.GetMimeValues() ) && input.Contains( "base64" );
+                //var data = Convert.FromBase64String( input );
+                //return input.Replace( " ", "" ).Length % 4 == 0;
+            }
+            catch { }
+            return false;
         }
 
         public override string Render()
@@ -124,6 +144,7 @@ namespace Stitch.Elements
                 }
                 else {
                     src = GetBase64EncodedImage();
+                    if (src.EndsWith("base64,")) src = Src.IsAbsoluteUri ? Src.AbsoluteUri : Src.OriginalString;
                 }
                 builder.Append( $"src =\"{src}\"" );
             }

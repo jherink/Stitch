@@ -201,6 +201,11 @@ namespace Stitch
     {"zip", "application/zip"}
   };
 
+        public static IEnumerable<string> GetMimeValues()
+        {
+            return MIMETypesDictionary.Values;
+        }
+
         public static string GetMIMEType( string fileName )
         {
             //get file extension
