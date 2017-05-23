@@ -18,26 +18,12 @@ namespace Stitch.Tests
             {
                 using (var sha1 = new SHA1Managed())
                 {
-                    var content = File.ReadAllText( file ).Replace( @"\r\n", @"\n" );
+                    var content = File.ReadAllText( file ).Replace( "\r\n", "\n" );
                     var sha1Computed = sha1.ComputeHash( System.Text.Encoding.UTF8.GetBytes( content ) );
-                    hash = BitConverter.ToString( sha1Computed );
-                    
+                    hash = BitConverter.ToString( sha1Computed );                    
                 }
             }
             return hash;
         }
-
-        /// <summary>
-        /// Git converts files to Unix.  This causes regressions to fail on Windows. 
-        /// Convert all to Unix for standard comparisons.
-        /// </summary>
-        /// <returns></returns>
-        //private static byte[] Dos2Unix( string file )
-        //{
-        //    const byte CR = 0x0D;
-        //    const byte LF = 0x0A;
-        //    byte[] data = File.ReadAllBytes( file );
-
-        //}
     }
 }
