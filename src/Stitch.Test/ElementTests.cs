@@ -127,10 +127,16 @@ namespace Stitch.Tests
                 Assert.NotNull( img.GetBase64EncodedImage() );
                 Assert.True( !img.Render().Contains( file ) );
             }
+        }
 
-            var doc = new StitchDocument();
-            doc.Add( img );
-            IntegrationHelpers.SaveToTemp( name, doc, true );
+        [Theory( DisplayName = "TestForcedReferenceImage" )]
+        [InlineData( "http://google.com/image_that_does_not_exist.png" )]
+        public void TestForcedReferenceImage( string file )
+        {
+            var img = new ImageElement( file );
+            img.ReferenceImage = false;
+            Assert.True( img.Render().Contains( file ) );
+            Assert.True( img.ReferenceImage ); // should be true now.
         }
     }
 }
