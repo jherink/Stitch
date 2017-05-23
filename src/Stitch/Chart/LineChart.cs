@@ -80,13 +80,10 @@ namespace Stitch.Chart
         protected override void RenderAxisChartImpl()
         {
             // labeled axis is on the bottom.
-
             var horizontalAxisLocations = new double[] { };
             var verticalAxisLocations = new double[] { };
             var horizontalIntervals = AxisHelper.SuggestIntervals( GetChartableAreaWidth() );
             var verticalIntervals = AxisHelper.SuggestIntervals( Height );
-            //T1 horizontalMin, horizontalMax;
-            //T2 verticalMin, verticalMax;
             Sort();
             var horizontalSet = GetHorizontalSet().ToList();
             var verticalSet = GetVerticalSet().ToList();

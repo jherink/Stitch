@@ -599,5 +599,28 @@ namespace Stitch.Tests
 
             IntegrationHelpers.SaveToTemp( "MultiLinesChartTest", doc );
         }
+
+        [Fact( DisplayName = "SingleGroupScatterChartTest" )]
+        public void SingleGroupScatterChartTest()
+        {
+            var doc = new StitchDocument();
+            var chart = new ScatterChart<double, double>();
+            chart.AddPoint( "Boys", 7, 64 );
+            chart.AddPoint( "Boys", 9, 83 );
+            chart.AddPoint( "Boys", 4, 44 );
+            chart.AddPoint( "Boys", 5, 50 );
+            chart.AddPoint( "Boys", 11, 90 );
+            chart.AddPoint( "Boys", 0, 0 );
+
+            chart.AddPoint( "Girls", 7, 54 );
+            chart.AddPoint( "Girls", 9, 73 );
+            chart.AddPoint( "Girls", 4, 34 );
+            chart.AddPoint( "Girls", 5, 40 );
+            chart.AddPoint( "Girls", 11, 80 );
+            chart.AddPoint( "Girls", 0, 0 );
+
+            doc.Add( chart );
+            IntegrationHelpers.SaveToTemp( "SingleGroupScatterChartTest", doc, true );
+        }
     }
 }

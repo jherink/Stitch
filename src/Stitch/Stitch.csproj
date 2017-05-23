@@ -66,6 +66,7 @@
     <Compile Include="Chart\Math\SphericalCoordinate.cs" />
     <Compile Include="Chart\Math\Trig.cs" />
     <Compile Include="Chart\Math\Vector.cs" />
+    <Compile Include="Chart\ScatterChart.cs" />
     <Compile Include="Chart\Trig.cs" />
     <Compile Include="Export\wkhtmltopdfWrapper.cs" />
     <Compile Include="Helpers.cs" />
