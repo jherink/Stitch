@@ -4,7 +4,7 @@ Create highly customizable reports using HTML &amp; CSS in .NET
 
 <hr />
 
-<h3>Why HTML?</h3>
+### Why HTML?
 <ul>
 
 <li>By styling through CSS & HTML you can create highly customizable reports!</li>
@@ -19,3 +19,7 @@ allowing you to render HydraDoc reports without the need for third party viewers
 you to mine data from these reports if needed.</li>
 
 </ul>
+
+### CSS
+
+Stitch uses [W3.CSS](https://www.w3schools.com/w3css/default.asp), currently version 2.84, for it's default styling.  As a user you have access to all the CSS styling available in W3.CSS in your Stitch elements.
