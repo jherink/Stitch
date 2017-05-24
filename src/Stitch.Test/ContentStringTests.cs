@@ -71,6 +71,23 @@ namespace Stitch.Tests
         [InlineData( "&lt;", "&lt;" )]
         [InlineData( "&apos;", "&apos;" )]
         [InlineData( "&quot;", "&quot;" )]
+        [InlineData( "<big></big>", "<big></big>")]
+        [InlineData( "<big></big>", "<big></big>")]
+        [InlineData( "<oddspot", "&lt;oddspot")]
+        [InlineData( "oddspot>", "oddspot&gt;" )]
+        [InlineData( "<element/>", "<element/>")]
+        [InlineData( "<element />", "<element />")]
+        [InlineData( "<element />", "<element />")]
+        [InlineData( "<element    ", "&lt;element    ")]
+        [InlineData( "<element  /  ", "&lt;element  /  ")]
+        [InlineData( "<element   /> ", "<element   /> " )]
+        [InlineData( "sjf<fjfj*e", "sjf&lt;fjfj*e" )]
+        [InlineData( "<big>Something & Else</big>", "<big>Something &amp; Else</big>" )]
+        [InlineData( "<big>Something &amp; Else</big>", "<big>Something &amp; Else</big>" )]
+        [InlineData( "<tspan x=\"10\" y=\"45\" >First Line</tspan>", "<tspan x=\"10\" y=\"45\" >First Line</tspan>" )]
+
+
+
         public void UnescapeXMLValues( string input, string output )
         {
             var str = new DOMString( input );

@@ -36,17 +36,195 @@ namespace Stitch
 
         private string XmlSafeRender( string renderedString )
         {
+            // GOAL: Loop through rendered string only once checking for 
+            // special characters.
+
+            const string amp = "&amp;";
+            const string apos = "&apos;";
+            const string quot = "&quot;";
+            const string lt = "&lt;";
+            const string gt = "&gt;";
+
+            // start with a buffer the same size as the string being rendered.
+            // StringBuilder will resize as necessary when swapping out values.
+            var buffer = new StringBuilder( renderedString.Length );
+            var holdBuffer = new StringBuilder();
+            var inPossibleTag = false;
+
+            for (int i = 0; i < renderedString.Length; i++)
+            {
+                switch (renderedString[i])
+                {
+                    case '&':
+                        // If we encounter an ampersand then make sure it isn't part of 
+                        // a XML Safe character already.
+
+                        // POSSIBLE OPTIMIZATION: We can exit peek process if peek string
+                        // is not a substring of the special characters string.
+
+                        var peek = new string( '&', 1 ); // we know it starts with an ampersand.
+                        var next = false;
+                        for (int j = 1; j < apos.Length && i + j < renderedString.Length; j++)
+                        { // peek ahead 6 characters, maximum XML safe string length (apos is longest)
+                            peek += renderedString[i + j];
+                            switch (peek)
+                            {
+                                case amp:
+                                case apos:
+                                case quot:
+                                case lt:
+                                case gt:
+                                    // already XML Safe.  Add to buffer and move i counter ahead.
+                                    buffer.Append( peek );
+                                    i += j;
+                                    next = true;
+                                    break;
+                            }
+                            if (next) break;
+                        }
+
+                        if (!next) buffer.Append( amp );
+                        break;
+                    case '\'':  // Just swap
+                        buffer.Append( apos );
+                        break;
+                    case '"':   // Just swap
+                        buffer.Append( quot );
+                        break;
+                    case '<':   // Make sure its not a part of an HTML tag
+                        int k = 1;
+                        ValidateElementSequence: // for restarting validate only if validated exit char.
+                        while ((i + k < renderedString.Length) && ValidElementChar( renderedString[i + k] ))
+                        {
+                            holdBuffer.Append( renderedString[i + k++] );
+                        }
+                        if (i + k < renderedString.Length)
+                        {
+                            if (renderedString[i + k] == '>')
+                            { // completes starting element tag.
+                                buffer.Append( renderedString[i] );         // remember to add '<'
+                                buffer.Append( holdBuffer.ToString() );
+                                buffer.Append( renderedString[i + k] );     // add '>'
+                                holdBuffer.Clear();
+                                i += k;
+                            }
+                            else if (renderedString[i + k] == '/')
+                            {   // this is valid if the previous character is a '<' (end tag like </div>)
+                                // or the next char is a '>' tag (self contained tag like <hr />
+                                if (renderedString[i + k - 1] == '<' ||
+                                   ((i + k + 1 < renderedString.Length) && renderedString[i + k + 1] == '>'))
+                                {
+                                    holdBuffer.Append( renderedString[i + k++] ); // add '/' to hold buffer
+                                    goto ValidateElementSequence; // keep trying to validate.
+                                }
+                            }
+                            else if (renderedString[i + k] == ' ')
+                            {   // there can be any number of spaces between element text and a close element />
+                                // like <hr />
+                                while ((i + k < renderedString.Length) && renderedString[i + k] == ' ')
+                                {
+                                    holdBuffer.Append( renderedString[i + k++] );
+                                }
+                                if (i + k < renderedString.Length)
+                                {
+                                    if (renderedString[i + k] == '/')
+                                    {
+                                        holdBuffer.Append( renderedString[i + k++] );
+                                        if ((i + k < renderedString.Length) && renderedString[i + k] == '>')
+                                        { // valid
+                                            buffer.Append( renderedString[i] );     // remember to add '<'
+                                            buffer.Append( holdBuffer.ToString() ); // add hold
+                                            buffer.Append( renderedString[i + k] ); // add '>'
+                                            holdBuffer.Clear();
+                                            i += k;
+                                        }
+                                        else
+                                        { // not valid
+                                            buffer.Append( lt ); // swap out for lt
+                                            if (holdBuffer.Length > 0)
+                                            { // We checked some values.  Add them to buffer so we don't check them twice.
+                                                buffer.Append( holdBuffer.ToString() );
+                                                holdBuffer.Clear();
+                                                i += k - 1;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    { // not valid
+                                        buffer.Append( lt ); // swap out for lt
+                                        if (holdBuffer.Length > 0)
+                                        { // We checked some values.  Add them to buffer so we don't check them twice.
+                                            buffer.Append( holdBuffer.ToString() );
+                                            holdBuffer.Clear();
+                                            i += k - 1;
+                                        }
+                                    }
+                                }
+                                else
+                                {   // Read to the end of the string. Not an element.
+                                    buffer.Append( lt ); // swap out for lt
+                                    if (holdBuffer.Length > 0)
+                                    { // We checked some values.  Add them to buffer so we don't check them twice.
+                                        buffer.Append( holdBuffer.ToString() );
+                                        holdBuffer.Clear();
+                                        i += k - 1;
+                                    }
+                                }
+                            }
+                            else
+                            { // Read to the end of the string. Not an element.
+                                buffer.Append( lt ); // swap out for lt
+                                if (holdBuffer.Length > 0)
+                                { // We checked some values.  Add them to buffer so we don't check them twice.
+                                    buffer.Append( holdBuffer.ToString() );
+                                    holdBuffer.Clear();
+                                    i += k - 1;
+                                }
+                            }
+                        }
+                        else
+                        { // invalid tag.
+                            buffer.Append( lt ); // swap out for lt
+                            if (holdBuffer.Length > 0)
+                            { // We checked some values.  Add them to buffer so we don't check them twice.
+                                buffer.Append( holdBuffer.ToString() );
+                                holdBuffer.Clear();
+                                i += k - 1;
+                            }
+                        }
+                        break;
+                    case '>':
+                        buffer.Append( gt ); // tag '>' cases are handled in '<' case -> just swap
+                        break;
+                    default: // not special -> put it in buffer.
+                        buffer.Append( renderedString[i] );
+                        break;
+                }
+            }
+
+            return buffer.ToString();
+
             // TODO: Optimize & fix
             // Notes: Must do '&' first with string.replace so we don't overwrite
             // other valid XML elements.
             // Drawbacks: string.replace will break code that already has XML
             // safe elements in it.
             // Drawback: breaks elements like <big>.
-            return renderedString.Replace( "&", "&amp;" )
-                                 .Replace( "\"", "&quot;" )
-                                 .Replace( "'", "&apos;" )
-                                 .Replace( "<", "&lt;" )
-                                 .Replace( ">", "&gt;" );
+            //return renderedString.Replace( "&", "&amp;" )
+            //                     .Replace( "\"", "&quot;" )
+            //                     .Replace( "'", "&apos;" )
+            //                     .Replace( "<", "&lt;" )
+            //                     .Replace( ">", "&gt;" );
+        }
+
+        private bool ValidElementChar( char c )
+        {
+            return (c >= 0x30 && c <= 0x39) ||  // is digit
+                   (c >= 0x41 && c <= 0x5A) ||  // uppercase letter
+                   (c >= 0x61 && c <= 0x7A) ||  // lowercase letter
+                    c == '_' ||                // underscore
+                    c == '.' ||                // period
+                    c == '-';                   // hyphen
         }
 
         public DOMString( string content ) : this( new PlainText( content ) )
