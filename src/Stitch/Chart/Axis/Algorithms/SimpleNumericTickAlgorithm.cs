@@ -92,11 +92,6 @@ namespace Stitch.Chart.Axis.Algorithms
             return (value - range.Min()) / (range.Max() - range.Min());
         }
 
-        //public double Percentage( double limitMinimum, double limitMaximum, double value )
-        //{
-        //    return value / (limitMaximum - limitMinimum);
-        //}
-
         public double Min( IEnumerable<double> set )
         {
             return set.Min();
@@ -105,6 +100,11 @@ namespace Stitch.Chart.Axis.Algorithms
         public double Max( IEnumerable<double> set )
         {
             return set.Max();
+        }
+
+        public int Compare( double x, double y )
+        {
+            return x.CompareTo( y );
         }
     }
 }

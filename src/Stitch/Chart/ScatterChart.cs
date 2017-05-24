@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Stitch.Chart
 {
-    public class ScatterGroup<T1, T2> : List<ScatterPoint<T1, T2>>, ICloneable where T1 : IComparable<T1>
+    public class ScatterGroup<T1, T2> : List<ChartPoint<T1, T2>>, ICloneable where T1 : IComparable<T1>
                                                                                where T2 : IComparable<T2>
     {
         public readonly string Name;
@@ -26,35 +26,17 @@ namespace Stitch.Chart
         public object Clone()
         {
             var clone = new ScatterGroup<T1, T2>( Name );
-            foreach (var pt in this) clone.Add( pt.Clone() as ScatterPoint<T1, T2> );
+            foreach (var pt in this) clone.Add( pt.Clone() as ChartPoint<T1, T2> );
             return clone;
         }
-    }
-
-    public class ScatterPoint<T1, T2> : ICloneable where T1 : IComparable<T1>
-                                                   where T2 : IComparable<T2>
-    {
-        public T1 LabeledValue { get; set; }
-        public T2 MeasuredValue { get; set; }
-        public string Color { get; set; }
-        public ScatterPoint() { }
-        public ScatterPoint( T1 labeledValue, T2 measuredValue )
-        {
-            LabeledValue = labeledValue;
-            MeasuredValue = measuredValue;
-        }
-
-        public object Clone()
-        {
-            return new ScatterPoint<T1, T2>( LabeledValue, MeasuredValue );
-        }
-    }
+    }    
 
     public class ScatterChart<T1, T2> : AxisChart<T1, T2> where T1 : IComparable<T1>
                                                           where T2 : IComparable<T2>
     {
-
         private Dictionary<string, ScatterGroup<T1, T2>> ScatterGroups = new Dictionary<string, ScatterGroup<T1, T2>>();
+
+        public double PointRadius { get; set; }
 
         #region Constructors
 
@@ -65,20 +47,21 @@ namespace Stitch.Chart
 
         public ScatterChart( int width, int height ) : base( width, height )
         {
+            PointRadius = ChartTextStyle.FontSize / 3;
         }
 
         #endregion
 
         #region Public Methods
 
-        public void AddPoint( string barGroup, T1 labeledValue, T2 measuredValue, string color = "" )
+        public void AddPoint( string scatterGroup, T1 labeledValue, T2 measuredValue, string color = "" )
         {
-            AddPoint( barGroup, new ScatterPoint<T1, T2>( labeledValue, measuredValue ) { Color = color } );
+            AddPoint( scatterGroup, new ChartPoint<T1, T2>( labeledValue, measuredValue ) { Color = color } );
         }
 
-        public void AddPoint( string barGroup, ScatterPoint<T1, T2> point )
+        public void AddPoint( string scatterGroup, ChartPoint<T1, T2> point )
         {
-            GetScatterGroup( barGroup ).Add( point );
+            GetScatterGroup( scatterGroup ).Add( point );
         }
 
         public void SetScatterGroupColor( string scatterGroup, string color )
@@ -104,7 +87,7 @@ namespace Stitch.Chart
             var verticalAxisLocations = new double[] { };
             var horizontalIntervals = AxisHelper.SuggestIntervals( GetChartableAreaWidth() );
             var verticalIntervals = AxisHelper.SuggestIntervals( Height );
-            //Sort();
+
             var horizontalSet = GetHorizontalSet().ToList();
             var verticalSet = GetVerticalSet().ToList();
             if (LabeledAxis.IncludeDefault) horizontalSet.Insert( 0, default( T1 ) );
@@ -128,62 +111,38 @@ namespace Stitch.Chart
             var horizSpace = verticalAxisLocations.Min();
             var chartableWidth = horizontalAxisLocations.Max() - horizontalAxisLocations.Min();
             var chartableHeight = verticalAxisLocations.Max() - verticalAxisLocations.Min();
+
             var i = 1;
             foreach (var group in ScatterGroups)
             {
                 var svgGroup = new SVGGroup();
                 foreach (var point in group.Value)
-                {                    
+                {
                     var x = LabeledAxisTickAlgorithm.Subtract( horizontalSet, point.LabeledValue, LabeledAxisTickAlgorithm.Min( horizontalSet ) );
                     var y = MeasuredAxisTickAlgorithm.Subtract( verticalSet, point.MeasuredValue, MeasuredAxisTickAlgorithm.Min( verticalSet ) );
-                    var pctX = LabeledAxisTickAlgorithm.Percentage( horizontalSet, point.LabeledValue );
-                    var pctY = MeasuredAxisTickAlgorithm.Percentage( verticalSet, point.MeasuredValue );
+                    // Fix issue #37.  We were calculating a percentage against the range
+                    // of values in the chart not the range of values the axis showed.
+                    // This caused the chart to look incorrect because the values didn't 
+                    // align with the axis values.  Instead use the tick sets.
+                    var pctX = LabeledAxisTickAlgorithm.Percentage( LabeledAxis.Ticks, point.LabeledValue );
+                    var pctY = MeasuredAxisTickAlgorithm.Percentage( MeasuredAxis.Ticks, point.MeasuredValue );
                     var px = baseLineX + pctX * chartableWidth;
                     var py = (chartableHeight - pctY * chartableHeight) + horizSpace;
 
                     var svgPt = new SVGCircle()
                     {
-                        R = ChartTextStyle.FontSize / 3,
+                        R = PointRadius,
                         Fill = point.Color,
+                        Stroke = point.Color,
                         Cx = px,
-                        Cy = py
+                        Cy = py,
                     };
 
-                    svgPt.ClassList.Add( GetChartTheme( i ) );
-
-                    //if (lineI++ == 0)
-                    //{ // move to start point if first line point.
-                    //    if (!LabeledAxis.IncludeDefault && MeasuredAxis.IncludeDefault)
-                    //    {
-                    //        svgLine.MoveTo( baseLineX, py );
-                    //    }
-                    //    else
-                    //    {
-                    //        svgLine.MoveTo( baseLineX, baseLineY );
-                    //    }
-                    //}
+                    svgPt.ClassList.Add( GetChartTheme( i ) );                   
                     svgGroup.Add( svgPt );
                 }
                 i++;
                 ChartGroup.Add( svgGroup );
-                //var svgLine = new SVGPath()
-                //{
-                //    StrokeWidth = 2,
-                //    FillOpacity = 1,
-                //    Stroke = line.Color,
-                //    Fill = "none"
-                //};
-                ////svgLine.ClassList.Add( GetChartStrokeTheme( i++ ) );
-                //svgLine.ClassList.Add( GetChartTheme( i++ ) );
-                //int lineI = 0;
-
-                //foreach (var point in line.Values)
-                //{
-                    
-
-                //    svgLine.LineTo( px, py );
-                //}
-                //ChartGroup.Add( svgLine );
             }
         }        
 

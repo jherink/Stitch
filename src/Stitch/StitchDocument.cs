@@ -220,6 +220,7 @@ namespace Stitch
             builder.AppendLine( Head.Render( nodes, filteredClasses ) );
             builder.AppendLine( Body.Render() );
             builder.AppendLine( "</html>" );
+            
             return builder.ToString();
         }
 

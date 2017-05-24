@@ -20,7 +20,7 @@ namespace Stitch.Chart.Axis
 
         public static int MaxTickLength<T>( IAxis<T> axis ) where T : IComparable<T>
         {
-            return LongestTick(axis).Length;
+            return LongestTick( axis ).Length;
         }
 
         public static string LongestTick<T>( IAxis<T> axis ) where T : IComparable<T>
@@ -162,7 +162,7 @@ namespace Stitch.Chart.Axis
 
             if (!string.IsNullOrWhiteSpace( verticalAxis.AxisTitle ))
             {
-                labeledAxisX = 1.125 * verticalAxis.AxisTitleTextStyle.FontSize;
+                //labeledAxisX = 1.125 * verticalAxis.AxisTitleTextStyle.FontSize;
                 var labeledAxisTitle = new SVGText
                 {
                     X = labeledAxisX,
@@ -173,7 +173,8 @@ namespace Stitch.Chart.Axis
                 labeledAxisTitle.Transform = $"rotate( -90 {labeledAxisTitle.X},{labeledAxisTitle.Y})";
                 verticalAxis.AxisTextStyle.ApplyStyle( labeledAxisTitle );
                 verticalGroup.Add( labeledAxisTitle );
-                labeledAxisX *= 2;
+                //labeledAxisX *= 2;
+                labeledAxisX += GraphicsHelper.MeasureStringHeight( verticalAxis.AxisTitle, verticalAxis.AxisTitleTextStyle );
             }
             var preLabelX = labeledAxisX;
             // Render Vertical Axis. We need to render this first so we know where the final grid line is at.
@@ -240,6 +241,6 @@ namespace Stitch.Chart.Axis
             }
 
         }
-                       
+
     }
 }

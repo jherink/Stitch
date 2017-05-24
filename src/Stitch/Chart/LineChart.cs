@@ -9,22 +9,23 @@ using System.Threading.Tasks;
 
 namespace Stitch.Chart
 {
-    public class Line<T1, T2> where T1 : IComparable<T1>
-                              where T2 : IComparable<T2>
+    public class Line<T1, T2> : List<ChartPoint<T1, T2>>, ICloneable where T1 : IComparable<T1>
+                                                                     where T2 : IComparable<T2>
     {
         public string LineName { get; set; }
-        public List<Tuple<T1, T2>> Values { get; set; } = new List<Tuple<T1, T2>>();
         public string Color { get; set; }
-
         public void AddPoint( T1 x, T2 y )
         {
-            Values.Add( new Tuple<T1, T2>( x, y ) );
+            this.Add( new ChartPoint<T1, T2>( x, y ) );
         }
 
-        public void Sort()
+        public object Clone()
         {
-            Values.OrderBy( t => t.Item1 );
+            var line = new Line<T1, T2>();
+            foreach (var pt in this) line.AddPoint( pt.LabeledValue, pt.MeasuredValue );
+            return line;
         }
+        
     }
     public class LineChart<T1, T2> : AxisChart<T1, T2> where T1 : IComparable<T1>
                                                        where T2 : IComparable<T2>
@@ -74,7 +75,12 @@ namespace Stitch.Chart
 
         private void Sort()
         {
-            foreach (var line in Lines) line.Sort();
+            foreach (var line in Lines)
+            {
+                //line.Sort( ( a, b ) => LabeledAxisTickAlgorithm.Compare( a.LabeledValue, b.LabeledValue ) );
+                //var extractedValues = line.Select( t => t.LabeledValue );
+                //LabeledAxisTickAlgorithm.Sort( extractedValues );
+            }
         }
 
         protected override void RenderAxisChartImpl()
@@ -108,6 +114,8 @@ namespace Stitch.Chart
             var horizSpace = verticalAxisLocations.Min();
             var chartableWidth = horizontalAxisLocations.Max() - horizontalAxisLocations.Min();
             var chartableHeight = verticalAxisLocations.Max() - verticalAxisLocations.Min();
+
+
             var i = 1;
             foreach (var line in Lines)
             {
@@ -118,16 +126,19 @@ namespace Stitch.Chart
                     Stroke = line.Color,
                     Fill = "none"
                 };
-                //svgLine.ClassList.Add( GetChartStrokeTheme( i++ ) );
                 svgLine.ClassList.Add( GetChartTheme( i++ ) );
                 int lineI = 0;
 
-                foreach (var point in line.Values)
+                foreach (var point in line)
                 {
-                    var x = LabeledAxisTickAlgorithm.Subtract( horizontalSet, point.Item1, LabeledAxisTickAlgorithm.Min( horizontalSet ) );
-                    var y = MeasuredAxisTickAlgorithm.Subtract( verticalSet, point.Item2, MeasuredAxisTickAlgorithm.Min( verticalSet ) );
-                    var pctX = LabeledAxisTickAlgorithm.Percentage( horizontalSet, point.Item1 );
-                    var pctY = MeasuredAxisTickAlgorithm.Percentage( verticalSet, point.Item2 );
+                    var x = LabeledAxisTickAlgorithm.Subtract( horizontalSet, point.LabeledValue, LabeledAxisTickAlgorithm.Min( horizontalSet ) );
+                    var y = MeasuredAxisTickAlgorithm.Subtract( verticalSet, point.MeasuredValue, MeasuredAxisTickAlgorithm.Min( verticalSet ) );
+                    // Fix issue #37.  We were calculating a percentage against the range
+                    // of values in the chart not the range of values the axis showed.
+                    // This caused the chart to look incorrect because the values didn't 
+                    // align with the axis values.  Instead use the tick sets.
+                    var pctX = LabeledAxisTickAlgorithm.Percentage( LabeledAxis.Ticks, point.LabeledValue );
+                    var pctY = MeasuredAxisTickAlgorithm.Percentage( MeasuredAxis.Ticks, point.MeasuredValue );
                     var px = baseLineX + pctX * chartableWidth;
                     var py = (chartableHeight - pctY * chartableHeight) + horizSpace;
 
@@ -154,7 +165,7 @@ namespace Stitch.Chart
             var set = new List<T1>();
             foreach (var line in Lines)
             {
-                set.AddRange( line.Values.Select( t => t.Item1 ) );
+                set.AddRange( line.Select( t => t.LabeledValue ) );
             }
             return set.Distinct();
         }
@@ -164,7 +175,7 @@ namespace Stitch.Chart
             var set = new List<T2>();
             foreach (var line in Lines)
             {
-                set.AddRange( line.Values.Select( t => t.Item2 ) );
+                set.AddRange( line.Select( t => t.MeasuredValue ) );
             }
             return set.Distinct();
         }
@@ -178,7 +189,7 @@ namespace Stitch.Chart
         {
             return LegendPosition == LegendPosition.Right ? GraphicsHelper.MeasureStringWidth( Lines.Select( t => t.LineName ), ChartTextStyle ) : 0;
         }
-               
+
         protected override IEnumerable<Tuple<string, string>> GetLegendItems()
         {
             return Lines.Select( t => new Tuple<string, string>( t.LineName, t.Color ) );

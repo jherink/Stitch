@@ -8,6 +8,13 @@ namespace Stitch.Chart.Axis.Algorithms
 {
     public class StringTickAlgorithm : ITickAlgorithm<string>
     {
+        public int Compare( string x, string y )
+        {
+            // always return zero because when comparing we don't 
+            // want to force an order change for strings.
+            return 0;          
+        }
+
         public string Max( IEnumerable<string> set )
         {
             var val = set.Last();
@@ -61,5 +68,6 @@ namespace Stitch.Chart.Axis.Algorithms
 
             return ticks;
         }
+
     }
 }

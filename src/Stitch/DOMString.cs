@@ -29,9 +29,24 @@ namespace Stitch
             var builder = new StringBuilder();
             foreach (var element in Elements)
             {
-                builder.Append( element.Render() );
+                builder.Append( XmlSafeRender( element.Render() ) );
             }
             return builder.ToString();
+        }
+
+        private string XmlSafeRender( string renderedString )
+        {
+            // TODO: Optimize & fix
+            // Notes: Must do '&' first with string.replace so we don't overwrite
+            // other valid XML elements.
+            // Drawbacks: string.replace will break code that already has XML
+            // safe elements in it.
+            // Drawback: breaks elements like <big>.
+            return renderedString.Replace( "&", "&amp;" )
+                                 .Replace( "\"", "&quot;" )
+                                 .Replace( "'", "&apos;" )
+                                 .Replace( "<", "&lt;" )
+                                 .Replace( ">", "&gt;" );
         }
 
         public DOMString( string content ) : this( new PlainText( content ) )

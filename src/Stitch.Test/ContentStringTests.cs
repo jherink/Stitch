@@ -58,5 +58,23 @@ namespace Stitch.Tests
         {
             Assert.Equal( text.Render(), answer );
         }
+
+        [Theory( DisplayName = "UnescapeXMLValues" )]
+        [InlineData("&","&amp;")]
+        [InlineData(">","&gt;")]
+        [InlineData("<","&lt;")]
+        [InlineData("'","&apos;")]
+        [InlineData("\"","&quot;")]
+        // Currently these fail.
+        [InlineData( "&amp;", "&amp;" )]
+        [InlineData( "&gt;", "&gt;" )]
+        [InlineData( "&lt;", "&lt;" )]
+        [InlineData( "&apos;", "&apos;" )]
+        [InlineData( "&quot;", "&quot;" )]
+        public void UnescapeXMLValues( string input, string output )
+        {
+            var str = new DOMString( input );
+            Assert.Equal( output, str.Render() );
+        }
     }
 }

@@ -51,6 +51,7 @@
     <Compile Include="Chart\Axis\AxisHelper.cs" />
     <Compile Include="Chart\BarChart.cs" />
     <Compile Include="Chart\ChartBase.cs" />
+    <Compile Include="Chart\ChartPoint.cs" />
     <Compile Include="Chart\Formatters\Format.cs" />
     <Compile Include="Chart\Formatters\NumericFormat.cs" />
     <Compile Include="Chart\Formatters\ScientificFormat.cs" />
