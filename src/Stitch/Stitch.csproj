@@ -192,6 +192,7 @@
     <Compile Include="Chart\Interface\IChart.cs" />
     <Compile Include="Export\IExporter.cs" />
     <Compile Include="Export\PDFExporter.cs" />
+    <Compile Include="HtmlTidier.cs" />
     <Compile Include="IDFactory.cs" />
     <Compile Include="StitchDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

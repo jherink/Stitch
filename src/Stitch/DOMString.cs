@@ -39,6 +39,9 @@ namespace Stitch
             // GOAL: Loop through rendered string only once checking for 
             // special characters.
 
+            var tidier = new HtmlTidier();
+            return tidier.Tidy( renderedString );
+
             const string amp = "&amp;";
             const string apos = "&apos;";
             const string quot = "&quot;";
