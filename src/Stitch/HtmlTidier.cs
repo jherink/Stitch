@@ -107,5 +107,10 @@ namespace Stitch
         //{
         //    return string.Empty;
         //}
+
+        private string ParseElementAttribute( string input, ref int index )
+        {
+            return string.Empty;
+        }
     }
 }
