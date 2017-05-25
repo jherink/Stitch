@@ -68,7 +68,7 @@ namespace Stitch
         {
             // If we encounter an ampersand then make sure it isn't part of 
             // a XML Safe character already.
-            
+
             var peek = new string( '&', 1 ); // we know it starts with an ampersand.
             int j = 1;
             for (j = 1; j < HtmlApostrophe.Length && index + j < input.Length; j++)
@@ -100,7 +100,31 @@ namespace Stitch
         private string ParseLessThan( string input, ref int index )
         {
             // It hits the fan here... TODO.
-            return string.Empty;
+            var buffer = new StringBuilder();
+            var holdBuffer = new StringBuilder();
+            var k = 1;
+            while ((index + k < input.Length) && IsElementChar( input[index + k] ))
+            {
+                HoldBuffer.Append( input[index + k++] );
+            }
+            if (index + k < input.Length)
+            {
+            }
+            else
+            { // end of string
+                buffer.Append( HtmlLessThan );
+                if (holdBuffer.Length > 0)
+                {
+                    buffer.Append( holdBuffer.ToString() );
+                    index += k - 1;
+                }
+            }
+            return buffer.ToString();
+        }
+
+        private string ParseProposedAttribute( string input, ref int i, ref int j )
+        {
+            return input;
         }
 
         //private string ParseGreaterThan( string input, ref int index )
