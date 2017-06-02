@@ -9,3 +9,4 @@ The following charts are supported:
 * [Line Chart](Line-Chart-Sample.md)
 * [Pie Chart](Pie-Chart-Sample.md)
 * [Donut Chart](Donut-Chart-Sample.md)
+* [Scatter Chart](Scatter-Chart-Sample.md)
