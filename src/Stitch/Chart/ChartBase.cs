@@ -70,7 +70,7 @@ namespace Stitch.Chart
                         break;
                     case LegendPosition.Right:
                         _cx = Width - GetLegendRightOffset();
-                        _cy = Math.Max(GetTitleHeight(), minH );
+                        _cy = Math.Max( GetTitleHeight(), minH );
                         break;
                 }
 
@@ -116,7 +116,11 @@ namespace Stitch.Chart
         }
         public virtual double GetLegendTopOffset()
         {
-            return LegendPosition == LegendPosition.Top ? 2 * GraphicsHelper.MeasureStringHeight( ChartTitle, TitleTextStyle ) : 0;
+            //return LegendPosition == LegendPosition.Top ? 2 * GraphicsHelper.MeasureStringHeight( ChartTitle, TitleTextStyle ) : 0;
+            var legendItems = GetLegendItems();
+            if (!legendItems.Any()) legendItems = new Tuple<string, string>[] { };
+            return LegendPosition == LegendPosition.Top ? GraphicsHelper.MeasureStringHeight( ChartTitle, TitleTextStyle ) +
+                                                          GraphicsHelper.MeasureStringHeight( legendItems.Select( t => t.Item1 ), ChartTextStyle ) : 0;
         }
         public abstract double GetLegendLeftOffset();
         public abstract double GetLegendRightOffset();
@@ -162,7 +166,7 @@ namespace Stitch.Chart
         {
             return $"stitch-chart-theme-{(id % 23)}";
         }
-        
+
         protected string GetChartTextTheme( int id )
         {
             return $"stitch-chart-text-theme-{(id % 23)}";

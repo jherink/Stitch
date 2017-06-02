@@ -124,12 +124,14 @@
     <Content Include="Master\complexSamplePage.html" />
     <Content Include="Master\CustomCSSRuleTest.html" />
     <Content Include="Master\Default Themes Color Swatches.html" />
+    <Content Include="Master\DogsVsCatsScatterPlot.html" />
     <Content Include="Master\ExplodeSliceTest.html" />
     <Content Include="Master\ExportTest01.html" />
     <Content Include="Master\headingLevelTests.html" />
     <Content Include="Master\helloworld.html" />
     <Content Include="Master\helloworldincolor.html" />
     <Content Include="Master\HorizontalBarChartTest.html" />
+    <Content Include="Master\IceCreamVsSalesTempuratureScatterChart.html" />
     <Content Include="Master\imageInTableTests.html" />
     <Content Include="Master\LineChartLegendTestBottom.html" />
     <Content Include="Master\LineChartLegendTestLeft.html" />
@@ -140,6 +142,7 @@
     <Content Include="Master\linkTests.html" />
     <Content Include="Master\MultiLinesChartTest.html" />
     <Content Include="Master\MultipleBarChartTest2.html" />
+    <Content Include="Master\MultipleGroupScatterChartTest.html" />
     <Content Include="Master\MultipleVerticalBarChartTest.html" />
     <Content Include="Master\MultipleVerticalBarChartTest2.html" />
     <Content Include="Master\NorthwindSalesByYearTest.html" />
@@ -171,6 +174,12 @@
     <Content Include="Master\Samples\Pie-Chart-Rotation-Sample.html" />
     <Content Include="Master\Samples\Pie-Chart-Sample.html" />
     <Content Include="Master\Samples\Vertical-Bar-Chart-Sample.html" />
+    <Content Include="Master\ScatterChartLegendBottom.html" />
+    <Content Include="Master\ScatterChartLegendLeft.html" />
+    <Content Include="Master\ScatterChartLegendNone.html" />
+    <Content Include="Master\ScatterChartLegendRight.html" />
+    <Content Include="Master\ScatterChartLegendTop.html" />
+    <Content Include="Master\SingleGroupScatterChartTest.html" />
     <Content Include="Master\SingleHorizontalBarChartTest.html" />
     <Content Include="Master\SingleVerticalBarChartTest.html" />
     <Content Include="Master\SVGCircleTest.html" />

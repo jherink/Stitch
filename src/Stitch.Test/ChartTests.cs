@@ -146,12 +146,12 @@ namespace Stitch.Tests
                      new[] { 1.0 },
                     "PieSliceContentRenderingTestOne" )]
         [InlineData( PieSliceText.Percentage,
-                     new[] { "Value1", "Value2"},
+                     new[] { "Value1", "Value2" },
                      new[] { 1.0, 1 },
                     "PieSliceContentRenderingTestTwo" )]
-        [InlineData( PieSliceText.Percentage, 
-                     new[] { "Value1", "Value2", "Value3", "Value4" }, 
-                     new[] { 1.0, 1, 1, 1 }, 
+        [InlineData( PieSliceText.Percentage,
+                     new[] { "Value1", "Value2", "Value3", "Value4" },
+                     new[] { 1.0, 1, 1, 1 },
                     "PieSliceContentRenderingTestFour" )]
         [InlineData( PieSliceText.Percentage,
                      new[] { "Value1", "Value2", "Value3", "Value4", "Value5", "Value6", "Value7", "Value8" },
@@ -452,7 +452,7 @@ namespace Stitch.Tests
             chart.AddToBarGroup( "Collected", "Q2", 32340.72 );
             chart.AddToBarGroup( "Collected", "Q3", 32225.52 );
             chart.AddToBarGroup( "Collected", "Q4", 32425 );
-            
+
             cont.Add( chart );
 
             IntegrationHelpers.SaveToTemp( "MultipleVerticalBarChartTest", doc );
@@ -481,7 +481,7 @@ namespace Stitch.Tests
             chart.AddToBarGroup( "Profit", "2014", 200 );
             chart.AddToBarGroup( "Profit", "2015", 250 );
             chart.AddToBarGroup( "Profit", "2016", 300 );
-            chart.AddToBarGroup( "Profit", "2017", 350);
+            chart.AddToBarGroup( "Profit", "2017", 350 );
 
             chart.SetBarGroupColor( "Profit", "purple" );
 
@@ -550,12 +550,12 @@ namespace Stitch.Tests
 
             var chart2 = new LineChart<string, double>();
             chart.ChartTitle = "Temperatures in NY City";
-            chart2.AddPoint( "Temperatures In NY City", "Monday"    , 43 );
-            chart2.AddPoint( "Temperatures In NY City", "Tuesday"   , 53 );
-            chart2.AddPoint( "Temperatures In NY City", "Wednesday" , 50 );
-            chart2.AddPoint( "Temperatures In NY City", "Thursday"  , 57 );
-            chart2.AddPoint( "Temperatures In NY City", "Friday"    , 59 );
-            chart2.AddPoint( "Temperatures In NY City", "Saturday"  , 69 );
+            chart2.AddPoint( "Temperatures In NY City", "Monday", 43 );
+            chart2.AddPoint( "Temperatures In NY City", "Tuesday", 53 );
+            chart2.AddPoint( "Temperatures In NY City", "Wednesday", 50 );
+            chart2.AddPoint( "Temperatures In NY City", "Thursday", 57 );
+            chart2.AddPoint( "Temperatures In NY City", "Friday", 59 );
+            chart2.AddPoint( "Temperatures In NY City", "Saturday", 69 );
             chart2.AddPoint( "Temperatures In NY City", "Sunday", 51 );
             chart2.LabeledAxis.IncludeDefault = false;
 
@@ -574,30 +574,186 @@ namespace Stitch.Tests
             chart.ChartTitle = "Temperatures in US Cities";
             chart.LegendPosition = LegendPosition.Right;
 
-            chart.AddPoint( "Temperatures In NY City", "Monday"    , 43 );
-            chart.AddPoint( "Temperatures In NY City", "Tuesday"   , 53 );
-            chart.AddPoint( "Temperatures In NY City", "Wednesday" , 50 );
-            chart.AddPoint( "Temperatures In NY City", "Thursday"  , 57 );
-            chart.AddPoint( "Temperatures In NY City", "Friday"    , 59 );
+            chart.AddPoint( "Temperatures In NY City", "Monday", 43 );
+            chart.AddPoint( "Temperatures In NY City", "Tuesday", 53 );
+            chart.AddPoint( "Temperatures In NY City", "Wednesday", 50 );
+            chart.AddPoint( "Temperatures In NY City", "Thursday", 57 );
+            chart.AddPoint( "Temperatures In NY City", "Friday", 59 );
             chart.AddPoint( "Temperatures In NY City", "Saturday", 69 );
 
-            chart.AddPoint( "Temperatures In Chicago", "Monday"    , 22 );
-            chart.AddPoint( "Temperatures In Chicago", "Tuesday"   , 47 );
-            chart.AddPoint( "Temperatures In Chicago", "Wednesday" , 24 );
-            chart.AddPoint( "Temperatures In Chicago", "Thursday"  , 36 );
-            chart.AddPoint( "Temperatures In Chicago", "Friday"    , 59 );
+            chart.AddPoint( "Temperatures In Chicago", "Monday", 22 );
+            chart.AddPoint( "Temperatures In Chicago", "Tuesday", 47 );
+            chart.AddPoint( "Temperatures In Chicago", "Wednesday", 24 );
+            chart.AddPoint( "Temperatures In Chicago", "Thursday", 36 );
+            chart.AddPoint( "Temperatures In Chicago", "Friday", 59 );
             chart.AddPoint( "Temperatures In Chicago", "Saturday", 81 );
 
-            chart.AddPoint( "Temperatures In Los Angeles", "Monday"    , 67 );
-            chart.AddPoint( "Temperatures In Los Angeles", "Tuesday"   , 71 );
-            chart.AddPoint( "Temperatures In Los Angeles", "Wednesday" , 72 );
-            chart.AddPoint( "Temperatures In Los Angeles", "Thursday"  , 84 );
-            chart.AddPoint( "Temperatures In Los Angeles", "Friday"    , 64 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Monday", 67 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Tuesday", 71 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Wednesday", 72 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Thursday", 84 );
+            chart.AddPoint( "Temperatures In Los Angeles", "Friday", 64 );
             chart.AddPoint( "Temperatures In Los Angeles", "Saturday", 88 );
 
             doc.Add( chart );
 
             IntegrationHelpers.SaveToTemp( "MultiLinesChartTest", doc );
+        }
+
+        [Fact( DisplayName = "SingleGroupScatterChartTest" )]
+        public void SingleGroupScatterChartTest()
+        {
+            var doc = new StitchDocument();
+            var chart = new ScatterChart<double, double>();
+
+            chart.MeasuredAxis.AxisTitle = "Age";
+            chart.LabeledAxis.AxisTitle = "Weight";
+            chart.Title = "Age &amp; Weight Comparison of Boys vs Girls";
+            chart.LegendPosition = LegendPosition.Right;
+
+            chart.AddPoint( "Boys", 7, 64 );
+            chart.AddPoint( "Boys", 9, 83 );
+            chart.AddPoint( "Boys", 4, 44 );
+            chart.AddPoint( "Boys", 5, 50 );
+            chart.AddPoint( "Boys", 11, 90 );
+
+            chart.SetScatterGroupColor( "Boys", "blue" );
+
+            doc.Add( chart );
+
+            IntegrationHelpers.SaveToTemp( "SingleGroupScatterChartTest", doc );
+        }
+
+        [Fact( DisplayName = "MultipleGroupScatterChartTest" )]
+        public void MultipleGroupScatterChartTest()
+        {
+            var doc = new StitchDocument();
+            var chart = new ScatterChart<double, double>();
+
+            chart.MeasuredAxis.AxisTitle = "Age";
+            chart.LabeledAxis.AxisTitle = "Weight";
+            chart.Title = "Age &amp; Weight Comparison of Boys vs Girls";
+            chart.LegendPosition = LegendPosition.Right;
+
+            chart.AddPoint( "Boys", 7, 64 );
+            chart.AddPoint( "Boys", 9, 83 );
+            chart.AddPoint( "Boys", 4, 44 );
+            chart.AddPoint( "Boys", 5, 50 );
+            chart.AddPoint( "Boys", 11, 90 );
+
+            chart.AddPoint( "Girls", 7, 54 );
+            chart.AddPoint( "Girls", 9, 73 );
+            chart.AddPoint( "Girls", 4, 34 );
+            chart.AddPoint( "Girls", 5, 40 );
+            chart.AddPoint( "Girls", 11, 80 );
+
+            chart.SetScatterGroupColor( "Boys", "blue" );
+            chart.SetScatterGroupColor( "Girls", "pink" );
+
+            doc.Add( chart );
+
+            IntegrationHelpers.SaveToTemp( "MultipleGroupScatterChartTest", doc );
+        }
+
+        [Theory( DisplayName = "ScatterChartLegendPositionTest" )]
+        [InlineData( LegendPosition.Left, "ScatterChartLegendLeft" )]
+        [InlineData( LegendPosition.Right, "ScatterChartLegendRight" )]
+        [InlineData( LegendPosition.Top, "ScatterChartLegendTop" )]
+        [InlineData( LegendPosition.Bottom, "ScatterChartLegendBottom" )]
+        [InlineData( LegendPosition.None, "ScatterChartLegendNone" )]
+        public void ScatterChartLegendPositionTest( LegendPosition position, string fileName )
+        {
+            var doc = new StitchDocument();
+            var chart = new ScatterChart<double, double>();
+
+            chart.MeasuredAxis.AxisTitle = "Age";
+            chart.LabeledAxis.AxisTitle = "Weight";
+            chart.ChartTitle = "Age &amp; Weight Comparison of Boys vs Girls";
+            chart.LegendPosition = position;
+
+            chart.AddPoint( "Boys", 7, 64 );
+            chart.AddPoint( "Boys", 9, 83 );
+            chart.AddPoint( "Boys", 4, 44 );
+            chart.AddPoint( "Boys", 5, 50 );
+            chart.AddPoint( "Boys", 11, 90 );
+
+            chart.AddPoint( "Girls", 7, 54 );
+            chart.AddPoint( "Girls", 9, 73 );
+            chart.AddPoint( "Girls", 4, 34 );
+            chart.AddPoint( "Girls", 5, 40 );
+            chart.AddPoint( "Girls", 11, 80 );
+
+            chart.SetScatterGroupColor( "Boys", "blue" );
+            chart.SetScatterGroupColor( "Girls", "pink" );
+
+            doc.Add( chart );
+
+            IntegrationHelpers.SaveToTemp( fileName, doc );
+        }
+
+        [Fact( DisplayName = "DogsVsCatsScatterChart" )]
+        public void DogsVsCatsScatterPlot()
+        {
+            var doc = new StitchDocument();
+            var chart = new ScatterChart<double, double>();
+
+            var dogPoints = new[] { 0, 10, 23, 17, 18, 9, 11, 27,
+                                    33, 40, 32, 35, 30, 40, 42, 47,
+                                    44, 48, 52, 54, 42, 55, 56, 57,
+                                    60, 50, 52, 51, 49, 53, 55, 60,
+                                    61, 59, 62, 65, 62, 58, 55, 61, 64,
+                                    65, 63, 66, 67, 69, 69, 70, 72, 68, 66,
+                                    65, 67, 70, 71, 72, 73, 75, 70, 68,
+                                    64, 60, 65, 67, 68, 69, 70, 72, 75, 80 };
+
+            int i = 0;
+            foreach (var p in dogPoints) chart.AddPoint( "Dogs", i++, p );
+
+            var catPoints = new[] { 0, 5, 15, 9, 10, 5, 3, 19, 25,
+                                    32, 24, 27, 22, 32, 34, 39, 36,
+                                    40, 44, 46, 34, 47, 48, 49, 52,
+                                    42, 44, 43, 41, 45, 47, 52, 53,
+                                    51, 54, 57, 54, 50, 47, 53, 56,
+                                    57, 55, 58, 59, 61, 61, 62, 64,
+                                    60, 58, 57, 59, 62, 64, 60, 58,
+                                    57, 59, 62, 63, 64, 65, 67, 62,
+                                    60, 56, 52, 57, 59, 60, 61, 62,
+                                    64, 67, 72 };
+
+            var j = 0;
+            foreach (var c in catPoints) chart.AddPoint( "Cats", j++, c );
+
+            doc.Add( chart );
+            IntegrationHelpers.SaveToTemp( "DogsVsCatsScatterPlot", doc );
+        }
+
+        [Fact( DisplayName = "IceCreamSalesVsTempuratureScatterChart" )]
+        public void IceCreamVsSalesTempuratureScatterChart()
+        {
+            var doc = new StitchDocument();
+            var chart = new ScatterChart<double, double>();
+
+            chart.LabeledAxis.IncludeDefault = false;
+            chart.MeasuredAxis.IncludeDefault = false;
+            chart.ChartTitle = "Ice Cream Sales vs Temperature";
+            chart.MeasuredAxis.AxisTitle = "Sales";
+            chart.LabeledAxis.AxisTitle = "Temperature";
+
+            chart.AddPoint( "Sales", 14.2, 215 );
+            chart.AddPoint( "Sales", 16.4, 325 );
+            chart.AddPoint( "Sales", 11.9, 185 );
+            chart.AddPoint( "Sales", 15.2, 332 );
+            chart.AddPoint( "Sales", 18.5, 406 );
+            chart.AddPoint( "Sales", 22.1, 522 );
+            chart.AddPoint( "Sales", 19.4, 412 );
+            chart.AddPoint( "Sales", 25.1, 614 );
+            chart.AddPoint( "Sales", 23.4, 544 );
+            chart.AddPoint( "Sales", 18.1, 421 );
+            chart.AddPoint( "Sales", 22.6, 445 );
+            chart.AddPoint( "Sales", 17.2, 408 );
+
+            doc.Add( chart );
+            IntegrationHelpers.SaveToTemp( "IceCreamVsSalesTempuratureScatterChart", doc );
         }
     }
 }

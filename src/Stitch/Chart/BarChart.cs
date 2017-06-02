@@ -34,7 +34,7 @@ namespace Stitch.Chart
     {
         public readonly string Name;
 
-        public string Color { get; set; }
+        public string Color { get; private set; }
 
         public void SetColor( string color )
         {
@@ -358,25 +358,6 @@ namespace Stitch.Chart
                 clone.BarGroups.Add( g.Key, g.Value.Clone() as BarGroup );
             }
             return clone;
-        }
-
-        public override string Render()
-        {
-            //if (BarGroupCount > 1)
-            //{
-            //    var lastGroup = BarGroups.First().Key;
-            //    var ct = BarGroups.First().Value.Count;
-            //    foreach (var group in BarGroups)
-            //    {
-            //        if (ct != group.Value.Count)
-            //        {
-            //            throw new InvalidOperationException( $"Mismatched Bar Group Exception: The bar group \"{lastGroup}\" has {ct} members while the bar group \"{group.Value.Name}\" has {group.Value.Count} members." );
-            //        }
-            //        ct = group.Value.Count;
-            //        lastGroup = group.Key;
-            //    }
-            //}
-            return base.Render();
         }
     }
 }

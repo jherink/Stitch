@@ -51,6 +51,7 @@
     <Compile Include="Chart\Axis\AxisHelper.cs" />
     <Compile Include="Chart\BarChart.cs" />
     <Compile Include="Chart\ChartBase.cs" />
+    <Compile Include="Chart\ChartPoint.cs" />
     <Compile Include="Chart\Formatters\Format.cs" />
     <Compile Include="Chart\Formatters\NumericFormat.cs" />
     <Compile Include="Chart\Formatters\ScientificFormat.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Chart\Math\SphericalCoordinate.cs" />
     <Compile Include="Chart\Math\Trig.cs" />
     <Compile Include="Chart\Math\Vector.cs" />
+    <Compile Include="Chart\ScatterChart.cs" />
     <Compile Include="Chart\Trig.cs" />
     <Compile Include="Export\wkhtmltopdfWrapper.cs" />
     <Compile Include="Helpers.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="Chart\Interface\IChart.cs" />
     <Compile Include="Export\IExporter.cs" />
     <Compile Include="Export\PDFExporter.cs" />
+    <Compile Include="HtmlTidier.cs" />
     <Compile Include="IDFactory.cs" />
     <Compile Include="StitchDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

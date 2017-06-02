@@ -7,7 +7,7 @@ namespace Stitch.Chart.Axis.Algorithms
     /// Interface for Axis algorithms.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ITickAlgorithm<T> where T : IComparable<T>
+    public interface ITickAlgorithm<T> : IComparer<T> where T : IComparable<T>
     {
         /// <summary>
         /// Suggest possible tick values based upon the number of desired intervals and the set of values.
@@ -35,7 +35,18 @@ namespace Stitch.Chart.Axis.Algorithms
         /// <returns></returns>
         double Percentage( IEnumerable<T> range, T value );
 
+        /// <summary>
+        /// Identify the minimum value in the set.
+        /// </summary>
+        /// <param name="set">The set.</param>
+        /// <returns>The set's minimum value.</returns>
         T Min( IEnumerable<T> set );
+
+        /// <summary>
+        /// Identify the maximum value in the set.
+        /// </summary>
+        /// <param name="set">The set.</param>
+        /// <returns>The set's maximum value.</returns>
         T Max( IEnumerable<T> set );
     }
 }

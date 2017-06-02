@@ -1,5 +1,4 @@
 ﻿using Stitch.Chart.Axis;
-using Stitch.Chart.Axis.Algorithms;
 using Stitch.Elements;
 using System;
 using System.Collections.Generic;
@@ -9,79 +8,77 @@ using System.Threading.Tasks;
 
 namespace Stitch.Chart
 {
-    public class Line<T1, T2> : List<ChartPoint<T1, T2>>, ICloneable where T1 : IComparable<T1>
-                                                                     where T2 : IComparable<T2>
+    public class ScatterGroup<T1, T2> : List<ChartPoint<T1, T2>>, ICloneable where T1 : IComparable<T1>
+                                                                               where T2 : IComparable<T2>
     {
-        public string LineName { get; set; }
-        public string Color { get; set; }
-        public void AddPoint( T1 x, T2 y )
+        public readonly string Name;
+
+        public string Color { get; private set; }
+
+        public ScatterGroup( string name ) { Name = name; }
+
+        public void SetColor( string color )
         {
-            this.Add( new ChartPoint<T1, T2>( x, y ) );
+            Color = color;
+            foreach (var pt in this) pt.Color = color;
         }
 
         public object Clone()
         {
-            var line = new Line<T1, T2>();
-            foreach (var pt in this) line.AddPoint( pt.LabeledValue, pt.MeasuredValue );
-            return line;
+            var clone = new ScatterGroup<T1, T2>( Name );
+            foreach (var pt in this) clone.Add( pt.Clone() as ChartPoint<T1, T2> );
+            return clone;
         }
-        
-    }
-    public class LineChart<T1, T2> : AxisChart<T1, T2> where T1 : IComparable<T1>
-                                                       where T2 : IComparable<T2>
+    }    
+
+    public class ScatterChart<T1, T2> : AxisChart<T1, T2> where T1 : IComparable<T1>
+                                                          where T2 : IComparable<T2>
     {
-        private readonly List<Line<T1, T2>> Lines = new List<Line<T1, T2>>();
+        private Dictionary<string, ScatterGroup<T1, T2>> ScatterGroups = new Dictionary<string, ScatterGroup<T1, T2>>();
+
+        public double PointRadius { get; set; }
 
         #region Constructors
 
-        public LineChart() : this( 900, 500 )
+        public ScatterChart() : this( 900, 500 )
         {
 
         }
 
-        public LineChart( int width, int height ) : base( width, height )
+        public ScatterChart( int width, int height ) : base( width, height )
         {
+            PointRadius = ChartTextStyle.FontSize / 3;
         }
 
         #endregion
 
-        public Line<T1, T2> GetLine( string lineName )
+        #region Public Methods
+
+        public void AddPoint( string scatterGroup, T1 labeledValue, T2 measuredValue, string color = "" )
         {
-            return Lines.FirstOrDefault( t => t.LineName.Equals( lineName, StringComparison.InvariantCultureIgnoreCase ) );
+            AddPoint( scatterGroup, new ChartPoint<T1, T2>( labeledValue, measuredValue ) { Color = color } );
         }
 
-        public Line<T1, T2> GetLine( int index )
+        public void AddPoint( string scatterGroup, ChartPoint<T1, T2> point )
         {
-            return Lines[index];
+            GetScatterGroup( scatterGroup ).Add( point );
         }
 
-        public void AddPoint( string lineName, T1 xValue, T2 yValue )
+        public void SetScatterGroupColor( string scatterGroup, string color )
         {
-            var line = GetLine( lineName );
+            GetScatterGroup( scatterGroup ).SetColor( color );
+        }
 
-            if (line == default( Line<T1, T2> ))
+        public ScatterGroup<T1, T2> GetScatterGroup( string scatterGroup )
+        {
+            if (!ScatterGroups.ContainsKey( scatterGroup ))
             {
-                line = new Line<T1, T2>() { LineName = lineName };
-                AddLine( line );
+                ScatterGroups.Add( scatterGroup, new ScatterGroup<T1, T2>( scatterGroup ) );
             }
-
-            line.AddPoint( xValue, yValue ); // add point to line.
+            return ScatterGroups[scatterGroup];
         }
 
-        public void AddLine( Line<T1, T2> line )
-        {
-            Lines.Add( line );
-        }
-
-        private void Sort()
-        {
-            foreach (var line in Lines)
-            {
-                //line.Sort( ( a, b ) => LabeledAxisTickAlgorithm.Compare( a.LabeledValue, b.LabeledValue ) );
-                //var extractedValues = line.Select( t => t.LabeledValue );
-                //LabeledAxisTickAlgorithm.Sort( extractedValues );
-            }
-        }
+        #endregion
 
         protected override void RenderAxisChartImpl()
         {
@@ -90,7 +87,7 @@ namespace Stitch.Chart
             var verticalAxisLocations = new double[] { };
             var horizontalIntervals = AxisHelper.SuggestIntervals( GetChartableAreaWidth() );
             var verticalIntervals = AxisHelper.SuggestIntervals( Height );
-            Sort();
+
             var horizontalSet = GetHorizontalSet().ToList();
             var verticalSet = GetVerticalSet().ToList();
             if (LabeledAxis.IncludeDefault) horizontalSet.Insert( 0, default( T1 ) );
@@ -115,21 +112,11 @@ namespace Stitch.Chart
             var chartableWidth = horizontalAxisLocations.Max() - horizontalAxisLocations.Min();
             var chartableHeight = verticalAxisLocations.Max() - verticalAxisLocations.Min();
 
-
             var i = 1;
-            foreach (var line in Lines)
+            foreach (var group in ScatterGroups)
             {
-                var svgLine = new SVGPath()
-                {
-                    StrokeWidth = 2,
-                    FillOpacity = 1,
-                    Stroke = line.Color,
-                    Fill = "none"
-                };
-                svgLine.ClassList.Add( GetChartTheme( i++ ) );
-                int lineI = 0;
-
-                foreach (var point in line)
+                var svgGroup = new SVGGroup();
+                foreach (var point in group.Value)
                 {
                     var x = LabeledAxisTickAlgorithm.Subtract( horizontalSet, point.LabeledValue, LabeledAxisTickAlgorithm.Min( horizontalSet ) );
                     var y = MeasuredAxisTickAlgorithm.Subtract( verticalSet, point.MeasuredValue, MeasuredAxisTickAlgorithm.Min( verticalSet ) );
@@ -142,30 +129,29 @@ namespace Stitch.Chart
                     var px = baseLineX + pctX * chartableWidth;
                     var py = (chartableHeight - pctY * chartableHeight) + horizSpace;
 
-                    if (lineI++ == 0)
-                    { // move to start point if first line point.
-                        if (!LabeledAxis.IncludeDefault && MeasuredAxis.IncludeDefault)
-                        {
-                            svgLine.MoveTo( baseLineX, py );
-                        }
-                        else
-                        {
-                            svgLine.MoveTo( baseLineX, baseLineY );
-                        }
-                    }
+                    var svgPt = new SVGCircle()
+                    {
+                        R = PointRadius,
+                        Fill = point.Color,
+                        Stroke = point.Color,
+                        Cx = px,
+                        Cy = py,
+                    };
 
-                    svgLine.LineTo( px, py );
+                    svgPt.ClassList.Add( GetChartTheme( i ) );                   
+                    svgGroup.Add( svgPt );
                 }
-                ChartGroup.Add( svgLine );
+                i++;
+                ChartGroup.Add( svgGroup );
             }
-        }
+        }        
 
         private IEnumerable<T1> GetHorizontalSet()
         {
             var set = new List<T1>();
-            foreach (var line in Lines)
+            foreach (var group in ScatterGroups)
             {
-                set.AddRange( line.Select( t => t.LabeledValue ) );
+                set.AddRange( group.Value.Select( t => t.LabeledValue ) );
             }
             return set.Distinct();
         }
@@ -173,27 +159,37 @@ namespace Stitch.Chart
         private IEnumerable<T2> GetVerticalSet()
         {
             var set = new List<T2>();
-            foreach (var line in Lines)
+            foreach (var group in ScatterGroups)
             {
-                set.AddRange( line.Select( t => t.MeasuredValue ) );
+                set.AddRange( group.Value.Select( t => t.MeasuredValue ) );
             }
             return set.Distinct();
         }
 
         public override double GetLegendLeftOffset()
         {
-            return LegendPosition == LegendPosition.Left ? GraphicsHelper.MeasureStringWidth( Lines.Select( t => t.LineName ), ChartTextStyle ) : 0;
+            return LegendPosition == LegendPosition.Left ? GraphicsHelper.MeasureStringWidth( ScatterGroups.Select( t => t.Value.Name ), ChartTextStyle ) : 0;
         }
 
         public override double GetLegendRightOffset()
         {
-            return LegendPosition == LegendPosition.Right ? GraphicsHelper.MeasureStringWidth( Lines.Select( t => t.LineName ), ChartTextStyle ) : 0;
+            return LegendPosition == LegendPosition.Right ? GraphicsHelper.MeasureStringWidth( ScatterGroups.Select( t => t.Value.Name ), ChartTextStyle ) : 0;
         }
 
         protected override IEnumerable<Tuple<string, string>> GetLegendItems()
         {
-            return Lines.Select( t => new Tuple<string, string>( t.LineName, t.Color ) );
+            return ScatterGroups.Select( t => new Tuple<string, string>( t.Value.Name, t.Value.Color ) );
+        }
+
+        public override object Clone()
+        {
+            var clone = base.Clone() as ScatterChart<T1, T2>;
+            clone.ScatterGroups = new Dictionary<string, ScatterGroup<T1, T2>>();
+            foreach (var g in ScatterGroups)
+            {
+                clone.ScatterGroups.Add( g.Key, g.Value.Clone() as ScatterGroup<T1, T2> );
+            }
+            return clone;
         }
     }
 }
-
