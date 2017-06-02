@@ -67,6 +67,7 @@ namespace Stitch.Tests
         [InlineData("\"","&quot;")]
         // Currently these fail.
         [InlineData( "&amp;", "&amp;" )]
+        [InlineData( "&am;", "&amp;am;" )]
         [InlineData( "&gt;", "&gt;" )]
         [InlineData( "&lt;", "&lt;" )]
         [InlineData( "&apos;", "&apos;" )]
