@@ -90,8 +90,48 @@ namespace Stitch.Tests
             // Step 2: Add elements to the document
             doc.Add( new Paragraph( "Hello World!" ) );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
+        }
+
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void ScatterChartSample()
+        {
+            // Step 1: Create new StitchDocument
+            var doc = new StitchDocument();
+
+            // Step 2: Create the chart
+            var chart = new ScatterChart<double, double>();
+            chart.MeasuredAxis.AxisTitle = "Weight";
+            chart.LabeledAxis.AxisTitle = "Age";
+            chart.ChartTitle = "Age &amp; Weight Comparison of Boys vs Girls";
+            chart.LegendPosition = LegendPosition.Right;
+
+            // Populate chart
+            chart.AddPoint( "Boys", 7, 64 );
+            chart.AddPoint( "Boys", 9, 83 );
+            chart.AddPoint( "Boys", 4, 44 );
+            chart.AddPoint( "Boys", 5, 50 );
+            chart.AddPoint( "Boys", 11, 90 );
+
+            chart.AddPoint( "Girls", 7, 54 );
+            chart.AddPoint( "Girls", 9, 73 );
+            chart.AddPoint( "Girls", 4, 34 );
+            chart.AddPoint( "Girls", 5, 40 );
+            chart.AddPoint( "Girls", 11, 80 );
+
+            // set group colorings
+            chart.SetScatterGroupColor( "Boys", "blue" );
+            chart.SetScatterGroupColor( "Girls", "pink" );
+
+            // Step 3: Add the chart to the document.
+            doc.Add( chart );
+
+            // Render or save the document.
+            var html = doc.Render();
+
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Scatter-Chart-Sample", doc );
         }
 
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
@@ -142,7 +182,7 @@ namespace Stitch.Tests
             doc.SetTheme( themePath );
 
             var html = doc.Render();
-            IntegrationHelpers.ExportPdfToTemp( "Samples\\Dark-Knight-Custom-Theme-Sample", doc, true );
+            IntegrationHelpers.ExportPdfToTemp( "Samples\\Dark-Knight-Custom-Theme-Sample", doc );
         }
 
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
@@ -172,7 +212,7 @@ namespace Stitch.Tests
             // Step 3: Add the chart to the Stitch doc
             doc.Add( chart );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Sample", doc );
@@ -206,7 +246,7 @@ namespace Stitch.Tests
             // Step 3: Add the chart to the Stitch doc
             doc.Add( chart );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Rotation-Sample", doc );
@@ -240,7 +280,7 @@ namespace Stitch.Tests
             // Step 3: Add the chart to the Stitch doc
             doc.Add( chart );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Donut-Chart-Sample", doc );
@@ -277,7 +317,7 @@ namespace Stitch.Tests
             // Step 3: Add the chart to the Stitch doc
             doc.Add( chart );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Exploded-Sample", doc );
@@ -309,10 +349,10 @@ namespace Stitch.Tests
                 chart.AddBar( record.Item1, record.Item2 );
             }
 
-            // Add the chart to the Stitch doc
+            // Step 3: Add the chart to the Stitch doc
             doc.Add( chart );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Vertical-Bar-Chart-Sample", doc );
@@ -344,10 +384,10 @@ namespace Stitch.Tests
                 chart.AddBar( record.Item1, record.Item2 );
             }
 
-            // Add the chart to the Stitch doc
+            // Step 3: Add the chart to the Stitch doc
             doc.Add( chart );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Horizontal-Bar-Chart-Sample", doc );
@@ -402,10 +442,10 @@ namespace Stitch.Tests
                 chart.AddToBarGroup( record["Year"].ToString(), record["Pie"] as string, (int)record["Votes"] );
             }
 
-            // Add the chart to the Stitch doc
+            // Step 3: Add the chart to the Stitch doc
             doc.Add( chart );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Multiple-Bar-Groups-Chart-Sample", doc );
@@ -456,10 +496,10 @@ namespace Stitch.Tests
                 chart.AddPoint( record["City"].ToString(), record["Day Of Week"] as string, (double)record["Tempurature"] );
             }
 
-            // Add the chart to the Stitch doc
+            // Step 3: Add the chart to the Stitch doc
             doc.Add( chart );
 
-            // Step 3: Render or the document
+            // Render or save the document
             var html = doc.Render();
 
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Line-Chart-Sample", doc );
