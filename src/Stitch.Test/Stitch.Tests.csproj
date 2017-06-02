@@ -165,6 +165,7 @@
     <Content Include="Master\PieSliceContentRenderingTestTwelve.html" />
     <Content Include="Master\PieSliceContentRenderingTestTwo.html" />
     <Content Include="Master\PracticalAxisRenderSizeTests.html" />
+    <Content Include="Master\Samples\Dark-Knight-Custom-Theme-Sample.html" />
     <Content Include="Master\Samples\Donut-Chart-Sample.html" />
     <Content Include="Master\Samples\Horizontal-Bar-Chart-Sample.html" />
     <Content Include="Master\Samples\Line-Chart-Sample.html" />
@@ -173,6 +174,7 @@
     <Content Include="Master\Samples\Pie-Chart-Exploded-Sample.html" />
     <Content Include="Master\Samples\Pie-Chart-Rotation-Sample.html" />
     <Content Include="Master\Samples\Pie-Chart-Sample.html" />
+    <Content Include="Master\Samples\Scatter-Chart-Sample.html" />
     <Content Include="Master\Samples\Vertical-Bar-Chart-Sample.html" />
     <Content Include="Master\ScatterChartLegendBottom.html" />
     <Content Include="Master\ScatterChartLegendLeft.html" />

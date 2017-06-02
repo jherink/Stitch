@@ -199,6 +199,7 @@
     <Compile Include="Themes\ThemeResourceAttribute.cs" />
     <Compile Include="Themes\ThemeCssResourceLoader.cs" />
     <Compile Include="Themes\Themes.cs" />
+    <Compile Include="Widgets\Page.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bundleconfig.json" />

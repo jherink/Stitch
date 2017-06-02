@@ -78,9 +78,60 @@ namespace Stitch
             CustomStyles = new Style { StyleSheet = new StyleSheet() };
             Head.Styles.Add( CustomStyles );
 
+            // Add Default classes
+            AddStyleRule( ".page { page-break-after: always }" );
+
+            CreatePage(); // create first page.
+
             // Setup defaults
             Orientation = PageOrientation.Portrait;
             Margin = 25;
+        }
+
+        #region Page Functions
+
+        private List<IPage> Pages = new List<IPage>();
+
+        /// <summary>
+        /// Get the page with the specified page number.
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <returns></returns>
+        public IPage this[int pageNumber]
+        {
+            get
+            {
+                foreach (var pg in Pages) if (pg.PageNumber == pageNumber) return pg;
+                return default( IPage );
+            }
+        }
+
+        /// <summary>
+        /// The number of pages in the current document.
+        /// </summary>
+        public int PageCount { get { return Pages.Count; } }
+
+        /// <summary>
+        /// Create a page in the current document.
+        /// </summary>
+        /// <returns>The page.</returns>
+        public IPage CreatePage()
+        {
+            var page = new Page() { PageNumber = Pages.Count + 1 };
+            Body.Children.Add( page );
+            Pages.Add( page );
+            return page;
+        }
+
+        /// <summary>
+        /// Inserts a page at the specified index.
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageNumber"></param>
+        public void InsertPage( IPage page, int pageNumber )
+        {
+            page.PageNumber = pageNumber; // make sure they match.
+            Pages.Insert( pageNumber - 1, page ); // zero index.
         }
 
         public IDivElement AddBodyContainer()
@@ -89,6 +140,8 @@ namespace Stitch
             Body.Children.Add( div );
             return div;
         }
+
+        #endregion
 
         /// <summary>
         /// Add an element to the body of the document.
@@ -170,7 +223,7 @@ namespace Stitch
         public void SetTheme( string themePath )
         {
             var css = File.ReadAllText( themePath );
-            var sheet = new Parser().Parse(css);
+            var sheet = new Parser().Parse( css );
             SetTheme( sheet );
         }
 
@@ -195,7 +248,8 @@ namespace Stitch
         /// <returns>The element the break was added to.</returns>
         public IElement InsertPageBreak( IElement element )
         {
-            element.StyleList.Add( "page-break-after", "always" );
+            element.ClassList.Add( "page" );
+            //element.StyleList.Add( "page-break-after", "always" );
             return element;
         }
 
@@ -220,7 +274,7 @@ namespace Stitch
             builder.AppendLine( Head.Render( nodes, filteredClasses ) );
             builder.AppendLine( Body.Render() );
             builder.AppendLine( "</html>" );
-            
+
             return builder.ToString();
         }
 

@@ -9,7 +9,7 @@ namespace Stitch
 
     public sealed class IDFactory
     {
-        //private HashSet<Guid> Elements = new HashSet<Guid>();
+        private HashSet<Guid> Elements = new HashSet<Guid>();
         private int idIndex = 1;
         private const int elementBase = 26;
         private readonly int MaxLength = (int)Math.Ceiling( Math.Log( int.MaxValue, elementBase ) ); // should be 7.
@@ -31,31 +31,31 @@ namespace Stitch
 
         #endregion
 
-        //private string getElementGuid()
-        //{
-        //    // We use GUIDs as identifiers for our elements
-        //    // however, HTML ids cannot start with a number.  
-        //    // So, we will ensure that our identifiers start 
-        //    // with the letter 'f'
+        private string getElementGuid()
+        {
+            // We use GUIDs as identifiers for our elements
+            // however, HTML ids cannot start with a number.  
+            // So, we will ensure that our identifiers start 
+            // with the letter 'f'
 
-        //    var distinct = false;
-        //    var guid = default( Guid );
+            var distinct = false;
+            var guid = default( Guid );
 
-        //    while (!distinct)
-        //    {
-        //        guid = Guid.NewGuid();
-        //        var bytes = guid.ToByteArray();
+            while (!distinct)
+            {
+                guid = Guid.NewGuid();
+                var bytes = guid.ToByteArray();
 
-        //        if ((bytes[3] & 0xf0) < 0xa0)
-        //        {
-        //            bytes[3] |= 0xc0;
-        //            guid = new Guid( bytes );
-        //        }
-        //        distinct = !Elements.Contains( guid );
-        //    }
-        //    Elements.Add( guid );
-        //    return guid.ToString();
-        //}
+                if ((bytes[3] & 0xf0) < 0xa0)
+                {
+                    bytes[3] |= 0xc0;
+                    guid = new Guid( bytes );
+                }
+                distinct = !Elements.Contains( guid );
+            }
+            Elements.Add( guid );
+            return guid.ToString();
+        }
 
         //Changed to use a, b, c..., aa, ab, ac,... ba, bb ect.
         private string getElementId()
@@ -81,11 +81,26 @@ namespace Stitch
         public static string GetElementId()
         {
             var id = string.Empty;
-            lock(Inst)
+            lock (Inst)
             {
                 id = Inst.getElementId();
             }
             return id;
         }
+
+        /// <summary>
+        /// Get a safe element id GUID
+        /// </summary>
+        /// <returns></returns>
+        public static string GetElementGuid()
+        {
+            var id = string.Empty;
+            lock (Inst)
+            {
+                id = Inst.getElementGuid();
+            }
+            return id;
+        }
+
     }
 }
