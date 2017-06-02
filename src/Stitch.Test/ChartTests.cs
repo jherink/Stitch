@@ -608,7 +608,7 @@ namespace Stitch.Tests
 
             chart.MeasuredAxis.AxisTitle = "Age";
             chart.LabeledAxis.AxisTitle = "Weight";
-            chart.Title = "Age & Weight Comparison of Boys vs Girls";
+            chart.Title = "Age &amp; Weight Comparison of Boys vs Girls";
             chart.LegendPosition = LegendPosition.Right;
 
             chart.AddPoint( "Boys", 7, 64 );
@@ -632,7 +632,7 @@ namespace Stitch.Tests
 
             chart.MeasuredAxis.AxisTitle = "Age";
             chart.LabeledAxis.AxisTitle = "Weight";
-            chart.Title = "Age & Weight Comparison of Boys vs Girls";
+            chart.Title = "Age &amp; Weight Comparison of Boys vs Girls";
             chart.LegendPosition = LegendPosition.Right;
 
             chart.AddPoint( "Boys", 7, 64 );
@@ -668,7 +668,7 @@ namespace Stitch.Tests
 
             chart.MeasuredAxis.AxisTitle = "Age";
             chart.LabeledAxis.AxisTitle = "Weight";
-            chart.ChartTitle = "Age & Weight Comparison of Boys vs Girls";
+            chart.ChartTitle = "Age &amp; Weight Comparison of Boys vs Girls";
             chart.LegendPosition = position;
 
             chart.AddPoint( "Boys", 7, 64 );
@@ -735,9 +735,9 @@ namespace Stitch.Tests
 
             chart.LabeledAxis.IncludeDefault = false;
             chart.MeasuredAxis.IncludeDefault = false;
-            chart.ChartTitle = "Ice Cream Sales vs Tempurature";
+            chart.ChartTitle = "Ice Cream Sales vs Temperature";
             chart.MeasuredAxis.AxisTitle = "Sales";
-            chart.LabeledAxis.AxisTitle = "Tempurature";
+            chart.LabeledAxis.AxisTitle = "Temperature";
 
             chart.AddPoint( "Sales", 14.2, 215 );
             chart.AddPoint( "Sales", 16.4, 325 );
