@@ -40,7 +40,6 @@ namespace Stitch
 
         private IStyleElement CustomStyles;
         private IStyleElement ActiveTheme;
-        private IStyleElement PaperSizeStyle;
 
         public Margin Margin { get; set; }
 
@@ -53,7 +52,7 @@ namespace Stitch
             Page.Children.Add( new Body() ); // and a body to the page.
             Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName; // set to current culture.
             Margin = new Margin( .5, .5, .5, .5 ) { MarginUnit = MarginUnit.Inches };
-            
+
             // add mobile viewport meta tag.
             Head.Metas.Add( new Meta( "viewport", "width=device-width, initial-scale=1" ) );
             // add charset meta tag.
@@ -71,33 +70,17 @@ namespace Stitch
             Head.Styles.Add( CustomStyles );
 
             CreatePage(); // create first page.
-
-            // Setup defaults
-            //Orientation = PageOrientation.Portrait;
         }
 
         #region Page Functions
 
         private List<IPage> Pages = new List<IPage>();
 
-        private PaperSize _paperSize = PaperSize.ANSI_A;
-
         /// <summary>
         /// The paper size of the pages in this document.
-        /// All pages created or inserted will get this paper size
+        /// All new pages created in this document will get this paper size.
         /// </summary>
-        public PaperSize PaperSize
-        {
-            get { return _paperSize; }
-            set
-            {
-                foreach (var page in this.Where(t => t.PageSize == _paperSize ))
-                {
-                    page.PageSize = value;   
-                }
-                _paperSize = value;
-            }
-        }
+        public PaperSize PaperSize { get; set; } = PaperSize.ANSI_A;
 
         /// <summary>
         /// Get the page with the specified page number.
@@ -124,11 +107,8 @@ namespace Stitch
         /// <returns>The page.</returns>
         public IPage CreatePage()
         {
-            var page = new Page() { PageNumber = Pages.Count + 1 };
-            page.Margin = this.Margin.Clone() as Margin;
-            page.PageSize = this.PaperSize;
-            Body.Children.Add( page );
-            Pages.Add( page );
+            var page = new Page() { PageNumber = Pages.Count + 1, PageSize = PaperSize.ANSI_A };
+            AddPage( page );
             return page;
         }
 
@@ -139,7 +119,6 @@ namespace Stitch
         /// <param name="pageNumber"></param>
         public void InsertPage( IPage page, int pageNumber )
         {
-            page.PageSize = this.PaperSize;
             page.Margin = this.Margin.Clone() as Margin;
             page.PageNumber = pageNumber; // make sure they match.
 
@@ -154,7 +133,8 @@ namespace Stitch
                 Pages.Add( page );
                 Body.Children.Add( page );
             }
-            else { // in middle
+            else
+            { // in middle
                 for (int i = 0; i < Body.Children.Count; i++)
                 {
                     if (Body.Children[i] is IPage &&
@@ -165,11 +145,25 @@ namespace Stitch
                 }
                 Pages.Insert( pageNumber - 1, page );
             }
-            
-            for (int i = pageNumber; i < Pages.Count; i++)
-            { // correct page numbering.
-                Pages[i].PageNumber = pageNumber + 1;
+
+            //for (int i = pageNumber + 1; i < Pages.Count; i++)
+            //{ // correct page numbering.
+            //    Pages[i].PageNumber = pageNumber + 1;
+            //}
+            // remove page class on last page only & correct page numberings.
+            for (int i = 0; i < Pages.Count; i++)
+            {
+                Pages[i].PageNumber = i + 1;
+                if (i < (Pages.Count - 1))
+                {
+                    Pages[i].ClassList.Add( "page" );
+                }
+                else if ((i == (Pages.Count - 1)) && page.ClassList.Contains( "page" ))
+                {
+                    Pages[i].ClassList.Remove( "page" );
+                }
             }
+
 
         }
 
@@ -193,7 +187,7 @@ namespace Stitch
         /// <param name="page"></param>
         public void AddPage( IPage page )
         {
-            InsertPage( page, Math.Max(PageCount, 1) );
+            InsertPage( page, Math.Max( PageCount, 1 ) );
         }
 
         //public IDivElement AddBodyContainer()
@@ -220,13 +214,14 @@ namespace Stitch
                     AddPage( element as IPage );
                     lp = this[PageCount];
                 }
-                else {
+                else
+                {
                     if (lp == null) lp = CreatePage();
                     lp.Children.Add( element );
                 }
             }
         }
-        
+
         public void AddStyle( IStyleElement style )
         {
             Head.Styles.Add( style );
@@ -294,7 +289,7 @@ namespace Stitch
 
             SetTheme( newTheme );
         }
-       
+
         public IElement Find( string id )
         {
             return Body.FindById( id );

@@ -441,15 +441,24 @@ namespace Stitch.Tests
             Assert.NotNull( page );
             Assert.Equal( 2, doc.PageCount );
             page = new Page();
+            page.PageSize = PaperSize.A0;
             doc.InsertPage( page, 2 );
             for (int i = 0; i < doc.PageCount; i++)
             {
                 Assert.Equal( i + 1, doc[i + 1].PageNumber );
             }
 
+            page = page.Clone() as Page;
+            page.PageOrientation = PageOrientation.Landscape;
+            doc.AddPage( page );
+            Assert.Equal( 4, page.PageNumber );
+
             page = new Page();
             doc.AddPage( page );
-            Assert.Equal( 4, doc.PageCount );
+            page.PageOrientation = PageOrientation.Landscape;
+            Assert.Equal( 5, doc.PageCount );
+
+            IntegrationHelpers.SaveToTemp( "Page Test", doc );
         }
     }
 }

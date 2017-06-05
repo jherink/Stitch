@@ -133,6 +133,7 @@
     <Content Include="Master\HorizontalBarChartTest.html" />
     <Content Include="Master\IceCreamVsSalesTempuratureScatterChart.html" />
     <Content Include="Master\imageInTableTests.html" />
+    <Content Include="Master\Line-Chart-Sample.html" />
     <Content Include="Master\LineChartLegendTestBottom.html" />
     <Content Include="Master\LineChartLegendTestLeft.html" />
     <Content Include="Master\LineChartLegendTestNone.html" />
@@ -146,6 +147,7 @@
     <Content Include="Master\MultipleVerticalBarChartTest.html" />
     <Content Include="Master\MultipleVerticalBarChartTest2.html" />
     <Content Include="Master\NorthwindSalesByYearTest.html" />
+    <Content Include="Master\Page Test.html" />
     <Content Include="Master\Pie2DLegendTestBottom.html" />
     <Content Include="Master\Pie2DLegendTestLeft.html" />
     <Content Include="Master\Pie2DLegendTestNone.html" />

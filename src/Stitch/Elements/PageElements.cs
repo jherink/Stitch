@@ -42,6 +42,7 @@ namespace Stitch.Elements
             var clone = (IElement)MemberwiseClone();
             clone.ClassList = new ClassList();
             clone.StyleList = new StyleList();
+            (clone as BaseElement).Attributes = new Dictionary<string, string>();
             clone.ID = string.Empty;
             foreach (var cls in ClassList)
             {
@@ -50,6 +51,10 @@ namespace Stitch.Elements
             foreach (var style in StyleList)
             {
                 clone.StyleList.Add( style );
+            }
+            foreach (var att in Attributes)
+            {
+                clone.Attributes.Add( att.Key, att.Value );
             }
             return clone;
         }

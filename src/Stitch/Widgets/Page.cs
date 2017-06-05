@@ -36,24 +36,38 @@ namespace Stitch
             }
         }
 
-        public Margin Margin { get; set; }
+        public Margin Margin { get; set; } = new Margin();
 
-        private PaperSize _pageSize;
+        private PaperSize _pageSize = PaperSize.ANSI_A;
 
         public PaperSize PageSize
         {
             get { return _pageSize; }
             set
             {
-                var currClass = PaperSizeHelper.GetClass( _pageSize, PageOrientation );
-                ClassList.Remove( currClass );
+                var currClass = PaperSizeHelper.GetClass( _pageSize, _pageOrientation );
+                var newClass = PaperSizeHelper.GetClass( value, _pageOrientation );
+                ClassList.Remove( currClass ).Add( newClass );
                 _pageSize = value;
-                var newClass = PaperSizeHelper.GetClass( _pageSize, PageOrientation );
-                ClassList.Add( newClass );
             }
         }
 
-        public PageOrientation PageOrientation { get; set; } = PageOrientation.Portrait;
+        private PageOrientation _pageOrientation = PageOrientation.Portrait;
+
+        public PageOrientation PageOrientation
+        {
+            get
+            {
+                return _pageOrientation;
+            }
+            set
+            {
+                var currClass = PaperSizeHelper.GetClass( _pageSize, _pageOrientation );
+                var newClass = PaperSizeHelper.GetClass( _pageSize, value );
+                ClassList.Remove( currClass ).Add( newClass );
+                _pageOrientation = value;
+            }
+        }
 
         public Page()
         {
@@ -68,5 +82,11 @@ namespace Stitch
             return base.Render();
         }
 
+        public override object Clone()
+        {
+            var bClone = base.Clone() as Page;
+            bClone.Margin = this.Margin.Clone() as Margin;
+            return bClone;
+        }
     }
 }

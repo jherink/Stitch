@@ -371,7 +371,8 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact( DisplayName = "NorthwindSalesByYearTest" )]
         public void NorthwindSalesByYearTest()
         {
             var doc = new StitchDocument();

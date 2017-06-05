@@ -102,5 +102,14 @@ namespace Stitch
             return id;
         }
 
+        /// <summary>
+        /// Reset the id factory to default.
+        /// </summary>
+        public static void Reset()
+        {
+            Inst.Elements.Clear();
+            Inst.idIndex = 1;
+        }
+
     }
 }
