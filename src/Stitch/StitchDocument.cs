@@ -11,32 +11,19 @@ using System.Globalization;
 using System.Xml;
 using Stitch.Export;
 using Stitch.Themes;
+using System.Collections;
+using Stitch.Widgets;
 
 namespace Stitch
 {
-    public class StitchDocument
+    public class StitchDocument : IEnumerable<IPage>
     {
-        public readonly IHtmlElement Page;
+        private readonly IHtmlElement Page;
 
-        private readonly ThemeCssResourceLoader resourceLoader = new ThemeCssResourceLoader();
+        private readonly ThemeCssResourceLoader themeResourceLoader = new ThemeCssResourceLoader();
+        private readonly WidgetCssResourceLoader widgetResourceLoader = new WidgetCssResourceLoader();
 
         public Theme Theme { get; private set; }
-
-        #region Orientation
-
-        private PageOrientation _orientation;
-
-        public PageOrientation Orientation
-        {
-            get { return _orientation; }
-            set
-            {
-                _orientation = value;
-                Body.StyleList.Add( "max-width", $"{Helpers.TranslateOrientation( _orientation )}px !important" );
-            }
-        }
-
-        #endregion
 
         public IHeadElement Head
         {
@@ -53,6 +40,9 @@ namespace Stitch
 
         private IStyleElement CustomStyles;
         private IStyleElement ActiveTheme;
+        private IStyleElement PaperSizeStyle;
+
+        public Margin Margin { get; set; }
 
         public string Language { get; set; }
 
@@ -62,15 +52,17 @@ namespace Stitch
             Page.Children.Add( new Head() ); // add a head
             Page.Children.Add( new Body() ); // and a body to the page.
             Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName; // set to current culture.
-
+            Margin = new Margin( .5, .5, .5, .5 ) { MarginUnit = MarginUnit.Inches };
+            
             // add mobile viewport meta tag.
             Head.Metas.Add( new Meta( "viewport", "width=device-width, initial-scale=1" ) );
             // add charset meta tag.
             Head.Metas.Add( new Meta( string.Empty, "text/html; charset=utf-8", "content-type" ) );
 
-
             // add w3 resource.
-            Head.Styles.Add( new Style() { StyleSheet = resourceLoader.LoadTheme( "w3" ) } );
+            Head.Styles.Add( new Style() { StyleSheet = themeResourceLoader.LoadTheme( "w3" ) } );
+            // add paper size resource
+            Head.Styles.Add( new Style() { StyleSheet = widgetResourceLoader.LoadWidget( "paper-sizes" ) } );
 
             SetTheme( Theme.Blue );
 
@@ -78,19 +70,34 @@ namespace Stitch
             CustomStyles = new Style { StyleSheet = new StyleSheet() };
             Head.Styles.Add( CustomStyles );
 
-            // Add Default classes
-            AddStyleRule( ".page { page-break-after: always }" );
-
             CreatePage(); // create first page.
 
             // Setup defaults
-            Orientation = PageOrientation.Portrait;
-            Margin = 25;
+            //Orientation = PageOrientation.Portrait;
         }
 
         #region Page Functions
 
         private List<IPage> Pages = new List<IPage>();
+
+        private PaperSize _paperSize = PaperSize.ANSI_A;
+
+        /// <summary>
+        /// The paper size of the pages in this document.
+        /// All pages created or inserted will get this paper size
+        /// </summary>
+        public PaperSize PaperSize
+        {
+            get { return _paperSize; }
+            set
+            {
+                foreach (var page in this.Where(t => t.PageSize == _paperSize ))
+                {
+                    page.PageSize = value;   
+                }
+                _paperSize = value;
+            }
+        }
 
         /// <summary>
         /// Get the page with the specified page number.
@@ -118,6 +125,8 @@ namespace Stitch
         public IPage CreatePage()
         {
             var page = new Page() { PageNumber = Pages.Count + 1 };
+            page.Margin = this.Margin.Clone() as Margin;
+            page.PageSize = this.PaperSize;
             Body.Children.Add( page );
             Pages.Add( page );
             return page;
@@ -130,16 +139,69 @@ namespace Stitch
         /// <param name="pageNumber"></param>
         public void InsertPage( IPage page, int pageNumber )
         {
+            page.PageSize = this.PaperSize;
+            page.Margin = this.Margin.Clone() as Margin;
             page.PageNumber = pageNumber; // make sure they match.
-            Pages.Insert( pageNumber - 1, page ); // zero index.
+
+            // insert into page body.
+            if (pageNumber <= 1)
+            { // insert at front
+                Pages.Insert( pageNumber - 1, page );
+                Body.Children.Insert( pageNumber - 1, page );
+            }
+            else if (pageNumber >= PageCount)
+            { // at end
+                Pages.Add( page );
+                Body.Children.Add( page );
+            }
+            else { // in middle
+                for (int i = 0; i < Body.Children.Count; i++)
+                {
+                    if (Body.Children[i] is IPage &&
+                       (Body.Children[i] as IPage).PageNumber == pageNumber)
+                    { // if it's the correct page.
+                        Body.Children.Insert( i, page );
+                    }
+                }
+                Pages.Insert( pageNumber - 1, page );
+            }
+            
+            for (int i = pageNumber; i < Pages.Count; i++)
+            { // correct page numbering.
+                Pages[i].PageNumber = pageNumber + 1;
+            }
+
         }
 
-        public IDivElement AddBodyContainer()
+        public void RemovePage( int pageNumber )
         {
-            var div = new Div( true );
-            Body.Children.Add( div );
-            return div;
+            var pg = Pages.FirstOrDefault( t => t.PageNumber == pageNumber );
+            if (pg != default( IPage ))
+            {
+                Pages.Remove( pg );
+                Body.Children.Remove( pg );
+            }
+            for (int i = 1; i <= PageCount; i++)
+            {
+                Pages[i - 1].PageNumber = i; // correct page numberings.
+            }
         }
+
+        /// <summary>
+        /// Add a page to the end of the document.
+        /// </summary>
+        /// <param name="page"></param>
+        public void AddPage( IPage page )
+        {
+            InsertPage( page, Math.Max(PageCount, 1) );
+        }
+
+        //public IDivElement AddBodyContainer()
+        //{
+        //    var div = new Div( true );
+        //    Body.Children.Add( div );
+        //    return div;
+        //}
 
         #endregion
 
@@ -149,14 +211,22 @@ namespace Stitch
         /// <param name="element"></param>
         public void Add( params IElement[] elements )
         {
-            foreach (var element in elements) Body.Children.Add( element );
+            //foreach (var element in elements) Body.Children.Add( element );
+            var lp = this[PageCount];
+            foreach (var element in elements)
+            {
+                if (element is IPage)
+                {
+                    AddPage( element as IPage );
+                    lp = this[PageCount];
+                }
+                else {
+                    if (lp == null) lp = CreatePage();
+                    lp.Children.Add( element );
+                }
+            }
         }
-
-        public bool Remove( IElement element )
-        {
-            return Body.Children.Remove( element );
-        }
-
+        
         public void AddStyle( IStyleElement style )
         {
             Head.Styles.Add( style );
@@ -165,22 +235,6 @@ namespace Stitch
         public void AddMeta( IMetaElement meta )
         {
             Head.Metas.Add( meta );
-        }
-
-        /// <summary>
-        /// The width in pixels of the left and right margins.
-        /// </summary>
-        public int Margin
-        {
-            get
-            {
-                var margin = Body.StyleList["margin-left"];
-                return int.Parse( margin.Substring( 0, margin.Length - 2 ) );
-            }
-            set
-            {
-                Body.StyleList["margin-left"] = Body.StyleList["margin-right"] = $"{value}px";
-            }
         }
 
         /// <summary>
@@ -197,12 +251,12 @@ namespace Stitch
             }
         }
 
-        public void InsertPageBreak()
-        {
-            var last = Body.Children.Last();
-            if (last is IDivElement && last.ClassList.Contains( "w3-container" )) last = (last as IDivElement).Children.Last();
-            InsertPageBreak( last );
-        }
+        //public void InsertPageBreak()
+        //{
+        //    var last = Body.Children.Last();
+        //    if (last is IDivElement && last.ClassList.Contains( "w3-container" )) last = (last as IDivElement).Children.Last();
+        //    InsertPageBreak( last );
+        //}
 
         public void SetTheme( StyleSheet newTheme )
         {
@@ -236,23 +290,11 @@ namespace Stitch
             var memInfo = type.GetMember( theme.ToString() );
             var attributes = memInfo[0].GetCustomAttributes( typeof( ThemeResourceAttribute ), false );
             var resource = ((ThemeResourceAttribute)attributes[0]).ResourceName;
-            var newTheme = resourceLoader.LoadTheme( resource );
+            var newTheme = themeResourceLoader.LoadTheme( resource );
 
             SetTheme( newTheme );
         }
-
-        /// <summary>
-        /// Adds a page break after the specified element.
-        /// </summary>
-        /// <param name="element">The element to break after.</param>
-        /// <returns>The element the break was added to.</returns>
-        public IElement InsertPageBreak( IElement element )
-        {
-            element.ClassList.Add( "page" );
-            //element.StyleList.Add( "page-break-after", "always" );
-            return element;
-        }
-
+       
         public IElement Find( string id )
         {
             return Body.FindById( id );
@@ -302,6 +344,8 @@ namespace Stitch
             }
         }
 
+        #region Export 
+
         public void ExportToPdf( string path )
         {
             var pdfExporter = new PDFExporter();
@@ -320,5 +364,21 @@ namespace Stitch
         {
             exporter.Export( Render(), exportTo );
         }
+
+        #endregion
+
+        #region IEnumerable Implementation
+
+        public IEnumerator<IPage> GetEnumerator()
+        {
+            return Pages.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Pages.GetEnumerator();
+        }
+
+        #endregion
     }
 }

@@ -51,7 +51,7 @@ namespace Stitch
         Eggplant,
         [ThemeResource( "stitch-governor-bay.css" )]
         GovernorBay,
-        [ThemeResource( "stitch-tall-poppy.css")]
+        [ThemeResource( "stitch-tall-poppy.css" )]
         TallPoppy
     }
 }

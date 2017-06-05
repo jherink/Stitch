@@ -387,7 +387,7 @@ namespace Stitch.Tests
             {
                 chart.AddBar( row["year"].ToString(), double.Parse( row["total"].ToString().Remove( 0, 1 ) ) );
             }
-            var container = doc.AddBodyContainer();
+            var container = doc[1];
             container.Children.Add( chart );
 
             IntegrationHelpers.SaveToTemp( "NorthwindSalesByYearTest", doc );
@@ -418,7 +418,7 @@ namespace Stitch.Tests
         {
             var doc = new StitchDocument();
             var chart = new BarChart();
-            var cont = doc.AddBodyContainer();
+            var cont = doc[1];
             chart.ChartTitle = "Quarterly Results";
             chart.TitleTextStyle.Bold = true;
             chart.Width = 600;
@@ -439,7 +439,7 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             var chart = new BarChart();
             chart.LegendPosition = LegendPosition.Right;
-            var cont = doc.AddBodyContainer();
+            var cont = doc[1];
             chart.ChartTitle = "Quarterly Results";
             chart.MeasuredAxis.Format = "C0";
 

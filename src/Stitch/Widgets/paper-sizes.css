@@ -1,0 +1,43 @@
+﻿.page { page-break-after: always }
+
+/* Dimensions snarffed from here: http://resources.printhandbook.com/pages/paper-size-chart.php */
+
+/* International A paper sizes */
+.a0 { height: 841mm; width: 1189mm; }
+.a1 { height: 594mm; width: 841mm; }
+.a2 { height: 420mm; width: 594mm; }
+.a3 { height: 297mm; width: 420mm; }
+.a4 { height: 210mm; width: 297mm; }
+.a5 { height: 148mm; width: 210mm; }
+.a6 { height: 105mm; width: 148mm; }
+.a7 { height: 74mm; width: 105mm; }
+.a8 { height: 52mm; width: 74mm; }
+.a9 { height: 37mm; width: 52mm; }
+.a10 { height: 26mm; width: 37mm; }
+
+/* International A paper sizes landscape */
+.a0-landscape { width: 841mm; height: 1189mm; }
+.a1-landscape { width: 594mm; height: 841mm; }
+.a2-landscape { width: 420mm; height: 594mm; }
+.a3-landscape { width: 297mm; height: 420mm; }
+.a4-landscape { width: 210mm; height: 297mm; }
+.a5-landscape { width: 148mm; height: 210mm; }
+.a6-landscape { width: 105mm; height: 148mm; }
+.a7-landscape { width: 74mm; height: 105mm; }
+.a8-landscape { width: 52mm; height: 74mm; }
+.a9-landscape { width: 37mm; height: 52mm; }
+.a10-landscape { width: 26mm; height: 37mm; }
+
+/* US ANSI paper sizes */
+.ansi-a { width: 8.5in; }
+.ansi-b { width: 17in; }
+.ansi-c { width: 22in; }
+.ansi-d { width: 34in; }
+.ansi-e { width: 44in; }
+
+/* US ANSI landscape */
+.ansi-a-landscape { width: 11in; }
+.ansi-b-landscape { width: 11in; }
+.ansi-c-landscape { width: 17in; }
+.ansi-d-landscape { width: 22in; }
+.ansi-e-landscape { width: 34in; }
