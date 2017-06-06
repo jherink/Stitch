@@ -114,7 +114,7 @@ namespace Stitch.Tests
 
         public static SqlConnection CreateNorthwindConnection()
         {
-            var dbPath = Path.Combine( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ), "Data\\Northwind.mdf" );
+            var dbPath = Path.Combine( EnsuredTempDirectory(), "Data\\Northwind.mdf" );
             var conn = new SqlConnection( $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"{dbPath}\";Integrated Security=True;Connect Timeout=30" );
             conn.Open();
             return conn;

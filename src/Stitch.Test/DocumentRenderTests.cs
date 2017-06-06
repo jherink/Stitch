@@ -106,7 +106,7 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             doc.Head.Title = "Header Tests";
 
-            var container = doc.AddBodyContainer();
+            var container = doc[0];
             // This was testing that Element factory and constructor yielded the
             // same. Now they are identical now that element factory was removed.
             container.Children.Add( new Heading( HeadingLevel.H1, "Heading Level 1" ) );
@@ -146,7 +146,7 @@ namespace Stitch.Tests
             doc.AddStyleRule( "body { background-color:powderblue;" );
             doc.AddStyleRule( ".myCustomParagraph { color: red; }" );
 
-            var container = doc.AddBodyContainer();
+            var container = doc[0];
 
             var text = new DOMString();
             text.Append( "This is a " );
@@ -167,7 +167,7 @@ namespace Stitch.Tests
         {
             var doc = new StitchDocument();
             doc.AddStyleRule( ".bigDiv { min-height: 1600px; !important }" );
-            var container = doc.AddBodyContainer();
+            var container = doc[0];
 
             // create a regular link.
             var link = new AnchorLinkElement()
@@ -214,7 +214,7 @@ namespace Stitch.Tests
         public void ImageTests()
         {
             var doc = new StitchDocument();
-            var container = doc.AddBodyContainer();
+            var container = doc[0];
 
             var table = new Table();
             var row = new TableRow();
@@ -253,7 +253,7 @@ namespace Stitch.Tests
         public void TableWidthACaptionTests()
         {
             var doc = new StitchDocument();
-            var cont = doc.AddBodyContainer();
+            var cont = doc[0];
 
             var dt = new System.Data.DataTable();
             dt.Columns.Add( "Month", typeof( string ) );
@@ -276,7 +276,7 @@ namespace Stitch.Tests
             doc.AddStyleRule( ".limitedTable { max-width: 400px; }" );
             doc.AddStyleRule( "table { margin-top: 25px !important, margin-bottom: 25px !important }" );
             doc.AddStyleRule( "body, table, tr, td { font-size: 12 !important }" );
-            var container = doc.AddBodyContainer();
+            var container = doc[0];
 
             container.Children.Add( new Div( new Bold( "DESIGN CRITERIA" ) ) );
             container.Children.Add( new HorizontalRule() );
@@ -415,7 +415,7 @@ namespace Stitch.Tests
         public void ExportTest01()
         {
             var doc = new StitchDocument();
-            var container = doc.AddBodyContainer();
+            var container = doc[0];
             container.Children.Add( new Heading( HeadingLevel.H3, "Total Beverage Amounts" ) );
             container.Children.Add( new HorizontalRule() );
 
@@ -430,6 +430,63 @@ namespace Stitch.Tests
             container.Children.Add( new Table( salesData ) );
 
             IntegrationHelpers.ExportPdfToTemp( "ExportTest01", doc );
+        }
+
+        [Fact( DisplayName = "PageTest" )]
+        public void PageTest()
+        {
+            var doc = new StitchDocument();
+            Assert.Equal( 1, doc.PageCount );
+            var page = doc.CreatePage();
+            Assert.NotNull( page );
+            Assert.Equal( 2, doc.PageCount );
+            page = new Page();
+            page.PageSize = PaperSize.A0;
+            doc.InsertPage( page, 2 );
+            for (int i = 0; i < doc.PageCount; i++)
+            {
+                Assert.Equal( i + 1, doc[i].PageNumber );
+            }
+
+            page = page.Clone() as Page;
+            page.PageOrientation = PageOrientation.Landscape;
+            doc.AddPage( page );
+            Assert.Equal( 4, page.PageNumber );
+
+            page = new Page();
+            doc.AddPage( page );
+            page.PageOrientation = PageOrientation.Landscape;
+            Assert.Equal( 5, doc.PageCount );
+
+            IntegrationHelpers.SaveToTemp( "Page Test", doc );
+        }
+
+        [Fact( DisplayName = "PageTest2" )]
+        public void PageTest2()
+        {
+            var ids = new[] { "a", "b", "c", "d", "e" };
+            var ids2 = new[] { "a", "d", "b", "c", "e" };
+            var doc = new StitchDocument();
+
+            var checkPages = new Action<int, string[]>( (pages, _ids) =>
+             {
+                 Assert.Equal( pages, doc.PageCount );
+                 for (int i = 0; i < doc.PageCount; i++)
+                 {
+                     Assert.Equal( i + 1, doc[i].PageNumber );
+                     Assert.Equal( _ids[i], doc[i].ID );
+                 }
+             } );
+            checkPages( 1, ids );
+            doc.CreatePage();
+            checkPages( 2, ids );
+            doc.CreatePage();
+            checkPages( 3, ids );
+            var pg = new Page() { ID = doc.IDFactory.GetId() };
+            doc.InsertPage( pg, 2 );
+            checkPages( 4, ids2 );
+            doc.CreatePage();
+            checkPages( 5, ids2 );
         }
     }
 }

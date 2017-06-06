@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CssResourceLoader.cs" />
     <Compile Include="Chart\AxisChart.cs" />
     <Compile Include="Chart\Axis\Algorithms\ITickAlgorithm.cs" />
     <Compile Include="Chart\Axis\Algorithms\SimpleNumericTickAlgorithm.cs" />
@@ -196,9 +197,15 @@
     <Compile Include="IDFactory.cs" />
     <Compile Include="StitchDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Widgets\Margin.cs" />
+    <Compile Include="Widgets\PaperSize.cs" />
+    <Compile Include="Widgets\PaperSizeResourceAttribute.cs" />
     <Compile Include="Themes\ThemeResourceAttribute.cs" />
     <Compile Include="Themes\ThemeCssResourceLoader.cs" />
     <Compile Include="Themes\Themes.cs" />
+    <Compile Include="Widgets\Page.cs" />
+    <Compile Include="Widgets\TableOfContents.cs" />
+    <Compile Include="Widgets\WidgetCssResourceLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bundleconfig.json" />
@@ -207,6 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\README.txt" />
+    <EmbeddedResource Include="Widgets\paper-sizes.css" />
     <EmbeddedResource Include="Export\wkhtmltopdf.exe" />
     <EmbeddedResource Include="Themes\stitch-malachite.css" />
     <EmbeddedResource Include="Themes\stitch-azure.css" />

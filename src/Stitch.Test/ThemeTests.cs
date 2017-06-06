@@ -38,7 +38,6 @@ namespace Stitch.Tests
         public void GenerateColorSwatch()
         {
             var doc = new StitchDocument();
-            var cont = doc.AddBodyContainer();
             var div = new Div();
             div.StyleList.Add( "width", "100%" );
             div.StyleList.Add( "height", "100px" );
@@ -48,7 +47,7 @@ namespace Stitch.Tests
 
             foreach (var color in colors)
             {
-                if (themes[i] == "Plum") doc.InsertPageBreak();
+                if (themes[i] == "Plum") doc.CreatePage();
                 var c = div.Clone() as IDivElement;
                 c.StyleList.Add( "background", color );
                 c.Add( new Paragraph( color ) );
@@ -56,7 +55,7 @@ namespace Stitch.Tests
                 var p3 = new Paragraph( themes[i++] );
                 p2.StyleList.Add( "color", "#fff" );
                 c.Add( p2, p3 );
-                cont.Add( c );
+                doc.Add( c );
             }
 
             IntegrationHelpers.ExportPdfToTemp( "Default Themes Color Swatches", doc );

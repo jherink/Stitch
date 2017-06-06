@@ -14,25 +14,32 @@ html,body{ font-family:Verdana,sans-serif;font-size:15px;line-height:1.5; }
 html{ overflow-x:hidden; }
 .w3-btn,.w3-btn-floating,.w3-dropnav a,.w3-btn-floating-large,.w3-btn-block,.w3-navbar a,.w3-sidenav a,.w3-pagination li a,.w3-hoverable tbody tr,.w3-hoverable li,.w3-accordion-content a,.w3-dropdown-content a,.w3-dropdown-click:hover,.w3-dropdown-hover:hover,.w3-opennav,.w3-closenav,.w3-closebtn,*[class*="w3-hover-"]{ -webkit-transition:background-color 0.25s,color 0.15s,box-shadow 0.25s,opacity 0.25s,filter 0.25s,border 0.15s;transition:background-color 0.25s,color 0.15s,box-shadow 0.15s,opacity 0.25s,filter 0.25s,border 0.15s; }
 </style>
+		<style type="text/css">
+.ansi-a{ width:8.5in; }
+</style>
 		<style type="text/css"></style>
 		<style type="text/css"></style>
 	</head>
-	<body style="max-width:1024px !important;margin-right:25px;margin-left:25px;">
-		<svg height="400" width="450">
-			<path d="M100 350 l150 -300" id="lineAB" style="fill:none;stroke:red;stroke-width:3;" />
-			<path d="M250 50 l150 300" id="lineBC" style="fill:none;stroke:red;stroke-width:3;" />
-			<path d="M175 200 l150 0" style="fill:none;stroke:green;stroke-width:3;" />
-			<path d="M100 350 q150 -300 300 0" style="fill:none;stroke:blue;stroke-width:5;" />
-			<g style="fill:black;stroke:black;stroke-width:3;">
-				<circle cx="100" cy="350" r="3" id="pointA" />
-				<circle cx="250" cy="50" r="3" id="pointB" />
-				<circle cx="400" cy="350" r="3" id="pointC" />
-			</g>
-			<g style="font-size:30;font-family:sans-serif;text-anchor:middle;fill:black;stroke:none;">
-				<text x="100" y="350" dx="-30">A</text>
-				<text x="250" y="50" dy="-10">B</text>
-				<text x="400" y="350" dx="30">C</text>
-			</g>
-		</svg>
+	<body>
+		<div id="pages">
+			<div id="a" class="ansi-a" style="margin:0.5in 0.5in 0.5in 0.5in;" page-number="1">
+				<svg height="400" width="450">
+					<path d="M100 350 l150 -300" id="lineAB" style="fill:none;stroke:red;stroke-width:3;" />
+					<path d="M250 50 l150 300" id="lineBC" style="fill:none;stroke:red;stroke-width:3;" />
+					<path d="M175 200 l150 0" style="fill:none;stroke:green;stroke-width:3;" />
+					<path d="M100 350 q150 -300 300 0" style="fill:none;stroke:blue;stroke-width:5;" />
+					<g style="fill:black;stroke:black;stroke-width:3;">
+						<circle cx="100" cy="350" r="3" id="pointA" />
+						<circle cx="250" cy="50" r="3" id="pointB" />
+						<circle cx="400" cy="350" r="3" id="pointC" />
+					</g>
+					<g style="font-size:30;font-family:sans-serif;text-anchor:middle;fill:black;stroke:none;">
+						<text x="100" y="350" dx="-30">A</text>
+						<text x="250" y="50" dy="-10">B</text>
+						<text x="400" y="350" dx="30">C</text>
+					</g>
+				</svg>
+			</div>
+		</div>
 	</body>
 </html>

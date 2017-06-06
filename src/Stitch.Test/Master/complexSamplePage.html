@@ -21,8 +21,9 @@ hr{ border:0;border-top:1px solid #EEE;margin:20px 0; }
 .w3-table td,.w3-table th,.w3-table-all td,.w3-table-all th{ padding:8px 8px;display:table-cell;text-align:left;vertical-align:top; }
 .w3-table th:first-child,.w3-table td:first-child,.w3-table-all th:first-child,.w3-table-all td:first-child{ padding-left:16px; }
 .w3-btn,.w3-btn-floating,.w3-dropnav a,.w3-btn-floating-large,.w3-btn-block,.w3-navbar a,.w3-sidenav a,.w3-pagination li a,.w3-hoverable tbody tr,.w3-hoverable li,.w3-accordion-content a,.w3-dropdown-content a,.w3-dropdown-click:hover,.w3-dropdown-hover:hover,.w3-opennav,.w3-closenav,.w3-closebtn,*[class*="w3-hover-"]{ -webkit-transition:background-color 0.25s,color 0.15s,box-shadow 0.25s,opacity 0.25s,filter 0.25s,border 0.15s;transition:background-color 0.25s,color 0.15s,box-shadow 0.15s,opacity 0.25s,filter 0.25s,border 0.15s; }
-.w3-container:after,.w3-panel:after,.w3-row:after,.w3-row-padding:after,.w3-topnav:after,.w3-clear:after,.w3-btn-group:before,.w3-btn-group:after,.w3-btn-bar:before,.w3-btn-bar:after{ content:'';display:table;clear:both; }
-.w3-container{ padding:0.01em 16px; }
+</style>
+		<style type="text/css">
+.ansi-a{ width:8.5in; }
 </style>
 		<style type="text/css">
 .stitch-theme{ color:#FFF;background-color:#36C !important;fill:#36C; }
@@ -33,135 +34,137 @@ table{ margin-top:25px !important; }
 body,table,tr,td{ font-size:12 !important; }
 </style>
 	</head>
-	<body style="max-width:1024px !important;margin-right:25px;margin-left:25px;">
-		<div class="w3-container">
-			<div>
-				<b>DESIGN CRITERIA</b>
-			</div>
-			<hr />
-			<div>
-				<table class="w3-table">
-					<caption></caption>
-					<thead></thead>
-					<tbody>
-						<tr>
-							<td>DESIGN CODE</td>
-							<td>AASHTO-2015</td>
-							<td>FATIGUE CATEGORY</td>
-							<td>1</td>
-						</tr>
-						<tr>
-							<td>ULTIMATE WIND SPEED (MPH)</td>
-							<td>115</td>
-							<td>TRUCK GUST</td>
-							<td>NO</td>
-						</tr>
-						<tr>
-							<td>MEAN RECURRENCE INTERVAL</td>
-							<td>700</td>
-							<td>GALLOPING</td>
-							<td>NO</td>
-						</tr>
-						<tr>
-							<td>SERVICE WIND SPEED (MPH)</td>
-							<td>115</td>
-							<td>NATURAL WIND GUST</td>
-							<td>NO</td>
-						</tr>
-						<tr>
-							<td>AASHTO ICE INCLUDED ?</td>
-							<td>YES</td>
-						</tr>
-						<tr>
-							<td>ELEVATION OF FOUNDATION</td>
-							<td>0</td>
-						</tr>
-						<tr>
-							<td colspan="4">ABOVE SURROUNDING TERRAIN (FT)</td>
-						</tr>
-					</tbody>
-					<tfoot></tfoot>
-				</table>
-			</div>
-			<div>
-				<b>DESIGN SUMMARY - POLE</b>
-			</div>
-			<hr />
-			<div>
-				<table class="w3-table">
-					<caption></caption>
-					<thead>
-						<tr class="stitch-theme">
-							<th>HEIGHT(FT)</th>
-							<th>SHAFT WEIGHT (LBS)</th>
-							<th>GROUND LINE DIAMETER (IN)</th>
-							<th>TOP DIAMETER (IN)</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>30</td>
-							<td>414</td>
-							<td>9</td>
-							<td>4.8</td>
-						</tr>
-					</tbody>
-					<tfoot></tfoot>
-				</table>
-			</div>
-			<div>
-				<b>SECTION CHARACTERISTICS</b>
-			</div>
-			<hr />
-			<div>
-				<table class="w3-table limitedTable">
-					<caption></caption>
-					<thead>
-						<tr class="stitch-theme">
-							<th></th>
-							<th>SECTION - 1</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>SHAPE</td>
-							<td>4W FLUTES</td>
-						</tr>
-						<tr>
-							<td>TOP DIAMETER(IN)</td>
-							<td>4.8</td>
-						</tr>
-						<tr>
-							<td>BASE DIAMTER (IN)</td>
-							<td>9</td>
-						</tr>
-						<tr>
-							<td>THICKNESS (IN)</td>
-							<td>0.1793</td>
-						</tr>
-						<tr>
-							<td>LENGTH (FT)</td>
-							<td>30</td>
-						</tr>
-						<tr>
-							<td>WEIGHT (LBS)</td>
-							<td>414</td>
-						</tr>
-						<tr>
-							<td>TAPER (IN/FT)</td>
-							<td>0.14</td>
-						</tr>
-						<tr>
-							<td>YIELD STRENGTH(KSI)</td>
-							<td>55</td>
-						</tr>
-						<tr>
-							<td>MATERIAL</td>
-							<td>S105-55</td>
-						</tr>
-					</tbody>
-					<tfoot></tfoot>
-				</table>
+	<body>
+		<div id="pages">
+			<div id="a" class="ansi-a" style="margin:0.5in 0.5in 0.5in 0.5in;" page-number="1">
+				<div>
+					<b>DESIGN CRITERIA</b>
+				</div>
+				<hr />
+				<div>
+					<table class="w3-table">
+						<caption></caption>
+						<thead></thead>
+						<tbody>
+							<tr>
+								<td>DESIGN CODE</td>
+								<td>AASHTO-2015</td>
+								<td>FATIGUE CATEGORY</td>
+								<td>1</td>
+							</tr>
+							<tr>
+								<td>ULTIMATE WIND SPEED (MPH)</td>
+								<td>115</td>
+								<td>TRUCK GUST</td>
+								<td>NO</td>
+							</tr>
+							<tr>
+								<td>MEAN RECURRENCE INTERVAL</td>
+								<td>700</td>
+								<td>GALLOPING</td>
+								<td>NO</td>
+							</tr>
+							<tr>
+								<td>SERVICE WIND SPEED (MPH)</td>
+								<td>115</td>
+								<td>NATURAL WIND GUST</td>
+								<td>NO</td>
+							</tr>
+							<tr>
+								<td>AASHTO ICE INCLUDED ?</td>
+								<td>YES</td>
+							</tr>
+							<tr>
+								<td>ELEVATION OF FOUNDATION</td>
+								<td>0</td>
+							</tr>
+							<tr>
+								<td colspan="4">ABOVE SURROUNDING TERRAIN (FT)</td>
+							</tr>
+						</tbody>
+						<tfoot></tfoot>
+					</table>
+				</div>
+				<div>
+					<b>DESIGN SUMMARY - POLE</b>
+				</div>
+				<hr />
+				<div>
+					<table class="w3-table">
+						<caption></caption>
+						<thead>
+							<tr class="stitch-theme">
+								<th>HEIGHT(FT)</th>
+								<th>SHAFT WEIGHT (LBS)</th>
+								<th>GROUND LINE DIAMETER (IN)</th>
+								<th>TOP DIAMETER (IN)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>30</td>
+								<td>414</td>
+								<td>9</td>
+								<td>4.8</td>
+							</tr>
+						</tbody>
+						<tfoot></tfoot>
+					</table>
+				</div>
+				<div>
+					<b>SECTION CHARACTERISTICS</b>
+				</div>
+				<hr />
+				<div>
+					<table class="w3-table limitedTable">
+						<caption></caption>
+						<thead>
+							<tr class="stitch-theme">
+								<th></th>
+								<th>SECTION - 1</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>SHAPE</td>
+								<td>4W FLUTES</td>
+							</tr>
+							<tr>
+								<td>TOP DIAMETER(IN)</td>
+								<td>4.8</td>
+							</tr>
+							<tr>
+								<td>BASE DIAMTER (IN)</td>
+								<td>9</td>
+							</tr>
+							<tr>
+								<td>THICKNESS (IN)</td>
+								<td>0.1793</td>
+							</tr>
+							<tr>
+								<td>LENGTH (FT)</td>
+								<td>30</td>
+							</tr>
+							<tr>
+								<td>WEIGHT (LBS)</td>
+								<td>414</td>
+							</tr>
+							<tr>
+								<td>TAPER (IN/FT)</td>
+								<td>0.14</td>
+							</tr>
+							<tr>
+								<td>YIELD STRENGTH(KSI)</td>
+								<td>55</td>
+							</tr>
+							<tr>
+								<td>MATERIAL</td>
+								<td>S105-55</td>
+							</tr>
+						</tbody>
+						<tfoot></tfoot>
+					</table>
+				</div>
 			</div>
 		</div>
 	</body>
