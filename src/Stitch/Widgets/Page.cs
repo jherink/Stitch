@@ -7,7 +7,6 @@ namespace Stitch
     public interface IPage : IDivElement
     {
         int PageNumber { get; set; }
-        string PageID { get; }
         PaperSize PageSize { get; set; }
         PageOrientation PageOrientation { get; set; }
         Margin Margin { get; set; }
@@ -27,15 +26,7 @@ namespace Stitch
                 if (value > 0) Attributes[PAGE_NUMBER_ATT] = value.ToString();
             }
         }
-
-        public string PageID
-        {
-            get
-            {
-                return ID;
-            }
-        }
-
+        
         public Margin Margin { get; set; } = new Margin();
 
         private PaperSize _pageSize = PaperSize.ANSI_A;

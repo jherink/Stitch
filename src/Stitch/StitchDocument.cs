@@ -128,6 +128,8 @@ namespace Stitch
         {
             page.Margin = this.Margin.Clone() as Margin;
             page.PageNumber = pageNumber; // make sure they match.
+            // pages need id's
+            if (string.IsNullOrWhiteSpace( page.ID )) page.ID = IDFactory.GetId();
             var pageIndex = pageNumber - 1;
 
             Pages.Insert( pageIndex, page );
