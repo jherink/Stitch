@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Stitch.Widgets
 {
-    public class TableOfContents : Div
-    {
-    }
+    //public class TableOfContents : Div
+    //{
+    //}
 }

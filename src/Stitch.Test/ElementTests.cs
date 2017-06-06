@@ -138,5 +138,82 @@ namespace Stitch.Tests
             Assert.True( img.Render().Contains( file ) );
             Assert.True( img.ReferenceImage ); // should be true now.
         }
+
+        [Fact(DisplayName = "CheckoutIdsTest")]
+        public void CheckoutIdsTest()
+        {
+            var expected = new[] { "a", "b", "c", "d", "e", "f", "g", "h",
+                                    "i", "j", "k", "l", "m", "n", "o", "p",
+                                    "q", "r", "s", "t", "u", "v", "w", "x",
+                                    "y", "z", "aa", "ab" };
+            var factory = new IDFactory();
+            int e = 0;
+            var diva = factory.GetId();
+            Assert.Equal( diva, expected[e++] );
+            var divb = factory.GetId();
+            Assert.Equal( divb, expected[e++] );
+            for (int i = 0; i < 26; i++)
+            {
+                diva = factory.GetId();
+                Assert.Equal( diva, expected[e++] );
+            }
+        }
+
+        [Fact( DisplayName = "SetStyleTypeAttributeHelperTests" )]
+        public void SetStyleTypeAttributeHelperTests()
+        {
+            Assert.Equal( "1", StyleTypeHelper.GetStyleType( OrderedListStyleType.Numbered ) );
+        }
+
+        [Fact( DisplayName = "LabelTests" )]
+        public void LabelTests()
+        {
+            var label = new Label();
+            AssertElement( label );
+            label = new Label( "Test" );
+            AssertElement( label );
+
+            var _for = new Div() { ID = "Test" };
+            label = new Label( _for );
+            AssertElement( label );
+            Assert.Equal( "Test", label.For );
+
+        }
+
+        [Fact( DisplayName = "DivTests" )]
+        public void DivTests()
+        {
+            var div = new Div();
+            AssertElement( div );
+            var label = new Label();
+            div.Children.Add( label );
+            Assert.True( div.Children.Any() );
+        }
+
+        [Fact( DisplayName = "ParagraphTests" )]
+        public void ParagraphTests()
+        {
+            var paragraph = new Paragraph();
+            AssertElement( paragraph );
+            paragraph = new Paragraph( "Test" );
+            AssertElement( paragraph );
+            Assert.True( !string.IsNullOrWhiteSpace( paragraph.Content ) );
+            paragraph.Content += new Small( "tiny" );
+            Assert.True( "Test<small>tiny</small>" == paragraph.Content );
+        }
+
+        [Fact( DisplayName = "HRandBRTests")]
+        public void HRandBRTests()
+        {
+            var hr = new HorizontalRule();
+            Assert.NotNull( hr );
+            var br = new LineBreak();
+            Assert.NotNull( br );
+        }
+
+        public void AssertElement( IElement element )
+        {
+            Assert.NotNull( element );
+        }
     }
 }

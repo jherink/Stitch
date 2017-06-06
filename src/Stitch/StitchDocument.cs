@@ -18,26 +18,27 @@ namespace Stitch
 {
     public class StitchDocument : IEnumerable<IPage>
     {
-        private readonly IHtmlElement Page;
+        private readonly IHtmlElement Root;
 
         private readonly ThemeCssResourceLoader themeResourceLoader = new ThemeCssResourceLoader();
         private readonly WidgetCssResourceLoader widgetResourceLoader = new WidgetCssResourceLoader();
 
         public Theme Theme { get; private set; }
+        public IIDFactory IDFactory { get; set; } = new IDFactory();
 
         public IHeadElement Head
         {
-            get { return Page.Head; }
+            get { return Root.Head; }
         }
 
         public IBodyElement Body
         {
             get
             {
-                return Page.Body;
+                return Root.Body;
             }
         }
-
+        
         private IStyleElement CustomStyles;
         private IStyleElement ActiveTheme;
 
@@ -47,9 +48,10 @@ namespace Stitch
 
         public StitchDocument()
         {
-            Page = new Html();
-            Page.Children.Add( new Head() ); // add a head
-            Page.Children.Add( new Body() ); // and a body to the page.
+            Root = new Html();
+            Root.Children.Add( new Head() ); // add a head
+            Root.Children.Add( new Body() ); // and a body to the page.
+            Body.Children.Add( PageContainer ); // add container for pages.
             Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName; // set to current culture.
             Margin = new Margin( .5, .5, .5, .5 ) { MarginUnit = MarginUnit.Inches };
 
@@ -74,7 +76,8 @@ namespace Stitch
 
         #region Page Functions
 
-        private List<IPage> Pages = new List<IPage>();
+        private readonly List<IPage> Pages = new List<IPage>();
+        private readonly IDivElement PageContainer = new Div() { ID = "pages" };
 
         /// <summary>
         /// The paper size of the pages in this document.
@@ -87,13 +90,17 @@ namespace Stitch
         /// </summary>
         /// <param name="pageNumber"></param>
         /// <returns></returns>
-        public IPage this[int pageNumber]
+        public IPage this[int pageIndex]
         {
             get
             {
-                foreach (var pg in Pages) if (pg.PageNumber == pageNumber) return pg;
-                return default( IPage );
+                return Pages[pageIndex];
             }
+        }
+
+        public IPage GetPage( int pageNumber )
+        {
+            return Pages.FirstOrDefault( t => t.PageNumber == pageNumber );
         }
 
         /// <summary>
@@ -107,7 +114,7 @@ namespace Stitch
         /// <returns>The page.</returns>
         public IPage CreatePage()
         {
-            var page = new Page() { PageNumber = Pages.Count + 1, PageSize = PaperSize.ANSI_A };
+            var page = new Page() { PageNumber = Pages.Count + 1, PageSize = PaperSize.ANSI_A, ID = IDFactory.GetId() };
             AddPage( page );
             return page;
         }
@@ -121,35 +128,11 @@ namespace Stitch
         {
             page.Margin = this.Margin.Clone() as Margin;
             page.PageNumber = pageNumber; // make sure they match.
+            var pageIndex = pageNumber - 1;
 
-            // insert into page body.
-            if (pageNumber <= 1)
-            { // insert at front
-                Pages.Insert( pageNumber - 1, page );
-                Body.Children.Insert( pageNumber - 1, page );
-            }
-            else if (pageNumber >= PageCount)
-            { // at end
-                Pages.Add( page );
-                Body.Children.Add( page );
-            }
-            else
-            { // in middle
-                for (int i = 0; i < Body.Children.Count; i++)
-                {
-                    if (Body.Children[i] is IPage &&
-                       (Body.Children[i] as IPage).PageNumber == pageNumber)
-                    { // if it's the correct page.
-                        Body.Children.Insert( i, page );
-                    }
-                }
-                Pages.Insert( pageNumber - 1, page );
-            }
-
-            //for (int i = pageNumber + 1; i < Pages.Count; i++)
-            //{ // correct page numbering.
-            //    Pages[i].PageNumber = pageNumber + 1;
-            //}
+            Pages.Insert( pageIndex, page );
+            PageContainer.Children.Insert( pageIndex, page );
+            
             // remove page class on last page only & correct page numberings.
             for (int i = 0; i < Pages.Count; i++)
             {
@@ -173,11 +156,11 @@ namespace Stitch
             if (pg != default( IPage ))
             {
                 Pages.Remove( pg );
-                Body.Children.Remove( pg );
+                PageContainer.Children.Remove( pg );
             }
-            for (int i = 1; i <= PageCount; i++)
+            for (int i = 0; i < PageCount; i++)
             {
-                Pages[i - 1].PageNumber = i; // correct page numberings.
+                Pages[i].PageNumber = i + 1; // correct page numberings.
             }
         }
 
@@ -187,15 +170,8 @@ namespace Stitch
         /// <param name="page"></param>
         public void AddPage( IPage page )
         {
-            InsertPage( page, Math.Max( PageCount, 1 ) );
+            InsertPage( page, PageCount + 1 );
         }
-
-        //public IDivElement AddBodyContainer()
-        //{
-        //    var div = new Div( true );
-        //    Body.Children.Add( div );
-        //    return div;
-        //}
 
         #endregion
 
@@ -206,13 +182,13 @@ namespace Stitch
         public void Add( params IElement[] elements )
         {
             //foreach (var element in elements) Body.Children.Add( element );
-            var lp = this[PageCount];
+            var lp = PageCount > 0 ? this[PageCount - 1] : null;
             foreach (var element in elements)
             {
                 if (element is IPage)
                 {
                     AddPage( element as IPage );
-                    lp = this[PageCount];
+                    lp = this[PageCount - 1];
                 }
                 else
                 {
@@ -245,13 +221,6 @@ namespace Stitch
                 CustomStyles.StyleSheet.Rules.Add( rule );
             }
         }
-
-        //public void InsertPageBreak()
-        //{
-        //    var last = Body.Children.Last();
-        //    if (last is IDivElement && last.ClassList.Contains( "w3-container" )) last = (last as IDivElement).Children.Last();
-        //    InsertPageBreak( last );
-        //}
 
         public void SetTheme( StyleSheet newTheme )
         {
@@ -297,7 +266,7 @@ namespace Stitch
 
         public string Render()
         {
-            var allNodes = Page.GetAllNodes();
+            var allNodes = Root.GetAllNodes();
             var nodes = allNodes.Select( t => t.Tag ).Distinct();
             var classes = new List<string>();
             foreach (var node in allNodes)

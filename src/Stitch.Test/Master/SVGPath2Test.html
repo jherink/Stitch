@@ -21,23 +21,25 @@ html{ overflow-x:hidden; }
 		<style type="text/css"></style>
 	</head>
 	<body>
-		<div id="b" class="ansi-a" style="margin:0.5in 0.5in 0.5in 0.5in;" page-number="1">
-			<svg height="400" width="450">
-				<path d="M100 350 l150 -300" id="lineAB" style="fill:none;stroke:red;stroke-width:3;" />
-				<path d="M250 50 l150 300" id="lineBC" style="fill:none;stroke:red;stroke-width:3;" />
-				<path d="M175 200 l150 0" style="fill:none;stroke:green;stroke-width:3;" />
-				<path d="M100 350 q150 -300 300 0" style="fill:none;stroke:blue;stroke-width:5;" />
-				<g style="fill:black;stroke:black;stroke-width:3;">
-					<circle cx="100" cy="350" r="3" id="pointA" />
-					<circle cx="250" cy="50" r="3" id="pointB" />
-					<circle cx="400" cy="350" r="3" id="pointC" />
-				</g>
-				<g style="font-size:30;font-family:sans-serif;text-anchor:middle;fill:black;stroke:none;">
-					<text x="100" y="350" dx="-30">A</text>
-					<text x="250" y="50" dy="-10">B</text>
-					<text x="400" y="350" dx="30">C</text>
-				</g>
-			</svg>
+		<div id="pages">
+			<div id="a" class="ansi-a" style="margin:0.5in 0.5in 0.5in 0.5in;" page-number="1">
+				<svg height="400" width="450">
+					<path d="M100 350 l150 -300" id="lineAB" style="fill:none;stroke:red;stroke-width:3;" />
+					<path d="M250 50 l150 300" id="lineBC" style="fill:none;stroke:red;stroke-width:3;" />
+					<path d="M175 200 l150 0" style="fill:none;stroke:green;stroke-width:3;" />
+					<path d="M100 350 q150 -300 300 0" style="fill:none;stroke:blue;stroke-width:5;" />
+					<g style="fill:black;stroke:black;stroke-width:3;">
+						<circle cx="100" cy="350" r="3" id="pointA" />
+						<circle cx="250" cy="50" r="3" id="pointB" />
+						<circle cx="400" cy="350" r="3" id="pointC" />
+					</g>
+					<g style="font-size:30;font-family:sans-serif;text-anchor:middle;fill:black;stroke:none;">
+						<text x="100" y="350" dx="-30">A</text>
+						<text x="250" y="50" dy="-10">B</text>
+						<text x="400" y="350" dx="30">C</text>
+					</g>
+				</svg>
+			</div>
 		</div>
 	</body>
 </html>

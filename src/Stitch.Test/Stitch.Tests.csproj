@@ -77,7 +77,6 @@
     <Compile Include="ContentStringTests.cs" />
     <Compile Include="DocumentRenderTests.cs" />
     <Compile Include="DOMStringTests.cs" />
-    <Compile Include="ElementFactoryTests.cs" />
     <Compile Include="ElementTests.cs" />
     <Compile Include="FormattedElementTests.cs" />
     <Compile Include="IntegrationHelpers.cs" />

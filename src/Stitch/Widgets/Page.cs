@@ -71,7 +71,6 @@ namespace Stitch
 
         public Page()
         {
-            ID = IDFactory.GetElementId();
             ClassList.Add( "page" );
             Attributes.Add( "page-number", "0" );
         }
