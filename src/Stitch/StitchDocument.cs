@@ -74,6 +74,17 @@ namespace Stitch
             CreatePage(); // create first page.
         }
 
+        public TableOfContents AddTableOfContents()
+        {
+            var toc = new TableOfContents()
+            {
+                PageSize = PaperSize.ANSI_A,
+                ID = IDFactory.GetId()
+            };
+            InsertPage( toc, 1 );
+            return toc;
+        }
+
         #region Page Functions
 
         private readonly List<IPage> Pages = new List<IPage>();

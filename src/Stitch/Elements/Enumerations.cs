@@ -19,7 +19,7 @@ namespace Stitch.Elements
     };
 
     public enum OrderedListStyleType
-    {
+    {        
         [SetStyleType( "1" )]
         Numbered,
         [SetStyleType( "A" )]
@@ -29,7 +29,9 @@ namespace Stitch.Elements
         [SetStyleType( "I" )]
         UppercaseRomanNumeral,
         [SetStyleType( "i" )]
-        LowercaseRomanNumeral
+        LowercaseRomanNumeral,
+        [SetStyleType( "none" )]
+        None,
     };
 
     public enum HeadingLevel
