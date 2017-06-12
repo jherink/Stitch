@@ -1,10 +1,14 @@
-﻿.page { page-break-after: always }
+﻿/* Pages */
+.page { page-break-after: always }
 .page-width { width: 100%; }
+
+/* Table of Contents */
 .toc-link { padding-top: 4px; padding-bottom: 4px; }
 .toc-link a { text-decoration: none; }
 
 
-/* Dimensions snarfed from here: http://resources.printhandbook.com/pages/paper-size-chart.php */
+/* Paper Sizes
+   Dimensions snarfed from here: http://resources.printhandbook.com/pages/paper-size-chart.php */
 
 /* International A paper sizes */
 .a0 { /*height: 841mm;*/ width: 1189mm; }

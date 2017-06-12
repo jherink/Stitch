@@ -10,9 +10,10 @@ using Stitch.Elements.Interface;
 using System.Globalization;
 using System.Xml;
 using Stitch.Export;
-using Stitch.Themes;
 using System.Collections;
 using Stitch.Widgets;
+using Stitch.Attributes;
+using Stitch.Loaders;
 
 namespace Stitch
 {
@@ -22,6 +23,7 @@ namespace Stitch
 
         private readonly ThemeCssResourceLoader themeResourceLoader = new ThemeCssResourceLoader();
         private readonly WidgetCssResourceLoader widgetResourceLoader = new WidgetCssResourceLoader();
+        private readonly StitchCssResourceLoader stitchResourceLoader = new StitchCssResourceLoader();
 
         public Theme Theme { get; private set; }
         public IIDFactory IDFactory { get; set; } = new IDFactory();
@@ -62,8 +64,10 @@ namespace Stitch
 
             // add w3 resource.
             Head.Styles.Add( new Style() { StyleSheet = themeResourceLoader.LoadTheme( "w3" ) } );
+            // add w3 resource.
+            Head.Styles.Add( new Style() { StyleSheet = stitchResourceLoader.LoadTheme( "stitch" ) } );
             // add paper size resource
-            Head.Styles.Add( new Style() { StyleSheet = widgetResourceLoader.LoadWidget( "paper-sizes" ) } );
+            Head.Styles.Add( new Style() { StyleSheet = widgetResourceLoader.LoadWidget( "widgets" ) } );
 
             SetTheme( Theme.Blue );
 

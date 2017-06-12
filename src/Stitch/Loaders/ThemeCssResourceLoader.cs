@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stitch.Themes
+namespace Stitch.Loaders
 {
     internal class ThemeCssResourceLoader : CssResourceLoader
     {
