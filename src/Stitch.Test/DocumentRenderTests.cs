@@ -497,7 +497,7 @@ namespace Stitch.Tests
             var toc = doc.AddTableOfContents();
 
             doc[1].Add( new Paragraph("page 2") );
-            doc[1].StyleList.Add( "height", "600px" );
+            doc[1].StyleList.Add( "height", "600px" ); 
             toc.AddTOCLink( doc[1] );
 
             var pg = doc.CreatePage();
