@@ -1,4 +1,6 @@
-﻿namespace Stitch
+﻿using Stitch.Attributes;
+
+namespace Stitch
 {
     public enum PaperSize
     {
