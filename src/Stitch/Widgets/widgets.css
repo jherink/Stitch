@@ -3,8 +3,51 @@
 .page-width { width: 100%; }
 
 /* Table of Contents */
-.toc-link { padding-top: 4px; padding-bottom: 4px; }
-.toc-link a { text-decoration: none; }
+/*.toc-link { padding-top: 4px; padding-bottom: 4px; }
+.toc-link a { text-decoration: none; overflow: hidden; padding: 0; overflow-x: hidden; }
+.toc-link li:before {
+    float: left;
+    width: 0;
+    white-space: nowrap;
+    content:
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "}
+    .toc-link a span:first-child {
+        padding-right:0.33em;
+    }
+    .toc-link a span + span {
+        float:right;
+        padding-left: 0.33em;
+    }*/
+.toc-link {
+overflow-x: hidden;
+padding-top: 4px; padding-bottom: 4px;
+}
+.toc-link a { text-decoration: none;}
+
+.toc-link li:before {
+float: left;
+width: 0;
+white-space: nowrap;
+content:
+". . . . . . . . . . . . . . . . . . . . "
+". . . . . . . . . . . . . . . . . . . . "
+". . . . . . . . . . . . . . . . . . . . "
+". . . . . . . . . . . . . . . . . . . . "
+}
+
+.toc-link span:first-child {
+padding-right: 0.33em;
+background: white
+}
+
+.toc-link span + span {
+float: right;
+padding-left: 0.33em;
+background: white
+}
 
 
 /* Paper Sizes

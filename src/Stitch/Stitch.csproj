@@ -185,7 +185,6 @@
     <Compile Include="Elements\Interface\TableInterfaces.cs" />
     <Compile Include="Elements\ListElements.cs" />
     <Compile Include="Elements\PageElements.cs" />
-    <Compile Include="Attributes\SetStyleTypeAttribute.cs" />
     <Compile Include="Elements\StyleList.cs" />
     <Compile Include="Elements\SVGElements.cs" />
     <Compile Include="Elements\SVGSupport.cs" />

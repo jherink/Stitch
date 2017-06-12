@@ -211,6 +211,7 @@ namespace Stitch.Elements
             ClassList.Add( StitchCssResourceHelper.GetClass( StyleType ) );
             AppendIdAndClassInfoToTag( builder );
             //builder.AppendLine( $" type=\"{StyleTypeHelper.GetStyleType( StyleType )}\">" );
+            builder.AppendLine( ">" );
             builder.AppendLine( RenderChildren() );
             builder.AppendLine( $"</{Tag}>" );
             return builder.ToString();

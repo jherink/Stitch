@@ -515,7 +515,7 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             var toc = doc.AddTableOfContents();
             doc.AddStyleRule( ".page { min-height: 600px }" );
-            toc.StyleType = OrderedListStyleType.UppercaseLetter;
+            toc.SetStyleType( OrderedListStyleType.UppercaseLetter);
 
             var benifits = doc.CreatePage();
             var getTheTemplate = doc.CreatePage();
@@ -530,8 +530,8 @@ namespace Stitch.Tests
             spacing.Add( new Paragraph( "line spacing &amp; margins &amp; footnotes/endpoints &amp; page numbers" ) );
             styles.Add( new Paragraph( "styles" ) );
 
-            toc.AddTOCCategory( "Getting Started" );
-            toc.AddTOCCategory( "Using the Template" );
+            toc.AddTOCCategory( "Getting Started", benifits );
+            toc.AddTOCCategory( "Using the Template", templatePage );
 
             toc.AddTOCLinkToCategory( "Getting Started", "Benefits", benifits );
             toc.AddTOCLinkToCategory( "Getting Started", "Word Versions", benifits );
