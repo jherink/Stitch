@@ -87,6 +87,16 @@ namespace Stitch.Tests
             SaveToTemp( name.Remove( name.Length - ".pdf".Length ), doc, ignoreRegression );
         }
 
+        public static void ExportWordToTemp( string name, StitchDocument doc, bool ignoreRegression = false )
+        {
+            if (!name.EndsWith( ".docx" )) name += ".docx";
+
+            var path = Path.Combine( EnsuredTempDirectory(), name );
+            doc.Export( new MSWordExporter(), File.Create( path ) );
+
+            SaveToTemp( name.Remove( name.Length - ".docx".Length ), doc, ignoreRegression );
+        }
+
         public static string CreateLocalResource( string resourcePath )
         {
             var newPath = Path.Combine( EnsuredTempDirectory(), Path.GetFileName( resourcePath ) );

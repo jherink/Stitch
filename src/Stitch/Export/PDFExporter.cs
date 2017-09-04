@@ -11,7 +11,7 @@ namespace Stitch.Export
     /// <summary>
     /// HTML to PDF exporter using WkHtmlToPdf.
     /// </summary>
-    public class PDFExporter : IExporter
+    public sealed class PDFExporter : IExporter
     {
         public byte[] Export( string content )
         {

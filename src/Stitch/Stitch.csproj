@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Export\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlToOpenXml, Version=1.6.1.0, Culture=neutral, PublicKeyToken=6ad79d83e2b60e63, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Export\HtmlToOpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -40,9 +48,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\StitchCssResourceAttribute.cs" />
+    <Compile Include="Export\MSWordExporter.cs" />
     <Compile Include="Loaders\CssResourceLoader.cs" />
     <Compile Include="Chart\AxisChart.cs" />
     <Compile Include="Chart\Axis\Algorithms\ITickAlgorithm.cs" />
@@ -215,6 +225,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\README.txt" />
+    <Content Include="Export\DocumentFormat.OpenXml.dll" />
+    <Content Include="Export\HtmlToOpenXml.dll" />
     <EmbeddedResource Include="stitch.css" />
     <EmbeddedResource Include="Widgets\widgets.css" />
     <EmbeddedResource Include="Export\wkhtmltopdf.exe" />
