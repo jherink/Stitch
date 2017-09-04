@@ -24,11 +24,11 @@ namespace Stitch.Elements.Interface
         OrderedListStyleType StyleType { get; set; }
     }
 
-    public interface IDescriptionList : IListElement
+    public interface IDescriptionList : IParentElement
     {
     }
 
-    public interface IListItemElement : IElement
+    public interface IListItemElement : IParentElement
     {
         DOMString Content { get; set; }
     }

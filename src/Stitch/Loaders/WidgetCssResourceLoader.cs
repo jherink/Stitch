@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stitch.Widgets
+namespace Stitch.Loaders
 {
     internal class WidgetCssResourceLoader : CssResourceLoader
     {

@@ -23,6 +23,12 @@ namespace Stitch.Elements
         /// Formatted text for plain text to be rendered.
         /// <param name="text">The text to render.</param>
         /// </summary>
+        public PlainText( object text ) : base( text.ToString() ) { }
+
+        /// <summary>
+        /// Formatted text for plain text to be rendered.
+        /// <param name="text">The text to render.</param>
+        /// </summary>
         public PlainText( string text ) : base( text ) { }
 
         /// <summary>

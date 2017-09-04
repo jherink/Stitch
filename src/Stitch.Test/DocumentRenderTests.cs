@@ -6,6 +6,7 @@ using Stitch.Elements.Interface;
 using System.Linq;
 using Stitch.Chart;
 using System.Data;
+using Stitch.Widgets;
 
 namespace Stitch.Tests
 {
@@ -468,7 +469,7 @@ namespace Stitch.Tests
             var ids2 = new[] { "a", "d", "b", "c", "e" };
             var doc = new StitchDocument();
 
-            var checkPages = new Action<int, string[]>( (pages, _ids) =>
+            var checkPages = new Action<int, string[]>( ( pages, _ids ) =>
              {
                  Assert.Equal( pages, doc.PageCount );
                  for (int i = 0; i < doc.PageCount; i++)
@@ -487,6 +488,87 @@ namespace Stitch.Tests
             checkPages( 4, ids2 );
             doc.CreatePage();
             checkPages( 5, ids2 );
+        }
+
+        [Fact( DisplayName = "TOCWidgetTest1" )]
+        public void TOCWidgetTest1()
+        {
+            var doc = new StitchDocument();
+            var toc = doc.AddTableOfContents();
+
+            doc[1].Add( new Paragraph( "page 2" ) );
+            doc[1].StyleList.Add( "height", "600px" );
+            toc.AddTOCLink( doc[1] );
+
+            var pg = doc.CreatePage();
+            pg.StyleList.Add( "height", "600px" );
+            pg.Add( new Paragraph( "page 3" ) );
+            toc.AddTOCLink( pg );
+
+            IntegrationHelpers.ExportPdfToTemp( "TOCWidgetTest1", doc, true );
+        }
+
+        [Fact( DisplayName = "TOC9Test" )]
+        public void TOC9Test()
+        {
+            // Sample from: http://www.makeuseof.com/tag/10-best-table-contents-templates-microsoft-word/
+            var doc = new StitchDocument();
+            var toc = doc.AddTableOfContents();
+            doc.AddStyleRule( ".page { min-height: 600px }" );
+            toc.SetStyleType( OrderedListStyleType.UppercaseLetter );
+
+            var benifits = doc.CreatePage();
+            var getTheTemplate = doc.CreatePage();
+
+            var templatePage = doc.CreatePage();
+            var spacing = doc.CreatePage();
+            var styles = doc.CreatePage();
+
+            benifits.Add( new Paragraph( "Benefits &amp; Word Versions" ) );
+            getTheTemplate.Add( new Paragraph( "Get the template" ) );
+            templatePage.Add( new Paragraph( "Sample text &amp; Arrangement of your ETDR &amp; Basic formatting requirements &amp; fonts" ) );
+            spacing.Add( new Paragraph( "line spacing &amp; margins &amp; footnotes/endpoints &amp; page numbers" ) );
+            styles.Add( new Paragraph( "styles" ) );
+
+            toc.AddTOCCategory( "Getting Started", benifits );
+            toc.AddTOCCategory( "Using the Template", templatePage );
+
+            toc.AddTOCLinkToCategory( "Getting Started", "Benefits", benifits );
+            toc.AddTOCLinkToCategory( "Getting Started", "Word Versions", benifits );
+            toc.AddTOCLinkToCategory( "Getting Started", "Get the Template", getTheTemplate );
+            toc.AddTOCLinkToCategory( "Using the Template", "Sample text", templatePage );
+            toc.AddTOCLinkToCategory( "Using the Template", "Arrangement of your ETDR", templatePage );
+            toc.AddTOCLinkToCategory( "Using the Template", "Basic formatting requirements", templatePage );
+            toc.AddTOCLinkToCategory( "Using the Template", "Styles", styles );
+
+
+            IntegrationHelpers.ExportPdfToTemp( "TOC9Test", doc, true );
+        }
+
+        [Fact ( DisplayName = "TOC3Test")]
+        public void TOC3Test()
+        {
+            // Sample from: http://www.makeuseof.com/tag/10-best-table-contents-templates-microsoft-word/
+            var doc = new StitchDocument();
+            var toc = doc.TableOfContents;
+            toc.SetStyleType( OrderedListStyleType.None );
+
+            var _abstract = doc.CreatePage();
+            var acknowledgements = doc.CreatePage();
+            var listOfTables = doc.CreatePage();
+            var tableOfFigures = doc.CreatePage();
+            var chapter1 = doc.CreatePage();
+
+            toc.AddTOCLink( "ABSTRACT", _abstract );
+            toc.AddTOCLink( "ACKNOWLEDGMENTS", acknowledgements );
+            toc.AddTOCLink( "LIST OF TABLES", listOfTables );
+            toc.AddTOCLink( "LIST OF FITURES", tableOfFigures );
+            toc.AddTOCLink( "CHAPTER I: Introduction", chapter1 );
+
+            doc.SetPageHeight( 600 );
+
+            IntegrationHelpers.ExportPdfToTemp( "TOC3Test", doc, true );
+
         }
     }
 }

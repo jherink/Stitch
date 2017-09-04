@@ -1,6 +1,62 @@
-﻿.page { page-break-after: always }
+﻿/* Pages */
+.page { page-break-after: always }
+.page-width { width: 100%; }
 
-/* Dimensions snarfed from here: http://resources.printhandbook.com/pages/paper-size-chart.php */
+/* Table of Contents */
+/*.toc-link { padding-top: 4px; padding-bottom: 4px; }
+.toc-link a { text-decoration: none; overflow: hidden; padding: 0; overflow-x: hidden; }
+.toc-link li:before {
+    float: left;
+    width: 0;
+    white-space: nowrap;
+    content:
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "}
+    .toc-link a span:first-child {
+        padding-right:0.33em;
+    }
+    .toc-link a span + span {
+        float:right;
+        padding-left: 0.33em;
+    }*/
+.toc-link {
+overflow-x: hidden;
+padding-top: 4px; padding-bottom: 4px;
+}
+.toc-link a, .toc-link-alone a { text-decoration: none;}
+
+.toc-link li:before {
+float: left;
+width: 0;
+white-space: nowrap;
+content:
+". . . . . . . . . . . . . . . . . . . . "
+". . . . . . . . . . . . . . . . . . . . "
+". . . . . . . . . . . . . . . . . . . . "
+". . . . . . . . . . . . . . . . "
+}
+
+.toc-link-alone {
+    padding: 0;
+    margin: 0;    
+}
+
+.toc-link span:first-child {
+padding-right: 0.33em;
+background: white
+}
+
+.toc-link span + span {
+float: right;
+padding-left: 0.33em;
+background: white
+}
+
+
+/* Paper Sizes
+   Dimensions snarfed from here: http://resources.printhandbook.com/pages/paper-size-chart.php */
 
 /* International A paper sizes */
 .a0 { /*height: 841mm;*/ width: 1189mm; }

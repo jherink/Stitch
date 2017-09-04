@@ -1,7 +1,7 @@
 ﻿using Stitch.CSS;
 using System.IO;
 
-namespace Stitch
+namespace Stitch.Loaders
 {
     internal abstract class CssResourceLoader
     {

@@ -6,6 +6,7 @@ using System.Linq;
 using Xunit;
 using System.IO;
 using Stitch.CSS;
+using Stitch.Attributes;
 
 namespace Stitch.Tests
 {
@@ -159,11 +160,11 @@ namespace Stitch.Tests
             }
         }
 
-        [Fact( DisplayName = "SetStyleTypeAttributeHelperTests" )]
-        public void SetStyleTypeAttributeHelperTests()
-        {
-            Assert.Equal( "1", StyleTypeHelper.GetStyleType( OrderedListStyleType.Numbered ) );
-        }
+        //[Fact( DisplayName = "SetStyleTypeAttributeHelperTests" )]
+        //public void SetStyleTypeAttributeHelperTests()
+        //{
+        //    Assert.Equal( "1", StyleTypeHelper.GetStyleType( OrderedListStyleType.Numbered ) );
+        //}
 
         [Fact( DisplayName = "LabelTests" )]
         public void LabelTests()
