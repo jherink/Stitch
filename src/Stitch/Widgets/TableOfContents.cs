@@ -132,9 +132,9 @@ namespace Stitch.Widgets
         public TableOfContentsCategory GetCategory( string categoryName )
         {
             var e = FindById( $"toc-category-{categoryName.Replace( " ", "-" )}" );
-            return e != default( IElement ) ? e as TableOfContentsCategory : default(TableOfContentsCategory);
+            return e != default( IElement ) ? e as TableOfContentsCategory : default( TableOfContentsCategory );
         }
-        
+
         public void AddTOCLink( IPage page )
         {
             AddTOCLink( new TableOfContentsLink( page ) );
@@ -147,14 +147,15 @@ namespace Stitch.Widgets
 
         public void AddTOCLink( TableOfContentsLink link )
         {
-            var li = new ListItemElement();
-            li.Children.Add( link );
-            _toc.Children.Add( li );
+            var ol = new OrderedList( OrderedListStyleType.None );
+            ol.ClassList.Add( "toc-link-alone" );
+            ol.Children.Add( link );
+            _toc.Children.Add( ol );            
         }
 
         public void AddTOCLinkToCategory( string categoryName, TableOfContentsLink link )
         {
-            var category = GetCategory(categoryName);
+            var category = GetCategory( categoryName );
             if (category != null)
             {
                 var pCategory = category as TableOfContentsCategory;

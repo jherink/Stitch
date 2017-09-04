@@ -25,7 +25,7 @@
 overflow-x: hidden;
 padding-top: 4px; padding-bottom: 4px;
 }
-.toc-link a { text-decoration: none;}
+.toc-link a, .toc-link-alone a { text-decoration: none;}
 
 .toc-link li:before {
 float: left;
@@ -35,7 +35,12 @@ content:
 ". . . . . . . . . . . . . . . . . . . . "
 ". . . . . . . . . . . . . . . . . . . . "
 ". . . . . . . . . . . . . . . . . . . . "
-". . . . . . . . . . . . . . . . . . . . "
+". . . . . . . . . . . . . . . . "
+}
+
+.toc-link-alone {
+    padding: 0;
+    margin: 0;    
 }
 
 .toc-link span:first-child {

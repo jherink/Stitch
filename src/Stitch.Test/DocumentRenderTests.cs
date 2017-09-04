@@ -469,7 +469,7 @@ namespace Stitch.Tests
             var ids2 = new[] { "a", "d", "b", "c", "e" };
             var doc = new StitchDocument();
 
-            var checkPages = new Action<int, string[]>( (pages, _ids) =>
+            var checkPages = new Action<int, string[]>( ( pages, _ids ) =>
              {
                  Assert.Equal( pages, doc.PageCount );
                  for (int i = 0; i < doc.PageCount; i++)
@@ -496,7 +496,7 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             var toc = doc.AddTableOfContents();
 
-            doc[1].Add( new Paragraph("page 2") );
+            doc[1].Add( new Paragraph( "page 2" ) );
             doc[1].StyleList.Add( "height", "600px" );
             toc.AddTOCLink( doc[1] );
 
@@ -515,7 +515,7 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             var toc = doc.AddTableOfContents();
             doc.AddStyleRule( ".page { min-height: 600px }" );
-            toc.SetStyleType( OrderedListStyleType.UppercaseLetter);
+            toc.SetStyleType( OrderedListStyleType.UppercaseLetter );
 
             var benifits = doc.CreatePage();
             var getTheTemplate = doc.CreatePage();
@@ -543,6 +543,32 @@ namespace Stitch.Tests
 
 
             IntegrationHelpers.ExportPdfToTemp( "TOC9Test", doc, true );
+        }
+
+        [Fact ( DisplayName = "TOC3Test")]
+        public void TOC3Test()
+        {
+            // Sample from: http://www.makeuseof.com/tag/10-best-table-contents-templates-microsoft-word/
+            var doc = new StitchDocument();
+            var toc = doc.TableOfContents;
+            toc.SetStyleType( OrderedListStyleType.None );
+
+            var _abstract = doc.CreatePage();
+            var acknowledgements = doc.CreatePage();
+            var listOfTables = doc.CreatePage();
+            var tableOfFigures = doc.CreatePage();
+            var chapter1 = doc.CreatePage();
+
+            toc.AddTOCLink( "ABSTRACT", _abstract );
+            toc.AddTOCLink( "ACKNOWLEDGMENTS", acknowledgements );
+            toc.AddTOCLink( "LIST OF TABLES", listOfTables );
+            toc.AddTOCLink( "LIST OF FITURES", tableOfFigures );
+            toc.AddTOCLink( "CHAPTER I: Introduction", chapter1 );
+
+            doc.SetPageHeight( 600 );
+
+            IntegrationHelpers.ExportPdfToTemp( "TOC3Test", doc, true );
+
         }
     }
 }

@@ -40,7 +40,20 @@ namespace Stitch
                 return Root.Body;
             }
         }
-        
+
+        private TableOfContents _toc;
+        public TableOfContents TableOfContents
+        {
+            get
+            {
+                if (_toc == null)
+                {
+                    _toc = AddTableOfContents();
+                }
+                return _toc;
+            }
+        }
+
         private IStyleElement CustomStyles;
         private IStyleElement ActiveTheme;
 
@@ -80,13 +93,16 @@ namespace Stitch
 
         public TableOfContents AddTableOfContents()
         {
-            var toc = new TableOfContents()
+            if (_toc == null)
             {
-                PageSize = PaperSize.ANSI_A,
-                ID = IDFactory.GetId()
-            };
-            InsertPage( toc, 1 );
-            return toc;
+                _toc = new TableOfContents()
+                {
+                    PageSize = PaperSize.ANSI_A,
+                    ID = IDFactory.GetId()
+                };
+                InsertPage( _toc, 1 );
+            }
+            return _toc;
         }
 
         #region Page Functions
@@ -149,7 +165,7 @@ namespace Stitch
 
             Pages.Insert( pageIndex, page );
             PageContainer.Children.Insert( pageIndex, page );
-            
+
             // remove page class on last page only & correct page numberings.
             for (int i = 0; i < Pages.Count; i++)
             {
@@ -274,6 +290,16 @@ namespace Stitch
             var newTheme = themeResourceLoader.LoadTheme( resource );
 
             SetTheme( newTheme );
+        }
+
+        public void SetPageHeight( int pageHeightInPixels )
+        {
+            AddStyleRule( $".page {{ min-height: {pageHeightInPixels}px }}");
+        }
+         
+        public void SetPageWidth( int pageWidthInPixels )
+        {
+            AddStyleRule( $".page {{ min-width: {pageWidthInPixels}px }}" );
         }
 
         public IElement Find( string id )
