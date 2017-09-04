@@ -433,6 +433,79 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "ExportTest01", doc );
         }
 
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void ExportTest02()
+        {
+            var doc = new StitchDocument();
+            var container = doc[0];
+            container.Children.Add( new Heading( HeadingLevel.H3, "Total Beverage Amounts" ) );
+            container.Children.Add( new HorizontalRule() );
+
+            var salesData = IntegrationHelpers.GetSalesByCategory( "Beverages" );
+            var chart = new PieChart( 400, 800 );
+            chart.LegendPosition = LegendPosition.Right;
+            foreach (DataRow row in salesData.Rows)
+            {
+                chart.AddSlice( row["Product Name"] as string, double.Parse( row["Total Purchase"].ToString() ) );
+            }
+            container.Children.Add( chart );
+            container.Children.Add( new Table( salesData ) );
+
+            IntegrationHelpers.ExportWordToTemp( "ExportTest02", doc, true );
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        public void ExportTest03()
+        {
+            var doc = new StitchDocument();
+            doc.AddStyleRule( ".limitedTable { max-width: 400px; }" );
+            doc.AddStyleRule( "table { margin-top: 25px !important, margin-bottom: 25px !important }" );
+            doc.AddStyleRule( "body, table, tr, td { font-size: 12 !important }" );
+            var container = doc[0];
+
+            container.Children.Add( new Div( new Bold( "DESIGN CRITERIA" ) ) );
+            container.Children.Add( new HorizontalRule() );
+
+            //var table = ElementFactory.CreateTable();
+            var table = new Table();
+            table.ClassList.Remove( "w3-table-all" );
+            var row = table.CreateRow( "DESIGN CODE", "AASHTO-2015", "FATIGUE CATEGORY", "1" );
+            row = table.CreateRow( "ULTIMATE WIND SPEED (MPH)", 115, "TRUCK GUST", "NO" );
+            row = table.CreateRow( "MEAN RECURRENCE INTERVAL", 700, "GALLOPING", "NO" );
+            row = table.CreateRow( "SERVICE WIND SPEED (MPH)", 115, "NATURAL WIND GUST", "NO" );
+            row = table.CreateRow( "AASHTO ICE INCLUDED ?", "YES" );
+            row = table.CreateRow( "ELEVATION OF FOUNDATION", 0.0 );
+            row = table.CreateRow( "ABOVE SURROUNDING TERRAIN (FT)" );
+            row[0].ColSpan = 4;
+
+            container.Children.Add( new Div( table ) );
+            container.Children.Add( new Div( new Bold( "DESIGN SUMMARY - POLE" ) ) );
+            container.Children.Add( new HorizontalRule() );
+
+            table = new Table( "HEIGHT(FT)", "SHAFT WEIGHT (LBS)", "GROUND LINE DIAMETER (IN)", "TOP DIAMETER (IN)" );
+            table.ClassList.Remove( "w3-table-all" );
+            container.Children.Add( new Div( table ) );
+            table.CreateRow( 30.0, 414, 9.00, 4.80 );
+
+            container.Children.Add( new Div( new Bold( "SECTION CHARACTERISTICS" ) ) );
+            container.Children.Add( new HorizontalRule() );
+            table = new Table( string.Empty, "SECTION - 1" );
+            table.ClassList.Remove( "w3-table-all" );
+            table.ClassList.Add( "limitedTable" );
+            table.CreateRow( "SHAPE", "4W FLUTES" );
+            table.CreateRow( "TOP DIAMETER(IN)", 4.80 );
+            table.CreateRow( "BASE DIAMTER (IN)", 9.0 );
+            table.CreateRow( "THICKNESS (IN)", 0.17930 );
+            table.CreateRow( "LENGTH (FT)", 30 );
+            table.CreateRow( "WEIGHT (LBS)", 414 );
+            table.CreateRow( "TAPER (IN/FT)", .14 );
+            table.CreateRow( "YIELD STRENGTH(KSI)", 55 );
+            table.CreateRow( "MATERIAL", "S105-55" );
+            container.Children.Add( new Div( table ) );
+
+            IntegrationHelpers.ExportWordToTemp( "ExportTest03", doc, true );
+        }
+
         [Fact( DisplayName = "PageTest" )]
         public void PageTest()
         {
