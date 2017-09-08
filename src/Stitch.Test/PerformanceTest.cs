@@ -1,16 +1,15 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stitch.Elements;
 using System.Collections.Generic;
 using System.Linq;
 using Stitch.Elements.Interface;
+using Xunit;
 
 namespace Stitch.Tests
 {
-    [TestClass]
     public class PerformanceTest
     {
-        [TestMethod]
+        [Fact]
         public void ManyElementTest()
         {
             var runs = new List<double>();
@@ -26,7 +25,7 @@ namespace Stitch.Tests
                     doc.Add( new Div() );
                 }
 
-                Assert.IsFalse( string.IsNullOrWhiteSpace( doc.Render() ) );
+                Assert.False( string.IsNullOrWhiteSpace( doc.Render() ) );
                 watch.Stop();
                 runs.Add( watch.ElapsedMilliseconds );
             }
@@ -34,7 +33,7 @@ namespace Stitch.Tests
             Console.WriteLine( $"Average Time {runs.Average()}ms" );
         }
 
-        [TestMethod]
+        [Fact]
         public void DeeplyNestedElementTest()
         {
             var runs = new List<double>();
@@ -54,7 +53,7 @@ namespace Stitch.Tests
                     lastDiv = newDiv;
                 }
 
-                Assert.IsFalse( string.IsNullOrWhiteSpace( doc.Render() ) );
+                Assert.False( string.IsNullOrWhiteSpace( doc.Render() ) );
                 watch.Stop();
                 runs.Add( watch.ElapsedMilliseconds );
             }
@@ -62,7 +61,7 @@ namespace Stitch.Tests
             Console.WriteLine( $"Average Time {runs.Average()}ms" );
         }
 
-        [TestMethod]
+        [Fact]
         public void DeeplyNestedAndManyElementTest()
         {
             var runs = new List<double>();
@@ -84,7 +83,7 @@ namespace Stitch.Tests
                         lastDiv = newDiv;
                     }
                 }
-                Assert.IsFalse( string.IsNullOrWhiteSpace( doc.Render() ) );
+                Assert.False( string.IsNullOrWhiteSpace( doc.Render() ) );
                 watch.Stop();
                 runs.Add( watch.ElapsedMilliseconds );
             }
@@ -92,7 +91,7 @@ namespace Stitch.Tests
             Console.WriteLine( $"Average Time {runs.Average()}ms" );
         }
 
-        [TestMethod]
+        [Fact]
         public void FractalNestedTest()
         {
             var runs = new List<double>();
@@ -107,7 +106,7 @@ namespace Stitch.Tests
                 { // 1000 linear
                     AddChildren( 5, doc.Body ); // should be 120 children
                 }
-                Assert.IsFalse( string.IsNullOrWhiteSpace( doc.Render() ) );
+                Assert.False( string.IsNullOrWhiteSpace( doc.Render() ) );
                 watch.Stop();
                 runs.Add( watch.ElapsedMilliseconds );
             }
