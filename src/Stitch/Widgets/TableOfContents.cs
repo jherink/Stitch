@@ -72,7 +72,7 @@ namespace Stitch.Widgets
     public class TableOfContentsLink : AnchorLinkElement
     {
         public string Label { get; set; }
-        //public readonly IPage PageReference;
+        public readonly IPage PageReference;
         private readonly IListItemElement Item = new ListItemElement();
         private readonly ISpanElement PageNumber = new Span();
 
