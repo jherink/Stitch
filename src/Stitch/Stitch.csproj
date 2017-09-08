@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Attributes\StitchCssResourceAttribute.cs" />
     <Compile Include="Export\MSWordExporter.cs" />
+    <Compile Include="Fonts\OpenTypeParser.cs" />
     <Compile Include="Loaders\CssResourceLoader.cs" />
     <Compile Include="Chart\AxisChart.cs" />
     <Compile Include="Chart\Axis\Algorithms\ITickAlgorithm.cs" />

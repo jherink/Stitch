@@ -12,16 +12,16 @@ namespace Stitch.Elements.Interface
     public interface IListElement : IParentElement
     {
         IEnumerable<IListItemElement> Items { get; }
+        ListStyleType StyleType { get; set; }
     }
 
     public interface IUnorderedListElement : IListElement
     {
-        UnorderedListStyleType StyleType { get; set; }
     }
 
     public interface IOrderedListElement : IListElement
     {
-        OrderedListStyleType StyleType { get; set; }
+        
     }
 
     public interface IDescriptionList : IParentElement

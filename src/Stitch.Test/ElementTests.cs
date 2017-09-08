@@ -163,7 +163,7 @@ namespace Stitch.Tests
         //[Fact( DisplayName = "SetStyleTypeAttributeHelperTests" )]
         //public void SetStyleTypeAttributeHelperTests()
         //{
-        //    Assert.Equal( "1", StyleTypeHelper.GetStyleType( OrderedListStyleType.Numbered ) );
+        //    Assert.Equal( "1", StyleTypeHelper.GetStyleType( ListStyleType.Numbered ) );
         //}
 
         [Fact( DisplayName = "LabelTests" )]
