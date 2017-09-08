@@ -14,6 +14,8 @@ namespace Stitch.Widgets
         private readonly IOrderedListElement CategoryList = new OrderedList();
         public OrderedListStyleType StyleType { get { return CategoryList.StyleType; } set { CategoryList.StyleType = value; } }
 
+        public TableOfContentsCategory() : this( string.Empty ) { }
+
         public TableOfContentsCategory( string label )
         {
             Label = label;
@@ -70,9 +72,11 @@ namespace Stitch.Widgets
     public class TableOfContentsLink : AnchorLinkElement
     {
         public string Label { get; set; }
-        public readonly IPage PageReference;
+        //public readonly IPage PageReference;
         private readonly IListItemElement Item = new ListItemElement();
         private readonly ISpanElement PageNumber = new Span();
+
+        public TableOfContentsLink() : this(string.Empty, null ) { }
 
         public TableOfContentsLink( string label, IPage pageReference )
         {
