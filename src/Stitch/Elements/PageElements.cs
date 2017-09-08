@@ -88,7 +88,7 @@ namespace Stitch.Elements
         public virtual IEnumerable<IElement> GetAllNodes()
         {
             var elements = new List<IElement>();
-            System.Diagnostics.Debug.WriteLine( $"Getting all nodes: {Tag}, Children count: {Children.Count}" );
+            //System.Diagnostics.Debug.WriteLine( $"Getting all nodes: {Tag}, Children count: {Children.Count}" );
             foreach (var child in Children)
             {
                 elements.Add( child );

@@ -88,6 +88,7 @@
     <Compile Include="TickAlgorithmTests.cs" />
     <Compile Include="ThemeTests.cs" />
     <Compile Include="MathTests.cs" />
+    <Compile Include="PerformanceTest.cs" />
     <Compile Include="VectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
