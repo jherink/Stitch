@@ -52,7 +52,6 @@ namespace Stitch.Chart
             Legend.Children.Clear();
             if (LegendPosition != LegendPosition.None)
             {
-                var i = 1;
 
                 double _cx = ChartTextStyle.FontSize / 2, _cy = 0;
                 var minH = GraphicsHelper.MeasureStringHeight( "W", ChartTextStyle );

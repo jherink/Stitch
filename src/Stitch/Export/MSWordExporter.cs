@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 
-using System.IO;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -59,7 +58,6 @@ namespace Stitch.Export
 
                 return generatedDocument.ToArray();
             }
-            return null;
         }
 
         //The base for this method was taken from the CreateDOCX project on openxmldeveloper.org

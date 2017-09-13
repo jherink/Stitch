@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stitch.Chart
+namespace Stitch.StitchMath
 {
     /// <summary>Class for numeric comparisons.</summary>
     internal static class Compare

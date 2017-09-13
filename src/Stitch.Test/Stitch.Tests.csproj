@@ -90,9 +90,13 @@
     <Compile Include="ThemeTests.cs" />
     <Compile Include="MathTests.cs" />
     <Compile Include="PerformanceTest.cs" />
+    <Compile Include="FontTests.cs" />
     <Compile Include="VectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Fonts\Roboto-Black.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Resources\ResourceResolutionResolve\css\testFont.eot" />
     <None Include="Resources\ResourceResolutionResolve\fonts\testFont.eot" />
@@ -251,7 +255,8 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)\Master" "%25temp%25\Stitch\Master" /h/i/c/k/e/r/y
-xcopy "$(ProjectDir)\Data" "%25temp%25\Stitch\Data" /h/i/c/k/e/r/y</PostBuildEvent>
+xcopy "$(ProjectDir)\Data" "%25temp%25\Stitch\Data" /h/i/c/k/e/r/y
+xcopy "$(ProjectDir)\Fonts" "%25temp%25\Stitch\Fonts" /h/i/c/k/e/r/y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

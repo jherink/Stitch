@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stitch.Chart
+namespace Stitch.StitchMath
 {
     internal struct Vector : ICloneable
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Stitch.Chart
+﻿namespace Stitch.StitchMath
 {
     /// <summary>
     /// Interface for spatial point objects.

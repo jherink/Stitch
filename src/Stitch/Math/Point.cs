@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stitch.Chart
+namespace Stitch.StitchMath
 {
     /// <summary>
     /// Class for representing 2D points.
