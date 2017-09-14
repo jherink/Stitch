@@ -99,6 +99,11 @@ namespace Stitch.Fonts
 
         #region Methods
 
+        public double GetFontScale(double fontSize )
+        {
+            return 1.0 / UnitsPerEm * fontSize;
+        }
+
         internal void MapGlyphNames()
         {
             var glyph = default( Glyph );
@@ -122,7 +127,27 @@ namespace Stitch.Fonts
 
         public Glyph GetGlyph(uint glyphIndex)
         {
-            return glyf.Glyphs[glyphIndex];
+            if (!GlyphSet.ContainsKey(glyphIndex))
+            {
+
+            }
+            return GlyphSet[glyphIndex];
+        }
+
+        public BoundingBox MeasureString( string str, double fontSize )
+        {
+            var width = 0f;
+            var height = 0f;
+            var scale = (float)GetFontScale( fontSize );
+            for (int i = 0; i < str.Length; i++ )
+            {
+                var glyph = GetGlyph( str[i] );
+                width += scale * glyph.AdvanceWidth;
+                height = Math.Max(height, scale * glyph.YMax);
+            }
+            var box = new BoundingBox();
+            box.AddPoint( width, height );
+            return box;
         }
 
         #endregion

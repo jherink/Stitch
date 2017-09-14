@@ -155,6 +155,7 @@ namespace Stitch.Fonts
                 font.loca = new LocaFontTable( table.Item1, table.Item2, font.NumGlyphs, shortVersion );
                 table = UncompressTable( buffer, glyfTableEntry );
                 font.glyf = new GlyfFontTable( table.Item1, table.Item2, font.loca );
+                font.GlyphSet = font.glyf.Glyphs;
             }
             else if (cffTableEntry != null )
             {
@@ -167,7 +168,9 @@ namespace Stitch.Fonts
             }
 
             table = UncompressTable( buffer, htmxTableEntry );
-            var htmx = new HtmxFontTable( table.Item1, table.Item2, font.NumberOfHMetrics, font.NumGlyphs, font.glyf.Glyphs );
+            var htmx = new HtmxFontTable( table.Item1, table.Item2, font.NumberOfHMetrics, font.NumGlyphs, font.GlyphSet );
+            
+            //font.MapGlyphNames();
 
             if ( kernTableEntry != null )
             {

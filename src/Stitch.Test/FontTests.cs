@@ -131,5 +131,15 @@ namespace Stitch.Tests
             var result = parser.Parse( System.IO.File.ReadAllBytes( font ) );
             Assert.Equal( numGlyphs - 1, (uint)result.glyf.Glyphs.Count );
         }
+
+        [Theory( DisplayName = "MeasureStringTest" )]
+        [InlineData( "Verdana.ttf", "Watch TV" )]
+        public void MeasureStringTest( string fontName, string test )
+        {
+            var font = IntegrationHelpers.GetFontPath( fontName );
+            var parser = new OpenTypeParser();
+            var result = parser.Parse( System.IO.File.ReadAllBytes( font ) );
+            var box = result.MeasureString( test, 15 );
+        }
     }
 }

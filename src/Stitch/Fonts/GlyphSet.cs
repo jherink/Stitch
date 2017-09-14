@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stitch.Fonts
 {
-    public sealed class GlyphSet
+    public sealed class GlyphSet : Dictionary<uint, Glyph>
     {
     }
 }

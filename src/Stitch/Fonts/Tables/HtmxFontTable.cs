@@ -11,7 +11,7 @@ namespace Stitch.Fonts.Tables
         public readonly int NumMetrics;
         public readonly int NumGlyphs;
         private readonly bool _parseFlag = false;
-        private readonly Dictionary<uint, Glyph> GlyphSet;
+        public readonly GlyphSet GlyphSet;
 
         internal class LongHorMetric
         {
@@ -19,7 +19,7 @@ namespace Stitch.Fonts.Tables
             short LeftSideBearing { get; set; }
         }
 
-        public HtmxFontTable( byte[] data, uint offset, int numMetrics, int numGlyphs, Dictionary<uint, Glyph> glyphSet ) : base( data, offset )
+        public HtmxFontTable( byte[] data, uint offset, int numMetrics, int numGlyphs, GlyphSet glyphSet ) : base( data, offset )
         {
             NumMetrics = numMetrics;
             NumGlyphs = numGlyphs;
@@ -34,7 +34,7 @@ namespace Stitch.Fonts.Tables
             {
                 ushort advanceWidth = 0;
                 short leftSideBearing = 0;
-                for (uint i = 0; i < NumGlyphs; i++ )
+                for (uint i = 0; i < NumGlyphs - 1; i++ )
                 {
                     if (i < NumMetrics )
                     {

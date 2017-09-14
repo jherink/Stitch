@@ -97,6 +97,9 @@
     <Content Include="Fonts\Roboto-Black.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Fonts\VERDANA.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Resources\ResourceResolutionResolve\css\testFont.eot" />
     <None Include="Resources\ResourceResolutionResolve\fonts\testFont.eot" />
