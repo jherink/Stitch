@@ -12,12 +12,14 @@ namespace Stitch.Widgets
         private readonly IAnchorElement Link;
         private readonly ISpanElement PageNumber;
         private readonly IOrderedListElement CategoryList = new OrderedList();
-        public OrderedListStyleType StyleType { get { return CategoryList.StyleType; } set { CategoryList.StyleType = value; } }
+        public ListStyleType StyleType { get { return CategoryList.StyleType; } set { CategoryList.StyleType = value; } }
+
+        public TableOfContentsCategory() : this( string.Empty ) { }
 
         public TableOfContentsCategory( string label )
         {
             Label = label;
-            StyleType = OrderedListStyleType.None;
+            StyleType = ListStyleType.None;
             ID = $"toc-category-{label.Replace( " ", "-" )}";
             LabelElement = new PlainText( label );
             ClassList.Add( "page-width", "toc-link" );
@@ -74,6 +76,8 @@ namespace Stitch.Widgets
         private readonly IListItemElement Item = new ListItemElement();
         private readonly ISpanElement PageNumber = new Span();
 
+        public TableOfContentsLink() : this(string.Empty, null ) { }
+
         public TableOfContentsLink( string label, IPage pageReference )
         {
             Label = label;
@@ -105,7 +109,7 @@ namespace Stitch.Widgets
         public string TOCTitle { get { return _tocTitle.Content; } set { _tocTitle.Content = value; } }
         private readonly Heading _tocTitle = new Heading( HeadingLevel.H4 );
 
-        public OrderedListStyleType DefaultStyleType = OrderedListStyleType.None;
+        public ListStyleType DefaultStyleType = ListStyleType.None;
 
         public TableOfContents()
         {
@@ -116,7 +120,7 @@ namespace Stitch.Widgets
             Children.Add( _toc );
         }
 
-        public void SetStyleType( OrderedListStyleType styleType )
+        public void SetStyleType( ListStyleType styleType )
         {
             foreach (var category in GetNodes( "div" ))
             {
@@ -147,7 +151,7 @@ namespace Stitch.Widgets
 
         public void AddTOCLink( TableOfContentsLink link )
         {
-            var ol = new OrderedList( OrderedListStyleType.None );
+            var ol = new OrderedList( ListStyleType.None );
             ol.ClassList.Add( "toc-link-alone" );
             ol.Children.Add( link );
             _toc.Children.Add( ol );            

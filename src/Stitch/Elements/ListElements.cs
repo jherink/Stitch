@@ -102,6 +102,8 @@ namespace Stitch.Elements
             }
         }
 
+        public ListStyleType StyleType { get; set; }
+
         public BaseListElement() { }
 
         public BaseListElement( IEnumerable<object> data )
@@ -117,24 +119,22 @@ namespace Stitch.Elements
 
     public class UnorderedList : BaseListElement, IUnorderedListElement
     {
-        public UnorderedListStyleType StyleType { get; set; } = UnorderedListStyleType.Disc;
-
         public UnorderedList()
         {
-
+            StyleType = ListStyleType.Disc;
         }
 
         public UnorderedList( IEnumerable<object> data ) : base( data )
         {
-
+            StyleType = ListStyleType.Disc;
         }
 
-        public UnorderedList( UnorderedListStyleType style )
+        public UnorderedList( ListStyleType style )
         {
             StyleType = style;
         }
 
-        public UnorderedList( IEnumerable<object> data, UnorderedListStyleType style ) : this( data )
+        public UnorderedList( IEnumerable<object> data, ListStyleType style ) : this( data )
         {
             StyleType = style;
         }
@@ -156,11 +156,9 @@ namespace Stitch.Elements
         {
             var builder = new StringBuilder();
             builder.Append( $"<{Tag}" );
-            //StyleList.Add( "list-style-type", StyleTypeHelper.GetStyleType( StyleType ) );
             ClassList.Add( StitchCssResourceHelper.GetClass( StyleType ) );
             AppendIdAndClassInfoToTag( builder );
             builder.AppendLine( ">" );
-            //builder.AppendLine( $" style=\"list-style-type:{StyleTypeHelper.GetStyleType( StyleType )}\">" );
             builder.AppendLine( RenderChildren() );
             builder.AppendLine( $"</{Tag}>" );
             return builder.ToString();
@@ -169,24 +167,22 @@ namespace Stitch.Elements
 
     public class OrderedList : BaseListElement, IOrderedListElement
     {
-        public OrderedListStyleType StyleType { get; set; } = OrderedListStyleType.Numbered;
-
         public OrderedList()
         {
-
+            StyleType = ListStyleType.Numbered;
         }
 
         public OrderedList( IEnumerable<object> data ) : base( data )
         {
-
+            StyleType = ListStyleType.Numbered;
         }
 
-        public OrderedList( OrderedListStyleType style )
+        public OrderedList( ListStyleType style )
         {
             StyleType = style;
         }
 
-        public OrderedList( IEnumerable<object> data, OrderedListStyleType style ) : this( data )
+        public OrderedList( IEnumerable<object> data, ListStyleType style ) : this( data )
         {
             StyleType = style;
         }
@@ -210,7 +206,6 @@ namespace Stitch.Elements
             builder.Append( $"<{Tag}" );
             ClassList.Add( StitchCssResourceHelper.GetClass( StyleType ) );
             AppendIdAndClassInfoToTag( builder );
-            //builder.AppendLine( $" type=\"{StyleTypeHelper.GetStyleType( StyleType )}\">" );
             builder.AppendLine( ">" );
             builder.AppendLine( RenderChildren() );
             builder.AppendLine( $"</{Tag}>" );

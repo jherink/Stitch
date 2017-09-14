@@ -66,6 +66,11 @@ namespace Stitch.Tests
             }
         }
 
+        public static string GetFontPath(string fontName)
+        {
+            return Path.Combine( EnsuredTempDirectory(), "Fonts", fontName );
+        }
+
         public static void SaveToTemp( string name, StitchDocument doc, bool ignoreRegression = false )
         {
             if (!name.EndsWith( ".html" )) name += ".html";

@@ -28,6 +28,6 @@ foreach (var record in data)
 // Step 3: Add the chart to the Stitch doc
 doc.Add( chart );
 
-// Step 3: Render or the document
+// Render or save the document
 var html = doc.Render();
 ~~~

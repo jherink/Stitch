@@ -9,16 +9,11 @@ namespace Stitch.Attributes
 {
     internal static class StitchCssResourceHelper
     {
-        public static string GetClass( UnorderedListStyleType styleType )
+        public static string GetClass( ListStyleType styleType )
         {
             return GetAttribute( styleType.GetType(), styleType.ToString() ).Class;
         }
-
-        public static string GetClass( OrderedListStyleType styleType )
-        {
-            return GetAttribute( styleType.GetType(), styleType.ToString() ).Class;
-        }
-
+        
         private static StitchCssResourceAttribute GetAttribute( Type type, string member )
         {
             var memInfo = type.GetMember( member );

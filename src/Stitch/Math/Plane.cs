@@ -1,4 +1,4 @@
-﻿namespace Stitch.Chart
+﻿namespace Stitch.StitchMath
 {
     /// <summary>
     /// Class representing a plane.

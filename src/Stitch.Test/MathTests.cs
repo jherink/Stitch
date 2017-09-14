@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stitch.Chart;
+using Stitch.StitchMath;
 using Xunit;
 
 using Assert = Xunit.Assert;

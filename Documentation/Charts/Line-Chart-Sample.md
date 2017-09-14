@@ -40,9 +40,9 @@ foreach (DataRow record in data.Rows)
     chart.AddPoint( record["City"].ToString(), record["Day Of Week"] as string, (double)record["Tempurature"] );
 }
 
-// Add the chart to the Stitch doc
+// Step 3: Add the chart to the Stitch doc
 doc.Add( chart );
 
-// Step 3: Render or the document
+// Render or save the document
 var html = doc.Render();
 ~~~

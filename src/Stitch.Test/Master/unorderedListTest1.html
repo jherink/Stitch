@@ -24,7 +24,9 @@ ul.w3-ul li:last-child{ border-bottom:none; }
 .w3-container:after,.w3-panel:after,.w3-row:after,.w3-row-padding:after,.w3-topnav:after,.w3-clear:after,.w3-btn-group:before,.w3-btn-group:after,.w3-btn-bar:before,.w3-btn-bar:after{ content:'';display:table;clear:both; }
 .w3-container{ padding:0.01em 16px; }
 @media screen and (max-width:600px){.w3-topnav a{display:block;}.w3-navbar li:not(.w3-opennav){float:none;width:100% !important;}.w3-navbar li.w3-right{float:none !important;}}</style>
+		<style type="text/css"></style>
 		<style type="text/css">
+.toc-link li:before{ float:left;width:0;white-space:nowrap;content:'. . . . . . . . . . . . . . . . . . . . ' '. . . . . . . . . . . . . . . . . . . . ' '. . . . . . . . . . . . . . . . . . . . ' '. . . . . . . . . . . . . . . . ' ; }
 .ansi-a{ width:8.5in; }
 </style>
 		<style type="text/css"></style>
@@ -34,28 +36,28 @@ ul.w3-ul li:last-child{ border-bottom:none; }
 		<div id="pages">
 			<div id="a" class="ansi-a" style="margin:0.5in 0.5in 0.5in 0.5in;" page-number="1">
 				<div class="w3-container">
-					<ul style="list-style-type:disc;">
+					<ul class="stitch-list-type-disc">
 						<li>test</li>
 						<li>2</li>
 						<li>%$^$</li>
 						<li>Hello World</li>
 					</ul>
 					<hr />
-					<ol type="1">
+					<ol class="stitch-list-type-decmial">
 						<li>test</li>
 						<li>2</li>
 						<li>%$^$</li>
 						<li>Hello World</li>
 					</ol>
 					<hr />
-					<ol type="I">
+					<ol class="stitch-list-type-upper-roman">
 						<li>test</li>
 						<li>2</li>
 						<li>%$^$</li>
 						<li>Hello World</li>
 					</ol>
 					<hr />
-					<ul style="list-style-type:circle;">
+					<ul class="stitch-list-type-circle">
 						<li>test</li>
 						<li>2</li>
 						<li>%$^$</li>

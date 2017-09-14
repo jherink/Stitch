@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HydraDoc.Elements.Interface
+namespace Stitch.Fonts
 {
-    public interface IContentElement : IElement
+    public sealed class GlyphSet
     {
     }
 }

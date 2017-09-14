@@ -451,7 +451,7 @@ namespace Stitch.Elements
 
         public IEnumerable<IElement> GetAllNodes()
         {
-            System.Diagnostics.Debug.WriteLine( $"Getting all nodes: {Tag}, Child count: {Children.Count}" );
+            //System.Diagnostics.Debug.WriteLine( $"Getting all nodes: {Tag}, Child count: {Children.Count}" );
 
             var elements = new List<IElement>();
             foreach (var child in Children)

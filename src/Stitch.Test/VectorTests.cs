@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stitch.Chart;
+using Stitch.StitchMath;
 
 namespace Stitch.Tests
 {

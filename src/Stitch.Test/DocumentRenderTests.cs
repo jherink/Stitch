@@ -88,13 +88,13 @@ namespace Stitch.Tests
 
             //div.Children.Add( ElementFactory.CreateHorizontalRule( false ) );
             div.Children.Add( new HorizontalRule() );
-            //div.Children.Add( ElementFactory.CreateOrderedList( list, OrderedListStyleType.UppercaseRomanNumeral ) );
-            div.Children.Add( new OrderedList( list, OrderedListStyleType.UppercaseRomanNumeral ) );
+            //div.Children.Add( ElementFactory.CreateOrderedList( list, ListStyleType.UppercaseRomanNumeral ) );
+            div.Children.Add( new OrderedList( list, ListStyleType.UppercaseRomanNumeral ) );
 
             //div.Children.Add( ElementFactory.CreateHorizontalRule( false ) );
             div.Children.Add( new HorizontalRule() );
-            //div.Children.Add( ElementFactory.CreateUnorderedList( list, UnorderedListStyleType.Circle ) );
-            div.Children.Add( new UnorderedList( list, UnorderedListStyleType.Circle ) );
+            //div.Children.Add( ElementFactory.CreateUnorderedList( list, UnListStyleType.Circle ) );
+            div.Children.Add( new UnorderedList( list, ListStyleType.Circle ) );
 
             doc.Add( div );
 
@@ -588,7 +588,7 @@ namespace Stitch.Tests
             var doc = new StitchDocument();
             var toc = doc.AddTableOfContents();
             doc.AddStyleRule( ".page { min-height: 600px }" );
-            toc.SetStyleType( OrderedListStyleType.UppercaseLetter );
+            toc.SetStyleType( ListStyleType.UppercaseLetter );
 
             var benifits = doc.CreatePage();
             var getTheTemplate = doc.CreatePage();
@@ -624,7 +624,7 @@ namespace Stitch.Tests
             // Sample from: http://www.makeuseof.com/tag/10-best-table-contents-templates-microsoft-word/
             var doc = new StitchDocument();
             var toc = doc.TableOfContents;
-            toc.SetStyleType( OrderedListStyleType.None );
+            toc.SetStyleType( ListStyleType.None );
 
             var _abstract = doc.CreatePage();
             var acknowledgements = doc.CreatePage();
