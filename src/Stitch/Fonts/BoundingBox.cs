@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Stitch.StitchMath;
 
 namespace Stitch.Fonts
 {
     public sealed class BoundingBox
     {
-        private float? _x1 { get; set; } = null;
-        private float? _y1 { get; set; } = null;
-        private float? _x2 { get; set; } = null;
-        private float? _y2 { get; set; } = null;
+        internal float? _x1 { get; private set; } = null;
+        internal float? _y1 { get; private set; } = null;
+        internal float? _x2 { get; private set; } = null;
+        internal float? _y2 { get; private set; } = null;
+
+        public float Width { get { return _x1 != null && _x2 != null ? Math.Abs( (float)_x2 - (float)_x1 ) : 0; } }
+        public float Height { get { return _y1 != null && _y2 != null ? Math.Abs( (float)_y2 - (float)_y1 ) : 0; } }
 
         /// <summary>
         /// Returns true if the bounding box is empty, that is, no points have been added to the box yet.

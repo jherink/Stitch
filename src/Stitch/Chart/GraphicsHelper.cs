@@ -73,7 +73,46 @@ namespace Stitch.Chart
                 size = g.MeasureString( text, new Font( fontName, (float)fontSize ) );
             }
 
+            var font = LoadFont( fontName );
+            if (font != default( Fonts.Font ) )
+            {
+                var _size = font.MeasureString( text, fontSize );
+                size.Width = _size.Item1;
+                size.Height = _size.Item2;
+            }
+
             return size;
         }
+
+        private static Fonts.Font LoadFont(string name)
+        {
+            name = name.ToLowerInvariant();
+
+            // try to get cached font first.
+            if ( FontCache.ContainsKey( name ) )
+            {
+                return FontCache[name];
+            }
+
+            // not cached.  Try to find on OS.
+            var fontsRoot = Environment.GetFolderPath( Environment.SpecialFolder.Fonts );
+            var match = $"{name.ToString()}.*" ;
+            var fontFile = System.IO.Directory.GetFiles( fontsRoot, match, System.IO.SearchOption.TopDirectoryOnly ).FirstOrDefault();
+            var font = default( Fonts.Font );
+            if ( !string.IsNullOrWhiteSpace( fontFile ) )
+            {
+                try
+                {
+                    var parser = new Fonts.OpenTypeParser();
+                    font = parser.Parse( System.IO.File.ReadAllBytes( fontFile ) );
+                }
+                catch { /* Nope... */ }
+            }
+
+            FontCache.Add( name, font ); // cahce font.
+            return font;
+        }
+
+        private static Dictionary<string, Fonts.Font> FontCache = new Dictionary<string, Fonts.Font>();
     }
 }

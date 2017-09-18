@@ -1,4 +1,5 @@
-﻿using Stitch.Fonts.Tables;
+﻿using Stitch.Elements;
+using Stitch.Fonts.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace Stitch.Fonts
     {
         public bool OnCurve;
         public bool LastPointOfContour;
-        public int X;
-        public int Y;
+        public float X;
+        public float Y;
     }
 
     public class Component
@@ -26,6 +27,8 @@ namespace Stitch.Fonts
         public int Dy;
         public Tuple<ushort, ushort> MatchedPoints;
     }
+
+    public class Contour : List<PointData> { }
 
     public sealed class Glyph : RelativeParser
     {
@@ -46,11 +49,11 @@ namespace Stitch.Fonts
         public short XMax { get; private set; }
 
         public short YMax { get; private set; }
-
+        
         public List<ushort> EndPointIndicies;
         public byte[] Instructions;
         public List<PointData> Points;
-        public List<Component> Components;
+        public List<Component> Components = new List<Component>();
 
         public bool IsComposite { get; private set; }
 
@@ -58,18 +61,15 @@ namespace Stitch.Fonts
 
         public short LeftSideBearing { get; internal set; }
 
-        public readonly BoundingBox BoundingBox = new BoundingBox();
+        public BoundingBox BoundingBox { get; internal set; }
 
-        public Glyph() : this( string.Empty, 0, 0, null, 0, 0, 0, 0, 0 ) { }
-
-        public Glyph( uint index ) : this( string.Empty, index, 0, null, 0, 0, 0, 0, 0 ) { }
-
-        public Glyph(string name, uint index, uint unicode, uint[] unicodes, int xMin, int yMin, int xMax, int yMax, int AdvanceWidth )
+        public Glyph(uint index, byte[] data, uint offset)
         {
             Index = index;
-            Name = name;
-            Unicode = unicode;
-            //Unicodes = unicodes;            
+            base.Data = data;
+            Offset = offset;
+            RelativeOffset = 0;
+            Parse();
         }
 
         public void AddUnicode(uint unicode)
@@ -113,16 +113,8 @@ namespace Stitch.Fonts
             return v;
         }
 
-        public Path BuildPath()
+        public void Parse()
         {
-            return null;
-        }
-
-        public void Parse( byte[] data, uint start )
-        {
-            Data = data;
-            Offset = start;
-
             NumberOfContours = GetShort();
             XMin = GetShort();
             YMin = GetShort();
@@ -134,7 +126,7 @@ namespace Stitch.Fonts
                 EndPointIndicies = new List<ushort>( NumberOfContours );
                 for (int i = 0; i < NumberOfContours; i++ )
                 {
-                    EndPointIndicies[i] = GetUShort();
+                    EndPointIndicies.Add( GetUShort() );
                 }
 
                 var numInstructions = GetUShort();
@@ -184,7 +176,7 @@ namespace Stitch.Fonts
                             var flag = flags[i];
                             var point = points[i];
                             point.X = ParseGlyphCoordinate( flag, px, 2, 16 );
-                            px = point.X;
+                            px = (int)point.X;
                         }
 
                         var py = 0;
@@ -193,7 +185,7 @@ namespace Stitch.Fonts
                             var flag = flags[i];
                             var point = points[i];
                             point.Y = ParseGlyphCoordinate( flag, py, 4, 32 );
-                            py = point.Y;
+                            py = (int)point.Y;
                         }
                     }
                     Points = points;
@@ -284,6 +276,119 @@ namespace Stitch.Fonts
                     }
                 }
             }
+
+            BoundingBox = GetBoundingBox();
+        }
+
+        private BoundingBox GetBoundingBox()
+        {
+            if ( IsComposite )
+            {
+                // TODO
+            }
+            
+
+            var contours = GetContours();
+
+            var startX = 0.0f;
+            var startY = 0.0f;
+            var prevX = 0.0f;
+            var prevY = 0.0f;
+
+            var box = new BoundingBox();
+            for (int i = 0; i < contours.Count; i++ )
+            {
+                var contour = contours[i];
+                var prev = default(PointData);
+                var curr = contour[contour.Count - 1];
+                var next = contour[0];
+                
+                if ( curr.OnCurve )
+                {
+                    box.AddPoint( curr.X, curr.Y );
+                    startX = prevX = curr.X;
+                    startY = prevY = curr.Y;
+                }
+                else
+                {
+                    if ( next.OnCurve )
+                    {
+                        box.AddPoint( next.X, next.Y );
+                        startX = prevX = next.X;
+                        startY = prevY = next.Y;
+                    }
+                    else
+                    {
+                        var sStartX = 0.5f * ( curr.X + next.X );
+                        var sStartY = 0.5f * ( curr.Y + next.Y );
+                        box.AddPoint( sStartX, sStartY );
+                        startX = prevX = sStartX;
+                        startY = prevY = sStartY;
+                    }
+                }
+
+                for (int j = 0; j < contour.Count; j++ )
+                {
+                    prev = curr;
+                    curr = next;
+                    next = contour[( i + 1 ) % contour.Count];
+                    
+                    if ( curr.OnCurve )
+                    {
+                        box.AddPoint( curr.X, curr.Y );
+                        prevX = curr.X;
+                        prevY = curr.Y;
+                    }
+                    else
+                    {
+                        var prev2 = prev;
+                        var next2 = next;
+
+                        if ( !prev.OnCurve )
+                        {
+                            prev2.X = 0.5f * ( curr.X + prev.X );
+                            prev2.Y = 0.5f * ( curr.Y + prev.Y );
+                            box.AddPoint( prev2.X, prev2.Y );
+                            prevX = prev2.X;
+                            prevY = prev2.Y;
+                        }
+
+                        if ( !next.OnCurve )
+                        {
+                            next2.X = 0.5f * ( curr.X + next.X );
+                            next2.Y = 0.5f * ( curr.Y + next.Y );
+                        }
+
+                        box.AddPoint( prev2.X, prev2.Y );
+                        prevX = prev2.X;
+                        prevY = prev2.Y;
+
+                        box.AddQuad( prevX, prevY, curr.X, curr.Y, next2.X, next2.Y );
+                        prevX = next2.Y;
+                        prevY = next2.Y;
+                    }                    
+                }
+            }
+
+            return box;
+        }
+
+        public List<Contour> GetContours()
+        {
+            var contours = new List<Contour>();
+            var currentContour = new Contour();
+            foreach ( var pt in Points )
+            {
+                currentContour.Add( pt );
+                if ( pt.LastPointOfContour )
+                {
+                    contours.Add( currentContour );
+                    currentContour = new Contour();
+                }
+            }
+
+            if ( currentContour.Count != 0 ) throw new Exception( "There are still points left in the currenc contour." );
+            return contours;
         }
     }
 }

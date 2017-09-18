@@ -23,7 +23,8 @@ namespace Stitch.Tests
             var directories = Directory.GetDirectories( root );
             foreach (var file in files) File.Delete( file );
             foreach (var dir in directories.Where( t => !t.EndsWith( "Master", StringComparison.InvariantCultureIgnoreCase ) &&
-                                                        !t.EndsWith( "Data", StringComparison.InvariantCultureIgnoreCase ) ))
+                                                        !t.EndsWith( "Data", StringComparison.InvariantCultureIgnoreCase ) &&
+                                                        !t.EndsWith( "Fonts", StringComparison.InvariantCultureIgnoreCase) ))
             {
                 Directory.Delete( dir, true );
             }

@@ -23,7 +23,7 @@ namespace Stitch.Fonts.Tables
         {
             if ( ParseFunction != null )
             { // check so base class doesn't parse until we are ready
-                for ( int i = 0; i < NumGlyphs; i++ )
+                for ( int i = 0; i <= NumGlyphs; i++ )
                 {
                     var offset = ParseFunction.Invoke();
 

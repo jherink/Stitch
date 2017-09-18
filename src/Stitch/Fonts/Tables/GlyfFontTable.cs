@@ -5,7 +5,7 @@ namespace Stitch.Fonts.Tables
     internal sealed class GlyfFontTable : FontTable
     {
         private readonly LocaFontTable Loca;
-        public readonly Dictionary<uint, Glyph> Glyphs = new Dictionary<uint, Glyph>();
+        public readonly GlyphSet Glyphs = new GlyphSet();
 
         public GlyfFontTable( byte[] data, uint offset, LocaFontTable loca ) : base( data, offset )
         {
@@ -24,11 +24,12 @@ namespace Stitch.Fonts.Tables
                     Glyph glyph;
                     if ( offset != nextOffset )
                     {
-                        glyph = new Glyph( i );
+                        glyph = new Glyph( i, Data, Offset + offset);
+                        //glyph = new Glyph( i );
                     }
                     else
                     {
-                        glyph = new Glyph( i );
+                        glyph = new Glyph( i, Data, Offset );
                     }
 
                     Glyphs.Add( i, glyph );
