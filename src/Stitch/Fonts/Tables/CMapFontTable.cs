@@ -16,6 +16,7 @@ namespace Stitch.Fonts.Tables
     /// </summary>
     internal sealed class CMapFontTable : FontTable
     {
+
         public ushort Version { get; private set; }
         public ushort NumTables { get; private set; }
         public ushort Format { get; private set; }
@@ -109,8 +110,9 @@ namespace Stitch.Fonts.Tables
             var glyphIndexMap = new Dictionary<uint, uint>();
             var endCountIndex = start + offset + 14;
             var startCountIndex = (uint)( start + offset + 16 + SegCount * 2 );
-            var idDeltaIndex = (uint)( start + offset + 16 + SegCount * 4 );
+            var idDeltaIndex = (uint)( start + offset + 16 + SegCount * 4 );            
             var idRangeOffsetIndex = (uint)( start + offset + 16 + SegCount * 6 );
+            var relativeOffsetIndex = (uint)( start + offset + 16 + SegCount * 6 );
             var glyphIndexOffset = (uint)( start + offset + 16 + SegCount * 8 );
             for ( var i = 0; i < SegCount - 1; i++ )
             {
@@ -119,8 +121,9 @@ namespace Stitch.Fonts.Tables
                 var startCount = ByteParser.GetUShort( Data, startCountIndex );
                 startCountIndex += sizeof( ushort );
                 var idDelta = ByteParser.GetShort( Data, idDeltaIndex );
-                idDelta += sizeof( short );
                 var idRangeOffset = ByteParser.GetUShort( Data, idRangeOffsetIndex );
+
+                idDeltaIndex += sizeof( short );
                 idRangeOffsetIndex += sizeof( ushort );
 
                 ushort glyphIndex;
@@ -131,7 +134,7 @@ namespace Stitch.Fonts.Tables
                         // The idRangeOffset is relative to the current index in the 
                         // idRangeOffset array. Take the current offset in the 
                         // idRangeOffset array.
-                        glyphIndexOffset = (uint)( idRangeOffset - sizeof( ushort ) );
+                        glyphIndexOffset = (uint)( idRangeOffsetIndex - sizeof( ushort ) );
 
                         // Add the value of the idRangeOffset, 
                         // which will move us into the glyphIndex array.
@@ -154,6 +157,7 @@ namespace Stitch.Fonts.Tables
 
                     glyphIndexMap.Add( c, glyphIndex );
                 }
+
             }
 
             GlyphIndexMap = glyphIndexMap;

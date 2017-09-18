@@ -170,7 +170,7 @@ namespace Stitch.Fonts
             table = UncompressTable( buffer, htmxTableEntry );
             var htmx = new HtmxFontTable( table.Item1, table.Item2, font.NumberOfHMetrics, font.NumGlyphs, font.GlyphSet );
             
-            //font.MapGlyphNames();
+            font.MapGlyphNames();
 
             if ( kernTableEntry != null )
             {

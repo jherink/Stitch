@@ -80,7 +80,6 @@
     <Compile Include="ElementTests.cs" />
     <Compile Include="FormattedElementTests.cs" />
     <Compile Include="IntegrationHelpers.cs" />
-    <Compile Include="OpenTypeParserTests.cs" />
     <Compile Include="SamplesGeneration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SHA1Comparison.cs" />
@@ -94,12 +93,8 @@
     <Compile Include="VectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Fonts\Roboto-Black.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="Fonts\VERDANA.TTF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Content Include="Fonts\Roboto-Black.ttf" />
+    <None Include="Fonts\VERDANA.TTF" />
     <None Include="packages.config" />
     <None Include="Resources\ResourceResolutionResolve\css\testFont.eot" />
     <None Include="Resources\ResourceResolutionResolve\fonts\testFont.eot" />

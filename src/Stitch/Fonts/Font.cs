@@ -101,7 +101,7 @@ namespace Stitch.Fonts
 
         public double GetFontScale(double fontSize )
         {
-            return 1.0 / UnitsPerEm * fontSize;
+            return 1.5 / UnitsPerEm * fontSize;
         }
 
         internal void MapGlyphNames()
@@ -114,40 +114,39 @@ namespace Stitch.Fonts
             {
                 var c = charCodes[i];
                 var glyphIndex = glyphIndexMap[c];
-                glyph = GetGlyph( glyphIndex );
+                glyph = GlyphSet[ glyphIndex ];
                 glyph.AddUnicode( c );
             }
 
             for (uint i = 0; i < glyf.Glyphs.Count; i++ )
             {
-                glyph = GetGlyph( i );
+                glyph = GlyphSet[ i ];
                 
             }
         }
 
-        public Glyph GetGlyph(uint glyphIndex)
-        {
-            if (!GlyphSet.ContainsKey(glyphIndex))
-            {
-
-            }
-            return GlyphSet[glyphIndex];
-        }
-
-        public BoundingBox MeasureString( string str, double fontSize )
+        /// <summary>
+        /// Calculate the approximate size of the given string at the specified font size.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="fontSize">The font size.</param>
+        /// <returns>A tuple (width, height) of the string size.</returns>
+        public Tuple<float, float> MeasureString( string str, double fontSize )
         {
             var width = 0f;
             var height = 0f;
             var scale = (float)GetFontScale( fontSize );
             for (int i = 0; i < str.Length; i++ )
             {
-                var glyph = GetGlyph( str[i] );
-                width += scale * glyph.AdvanceWidth;
-                height = Math.Max(height, scale * glyph.YMax);
+                var glyph = GlyphSet.LookupGlyph( str[i] );
+                //var _width = Math.Abs( glyph.XMax - glyph.XMin );
+                //var _height = Math.Abs( glyph.YMax - glyph.YMin );
+                var _width = glyph.AdvanceWidth;
+                var _height = head.YMax;
+                width += scale * _width;
+                height = Math.Max(height, scale * _height );
             }
-            var box = new BoundingBox();
-            box.AddPoint( width, height );
-            return box;
+            return new Tuple<float, float>( width, height );
         }
 
         #endregion
