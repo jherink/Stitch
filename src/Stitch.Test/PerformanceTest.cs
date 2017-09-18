@@ -20,7 +20,7 @@ namespace Stitch.Tests
                 watch.Reset();
                 watch.Start();
                 var doc = new StitchDocument();
-                for (int i = 0; i < 100000; i++)
+                for (int i = 0; i < 10000; i++)
                 {
                     doc.Add( new Div() );
                 }
@@ -46,7 +46,7 @@ namespace Stitch.Tests
                 var doc = new StitchDocument();
                 var lastDiv = new Div();
                 doc.Add( lastDiv );
-                for (int i = 0; i < 5000; i++)
+                for (int i = 0; i < 3000; i++)
                 {
                     var newDiv = new Div();
                     lastDiv.Add( newDiv );
@@ -72,7 +72,7 @@ namespace Stitch.Tests
                 watch.Reset();
                 watch.Start();
                 var doc = new StitchDocument();
-                for (int k = 0; k < 1000; k++)
+                for (int k = 0; k < 100; k++)
                 {
                     var lastDiv = new Div();
                     doc.Add( lastDiv );

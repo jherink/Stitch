@@ -1,12 +1,11 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stitch.Elements.Interface;
 using Stitch.Elements;
 using System.Collections.Generic;
+using Xunit;
 
 namespace Stitch.Tests
 {
-    [TestClass]
     public class ThemeTests
     {
         private static List<string> DefaultColors = new List<string>() {
@@ -34,7 +33,7 @@ namespace Stitch.Tests
             "#b82e2e", // "tall poppy"
             };
 
-        [TestMethod]
+        [Fact]
         public void GenerateColorSwatch()
         {
             var doc = new StitchDocument();

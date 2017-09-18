@@ -1,26 +1,25 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stitch.Chart;
 using Stitch.StitchMath;
+using Xunit;
 
 namespace Stitch.Tests
 {
-    [TestClass]
     public class VectorTests
     {
-        [TestMethod]
+        [Fact]
         public void VectorAlgebraTest()
         {
             var a = new Vector( 4, 0, 3 );
             var b = new Vector( -2, 1, 5 );
-            Assert.AreEqual( a.Magnitude, 5 );
+            Assert.Equal( a.Magnitude, 5 );
             AssertVectorEquals( a + b, new Vector( 2, 1, 8 ) );
             AssertVectorEquals( a - b, new Vector( 6, -1, -2 ) );
             AssertVectorEquals( 3 * b, new Vector( -6, 3, 15 ) );
             AssertVectorEquals( 2 * a + 5 * b, new Vector( -2, 5, 31 ) );
         }
 
-        [TestMethod]
+        [Fact]
         public void TerminalPointTest()
         {
             var p1 = new Point3D( 2, -3, 4 );
@@ -29,42 +28,42 @@ namespace Stitch.Tests
             AssertVectorEquals( v, new Vector( -4, 4, -3 ) );
         }
 
-        [TestMethod]
+        [Fact]
         public void UnitVectorTest()
         {
             var v = new Vector( 2, -1, -2 );
             AssertVectorEquals( v.UnitVector, new Vector( 2.0 / 3, -1.0 / 3, -2.0 / 3 ) );
         }
 
-        [TestMethod]
+        [Fact]
         public void OrthogonalTest()
         {
             var v1 = new Vector( 2, 2, -1 );
             var v2 = new Vector( 5, -4, 2 );
-            Assert.IsTrue( v1.Orthogonal( v2 ) );
+            Assert.True( v1.Orthogonal( v2 ) );
         }
 
-        [TestMethod]
+        [Fact]
         public void AngleBetweenTest()
         {
             var a = new Vector( 2, 2, -1 );
             var b = new Vector( 5, -3, 2 );
-            Assert.AreEqual( Trig.RadToDeg( a.AngleBetween( b ) ), 83.7914, .0001 );
+            Assert.Equal( Trig.RadToDeg( a.AngleBetween( b ) ), 83.7914553738142, 4 );
         }
 
-        [TestMethod]
+        [Fact]
         public void VectorScalarProjectionTest()
         {
             var b = new Vector( 1, 1, 2 );
             var a = new Vector( -2, 3, 1 );
 
             // scalar projection b onto a
-            Assert.AreEqual( b.ScalarProjection( a ), 3 / Math.Sqrt( 14 ), .0001 );
+            Assert.Equal( b.ScalarProjection( a ), 3 / Math.Sqrt( 14 ), 4 );
             // vector projection b onto a
             AssertVectorEquals( b.VectorProjection( a ), new Vector( -3 / 7.0, 9 / 14.0, 3 / 14.0 ) );
         }
 
-        [TestMethod]
+        [Fact]
         public void CrossTest()
         {
             var v1 = new Vector( 1, 3, 4 );
@@ -72,21 +71,21 @@ namespace Stitch.Tests
             AssertVectorEquals( v1.Cross( v2 ), new Vector( -43, 13, 1 ) );
         }
 
-        [TestMethod]
+        [Fact]
         public void VectorCrossOrthogonal()
         {
             var v1 = new Vector( 1, 3, 4 );
             var v2 = new Vector( 2, 7, -5 );
             var cross = v1.Cross( v2 );
-            Assert.IsTrue( cross.Orthogonal( v1 ) );
-            Assert.IsTrue( cross.Orthogonal( v2 ) );
+            Assert.True( cross.Orthogonal( v1 ) );
+            Assert.True( cross.Orthogonal( v2 ) );
         }
 
         private void AssertVectorEquals( Vector v1, Vector v2 )
         {
-            Assert.AreEqual( v1.X, v2.X, .0001 );
-            Assert.AreEqual( v1.Y, v2.Y, .0001 );
-            Assert.AreEqual( v1.Z, v2.Z, .0001 );
+            Assert.Equal( v1.X, v2.X, 4 );
+            Assert.Equal( v1.Y, v2.Y, 4 );
+            Assert.Equal( v1.Z, v2.Z, 4 );
         }
     }
 }

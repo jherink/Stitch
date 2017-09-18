@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Stitch.Elements.Interface;
-using System.Windows.Media;
+using System.Drawing;
 
 namespace Stitch.Elements
 {

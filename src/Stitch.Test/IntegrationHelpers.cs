@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Stitch.Export;
+﻿using Stitch.Export;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,32 +8,49 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Stitch.Tests
 {
-    [TestClass]
-    public sealed class AssemblyTestInitialize
-    {
-        [AssemblyInitialize]
-        public static void UnitTestAssemblyInitialize( TestContext tc )
-        {
-            var root = IntegrationHelpers.EnsuredTempDirectory();
-            var files = Directory.GetFiles( root );
-            var directories = Directory.GetDirectories( root );
-            foreach (var file in files) File.Delete( file );
-            foreach (var dir in directories.Where( t => !t.EndsWith( "Master", StringComparison.InvariantCultureIgnoreCase ) &&
-                                                        !t.EndsWith( "Data", StringComparison.InvariantCultureIgnoreCase ) &&
-                                                        !t.EndsWith( "Fonts", StringComparison.InvariantCultureIgnoreCase) ))
-            {
-                Directory.Delete( dir, true );
-            }
-        }
-    }
 
     public static class IntegrationHelpers
     {
+        private static bool initFlag = false;
+        private static object _lock = new object();
+
+        public static void UnitTestAssemblyInitialize( )
+        {
+            if ( !initFlag )
+            {
+                lock ( _lock )
+                {
+                    if ( !initFlag )
+                    {
+                        initFlag = true;
+                        var root = EnsuredTempDirectory();
+                        var files = Directory.GetFiles( root );
+                        var directories = Directory.GetDirectories( root );
+                        foreach ( var file in files ) File.Delete( file );
+                        foreach ( var dir in directories.Where( t => !t.EndsWith( "Master", StringComparison.InvariantCultureIgnoreCase ) &&
+                                                                     !t.EndsWith( "Data", StringComparison.InvariantCultureIgnoreCase ) &&
+                                                                     !t.EndsWith( "Fonts", StringComparison.InvariantCultureIgnoreCase ) ) )
+                        {
+                            Directory.Delete( dir, true );
+                        }
+
+                        var themes = Path.Combine( EnsuredTempDirectory(), "Themes" );
+                        var samples = Path.Combine( EnsuredTempDirectory(), "Samples" );
+
+                        if ( !Directory.Exists( themes ) ) Directory.CreateDirectory( themes );
+                        if ( !Directory.Exists( samples ) ) Directory.CreateDirectory( samples );
+                    }
+                }
+            }
+        }
+
         public static string EnsuredTempDirectory()
         {
+            UnitTestAssemblyInitialize();
             //var directory = "C:\\temp";
             var directory = Path.GetTempPath();
 
@@ -80,7 +96,7 @@ namespace Stitch.Tests
             var master = Path.Combine( MasterPath, name );
             doc.Save( path );
 
-            if (ignoreRegression == false) Assert.IsTrue( SHA1Comparison.Equal( path, master ), $"File comparison of \"{Path.GetFileName( path )}\" with master file \"{master}\" are not equal." );
+            if (ignoreRegression == false) Assert.True( SHA1Comparison.Equal( path, master ), $"File comparison of \"{Path.GetFileName( path )}\" with master file \"{master}\" are not equal." );
         }
 
         public static void ExportPdfToTemp( string name, StitchDocument doc, bool ignoreRegression = false )
@@ -93,6 +109,8 @@ namespace Stitch.Tests
             SaveToTemp( name.Remove( name.Length - ".pdf".Length ), doc, ignoreRegression );
         }
 
+#if !NETCOREAPP2_0
+
         public static void ExportWordToTemp( string name, StitchDocument doc, bool ignoreRegression = false )
         {
             if (!name.EndsWith( ".docx" )) name += ".docx";
@@ -102,6 +120,8 @@ namespace Stitch.Tests
 
             SaveToTemp( name.Remove( name.Length - ".docx".Length ), doc, ignoreRegression );
         }
+
+#endif
 
         public static string CreateLocalResource( string resourcePath )
         {

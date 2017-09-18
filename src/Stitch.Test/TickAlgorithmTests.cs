@@ -6,7 +6,6 @@ using Xunit;
 
 namespace Stitch.Tests
 {
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class TickAlgorithmTests
     {
         [Theory( DisplayName = "SimpleNumericTickAlgorithmTest" )]

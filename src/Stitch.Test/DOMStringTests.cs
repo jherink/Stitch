@@ -1,30 +1,29 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stitch.Elements;
+using Xunit;
 
 namespace Stitch.Tests
 {
-    [TestClass]
     public class DOMStringTests
     {
-        [TestMethod]
+        [Fact]
         public void ImplicitStringOperatorsTest()
         {
             DOMString domstr = "test";
             string regstring = domstr;
-            Assert.IsTrue( domstr == regstring );
+            Assert.True( domstr == regstring );
         }
 
-        [TestMethod]
+        [Fact]
         public void SpecialTextCombine()
         {
             var sp = new Big( "big!!!" );
             DOMString dom = "This was ";
-            Assert.IsTrue( "This was <big>big!!!</big>" == dom + sp );
-            Assert.AreEqual( dom + sp, "This was <big>big!!!</big>" );
+            Assert.True( "This was <big>big!!!</big>" == dom + sp );
+            Assert.Equal( dom + sp, "This was <big>big!!!</big>" );
         }
 
-        [TestMethod]
+        [Fact]
         public void MultipleAppendsTest()
         {
             var text = new DOMString();
@@ -33,7 +32,7 @@ namespace Stitch.Tests
             text += " paragraph";
             text.Append( "!!!!" );
 
-            Assert.IsTrue( "This is a <b>red</b> paragraph!!!!" == text );
+            Assert.True( "This is a <b>red</b> paragraph!!!!" == text );
         }
     }
 }

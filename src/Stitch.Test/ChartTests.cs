@@ -1,14 +1,11 @@
-﻿using System;
-using Stitch.Chart;
+﻿using Stitch.Chart;
 using Xunit;
 using System.Data;
-using System.Collections.Generic;
 using Stitch.Elements;
 using Stitch.Elements.Interface;
 
 namespace Stitch.Tests
 {
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class ChartTests
     {
         [Theory( DisplayName = "PieTestLegendPositions" )]
@@ -371,7 +368,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( fileName, doc );
         }
 
-        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        //[Fact]
         [Fact( DisplayName = "NorthwindSalesByYearTest" )]
         public void NorthwindSalesByYearTest()
         {

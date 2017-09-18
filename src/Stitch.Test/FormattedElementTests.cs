@@ -10,7 +10,6 @@ using Xunit.Extensions;
 
 namespace Stitch.Tests
 {
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class FormattedElementTests
     {
         public static IEnumerable<object[]> SpecialTextTestData
@@ -30,7 +29,7 @@ namespace Stitch.Tests
         }
 
         [Theory( DisplayName = "SpecialTextTest" ), MemberData( nameof( SpecialTextTestData ) )]
-        public void TestMethod1( FormattedElement text, string answer )
+        public void Fact1( FormattedElement text, string answer )
         {
             Assert.Equal( text.ToString(), answer );
         }

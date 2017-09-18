@@ -10,7 +10,6 @@ using Stitch.Attributes;
 
 namespace Stitch.Tests
 {
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class ElementTests
     {
         [Fact( DisplayName = "StyleFromUri" )]
@@ -74,7 +73,11 @@ namespace Stitch.Tests
         }
 
         [Theory( DisplayName = "GetAndEmbedLocalResources" )]
+#if NETCOREAPP2_0
+        [InlineData( "..\\..\\..\\Resources\\ResourceResolutionResolve\\css\\regressiontest.css" )]
+#else
         [InlineData( "..\\..\\Resources\\ResourceResolutionResolve\\css\\regressiontest.css" )]
+#endif
         public void GetAndEmbedLocalResources( string uriSource )
         {
             // try using given (probably relative) file path.
@@ -112,7 +115,12 @@ namespace Stitch.Tests
         }
 
         [Theory( DisplayName = "ImageElementDownload" )]
+#if NETCOREAPP2_0
+        [InlineData( "..\\..\\..\\Resources\\tiger.jpg", false, "imgRenderTest1" )] /* Relative path a time of rendering. */
+
+#else
         [InlineData( "..\\..\\Resources\\tiger.jpg", false, "imgRenderTest1" )] /* Relative path a time of rendering. */
+#endif
         [InlineData( "tiger.jpg", true, "imgRenderTest2" )] /* Relative path at time of release (reference) */
         [InlineData( "http://placehold.it/350x150.png", false, "imgRenderTest3" )]
         [InlineData( "http://placehold.it/350x150.png", true, "imgRenderTest4" )]

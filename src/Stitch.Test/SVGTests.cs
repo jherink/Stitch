@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stitch.Elements;
 using System.Linq;
+using Xunit;
 
 namespace Stitch.Tests
-{
-    [TestClass]
+{ 
     public class SVGTests
     {
-        [TestMethod]
+        [Fact]
         public void SVGRectangleTest()
         {
             var svg = new SVG()
@@ -31,7 +30,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGRectangleTest", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGRectangle2Test()
         {
             var svg = new SVG( 180, 400 );
@@ -54,7 +53,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGRectangle2Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGRectangle3Test()
         {
             var svg = new SVG( 180, 400 );
@@ -78,7 +77,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGRectangle3Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGCircleTest()
         {
             var doc = new StitchDocument();
@@ -98,7 +97,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGCircleTest", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGEllipse1Test()
         {
             var doc = new StitchDocument();
@@ -119,7 +118,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGEllipse1Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGEllipse2Test()
         {
             var doc = new StitchDocument();
@@ -135,7 +134,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGEllipse2Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGEllipse3Test()
         {
             var doc = new StitchDocument();
@@ -149,7 +148,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGEllipse3Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGLineTest()
         {
             var doc = new StitchDocument();
@@ -160,7 +159,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGLineTest", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGPolygon1Test()
         {
             var doc = new StitchDocument();
@@ -174,7 +173,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGPolygon1Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGPolygon2Test()
         {
             var doc = new StitchDocument();
@@ -189,7 +188,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGPolygon2Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGPolygon3Test()
         {
             var doc = new StitchDocument();
@@ -209,7 +208,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGPolygon3Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGPolyLineTest()
         {
             var doc = new StitchDocument();
@@ -239,7 +238,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGPolyLineTest", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGPath1Test()
         {
             var doc = new StitchDocument();
@@ -254,7 +253,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGPath1Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGPath2Test()
         {
             var doc = new StitchDocument();
@@ -303,7 +302,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGPath2Test", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGTextTest1()
         {
             var doc = new StitchDocument();
@@ -321,7 +320,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGTextTest1", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGTextTest2()
         {
             var doc = new StitchDocument();
@@ -337,7 +336,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGTextTest2", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGTextTest3()
         {
             var doc = new StitchDocument();
@@ -352,7 +351,7 @@ namespace Stitch.Tests
             IntegrationHelpers.SaveToTemp( "SVGTextTest3", doc );
         }
 
-        [TestMethod]
+        [Fact]
         public void SVGStrokeTests()
         {
             var doc = new StitchDocument();

@@ -3,36 +3,34 @@ using Stitch.Elements;
 using Stitch.Elements.Interface;
 using Stitch.Export;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using Xunit;
 
 namespace Stitch.Tests
 {
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class SamplesGeneration
     {
-        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitialize]
-        public static void OnInitializeExamples( Microsoft.VisualStudio.TestTools.UnitTesting.TestContext context )
-        {
-            var themes = Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "Themes" );
-            var samples = Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "Samples" );
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitialize]
+        //public static void OnInitializeExamples( Microsoft.VisualStudio.TestTools.UnitTesting.TestContext context )
+        //{
+        //    var themes = Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "Themes" );
+        //    var samples = Path.Combine( IntegrationHelpers.EnsuredTempDirectory(), "Samples" );
 
-            if (!Directory.Exists( themes )) Directory.CreateDirectory( themes );
-            if (!Directory.Exists( samples )) Directory.CreateDirectory( samples );
-        }
+        //    if (!Directory.Exists( themes )) Directory.CreateDirectory( themes );
+        //    if (!Directory.Exists( samples )) Directory.CreateDirectory( samples );
+        //}
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void NorthwindReportTestOutput()
         {
             var report = new NorthwindReport();
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Northwind-Report-Sample", report.Report, true );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void RenderThemesTest()
         {
             var table = IntegrationHelpers.GetSampleTableData();
@@ -81,7 +79,7 @@ namespace Stitch.Tests
             }
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void CreateHelloWorldSample()
         {
             // Step 1: Create new StitchDocument
@@ -95,7 +93,7 @@ namespace Stitch.Tests
         }
 
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void ScatterChartSample()
         {
             // Step 1: Create new StitchDocument
@@ -134,7 +132,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Scatter-Chart-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void RenderThemeSample()
         {
             // Step 1: Create new StitchDocument
@@ -155,7 +153,7 @@ namespace Stitch.Tests
             var html = doc.Render();
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void CustomThemeSample()
         {
             // Step 1: Create new StitchDocument
@@ -185,7 +183,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Dark-Knight-Custom-Theme-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void PieChartSample()
         {
             /** Data Setup - For DEMO **/
@@ -218,7 +216,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void PieChartRotatedChartSample()
         {
             /** Data Setup - For DEMO **/
@@ -252,7 +250,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Rotation-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void DonutChartSample()
         {
             /** Data Setup - For DEMO **/
@@ -286,7 +284,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Donut-Chart-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void PieChartExplodedSample()
         {
             /** Data Setup - For DEMO **/
@@ -323,7 +321,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Pie-Chart-Exploded-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void VerticalBarChartSample()
         {
             /** Data Setup - For DEMO **/
@@ -358,7 +356,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Vertical-Bar-Chart-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void HorizontalBarChartSample()
         {
             /** Data Setup - For DEMO **/
@@ -393,7 +391,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Horizontal-Bar-Chart-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void MultipleBarGroupsChartSample()
         {
             /** Data Setup - For DEMO **/
@@ -451,7 +449,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Multiple-Bar-Groups-Chart-Sample", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void LineChartSample()
         {
             /** Data Setup - For DEMO **/
@@ -505,7 +503,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "Samples\\Line-Chart-Sample", doc );
         }
 
-        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        //[Fact]
 
     }
 
