@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{93AB75EF-24FB-4E01-B2B1-0F2456BF1F3F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stitch</RootNamespace>
+    <AssemblyName>Stitch</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Export\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlToOpenXml, Version=1.6.1.0, Culture=neutral, PublicKeyToken=6ad79d83e2b60e63, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Export\HtmlToOpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\StitchCssResourceAttribute.cs" />
+    <Compile Include="Export\MSWordExporter.cs" />
+    <Compile Include="Fonts\BoundingBox.cs" />
+    <Compile Include="Fonts\ByteParser.cs" />
+    <Compile Include="Fonts\Encodings.cs" />
+    <Compile Include="Fonts\Font.cs" />
+    <Compile Include="Fonts\FontParser.cs" />
+    <Compile Include="Fonts\Glyph.cs" />
+    <Compile Include="Fonts\GlyphNames.cs" />
+    <Compile Include="Fonts\GlyphSet.cs" />
+    <Compile Include="Fonts\Path.cs" />
+    <Compile Include="Fonts\RelativeParser.cs" />
+    <Compile Include="Fonts\TableEntry.cs" />
+    <Compile Include="Fonts\OpenTypeParser.cs" />
+    <Compile Include="Fonts\Tables\CMapFontTable.cs" />
+    <Compile Include="Fonts\Tables\FontTable.cs" />
+    <Compile Include="Fonts\Tables\GlyfFontTable.cs" />
+    <Compile Include="Fonts\Tables\HeadFontTable.cs" />
+    <Compile Include="Fonts\Tables\HheaFontTable.cs" />
+    <Compile Include="Fonts\Tables\HtmxFontTable.cs" />
+    <Compile Include="Fonts\Tables\KernFontTable.cs" />
+    <Compile Include="Fonts\Tables\LocaFontTable.cs" />
+    <Compile Include="Fonts\Tables\LtagFontTable.cs" />
+    <Compile Include="Fonts\Tables\MaxPFontTable.cs" />
+    <Compile Include="Fonts\Tables\NameFontTable.cs" />
+    <Compile Include="Fonts\Tables\OS2FontTable.cs" />
+    <Compile Include="Fonts\Tables\PostFontTable.cs" />
+    <Compile Include="Fonts\WOFFParser.cs" />
+    <Compile Include="Loaders\CssResourceLoader.cs" />
+    <Compile Include="Chart\AxisChart.cs" />
+    <Compile Include="Chart\Axis\Algorithms\ITickAlgorithm.cs" />
+    <Compile Include="Chart\Axis\Algorithms\SimpleNumericTickAlgorithm.cs" />
+    <Compile Include="Chart\Axis\Algorithms\StringTickAlgorithm.cs" />
+    <Compile Include="Chart\Axis\Axis.cs" />
+    <Compile Include="Chart\Axis\IAxis.cs" />
+    <Compile Include="Chart\Axis\AxisHelper.cs" />
+    <Compile Include="Chart\BarChart.cs" />
+    <Compile Include="Chart\ChartBase.cs" />
+    <Compile Include="Chart\ChartPoint.cs" />
+    <Compile Include="Chart\Formatters\Format.cs" />
+    <Compile Include="Chart\Formatters\NumericFormat.cs" />
+    <Compile Include="Chart\Formatters\ScientificFormat.cs" />
+    <Compile Include="Chart\Formatters\UnitFormat.cs" />
+    <Compile Include="Chart\GraphicsHelper.cs" />
+    <Compile Include="Math\Compare.cs" />
+    <Compile Include="Math\IPoint.cs" />
+    <Compile Include="Math\Line.cs" />
+    <Compile Include="Math\Plane.cs" />
+    <Compile Include="Math\Point.cs" />
+    <Compile Include="Math\Point3D.cs" />
+    <Compile Include="Math\PolarCoordinate.cs" />
+    <Compile Include="Math\SphericalCoordinate.cs" />
+    <Compile Include="Math\Trig.cs" />
+    <Compile Include="Math\Vector.cs" />
+    <Compile Include="Chart\ScatterChart.cs" />
+    <Compile Include="Chart\Trig.cs" />
+    <Compile Include="Export\wkhtmltopdfWrapper.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="Chart\Interface\IChartArea.cs" />
+    <Compile Include="Chart\LineChart.cs" />
+    <Compile Include="Chart\PieChart.cs" />
+    <Compile Include="Chart\TextStyle.cs" />
+    <Compile Include="CSS\CSSResourceResolver.cs" />
+    <Compile Include="CSS\Extensions\CharacterExtensions.cs" />
+    <Compile Include="CSS\Extensions\StringExtensions.cs" />
+    <Compile Include="CSS\Model\Enumerations.cs" />
+    <Compile Include="CSS\Model\FunctionBuffer.cs" />
+    <Compile Include="CSS\Model\HtmlEncoding.cs" />
+    <Compile Include="CSS\Model\ICssRules.cs" />
+    <Compile Include="CSS\Model\ICssSelector.cs" />
+    <Compile Include="CSS\Model\IStyleDeclaration.cs" />
+    <Compile Include="CSS\Model\ISupportsMedia.cs" />
+    <Compile Include="CSS\Model\MediaTypeList.cs" />
+    <Compile Include="CSS\Model\Specification.cs" />
+    <Compile Include="CSS\Parser\IToString.cs" />
+    <Compile Include="CSS\Parser\Lexer.cs" />
+    <Compile Include="CSS\Parser\Parser.cs" />
+    <Compile Include="CSS\Parser\StyleSheet.cs" />
+    <Compile Include="CSS\Parser\StylesheetParserError.cs" />
+    <Compile Include="CSS\Parser\StylesheetReader.cs" />
+    <Compile Include="CSS\Rules\AggregateRule.cs" />
+    <Compile Include="CSS\Rules\CharacterSetRule.cs" />
+    <Compile Include="CSS\Rules\ConditionalRule.cs" />
+    <Compile Include="CSS\Rules\DocumentRule.cs" />
+    <Compile Include="CSS\Rules\FontFaceRule.cs" />
+    <Compile Include="CSS\Rules\GenericRule.cs" />
+    <Compile Include="CSS\Rules\ImportRule.cs" />
+    <Compile Include="CSS\Rules\IRuleContainer.cs" />
+    <Compile Include="CSS\Rules\KeyframeRule.cs" />
+    <Compile Include="CSS\Rules\KeyframesRule.cs" />
+    <Compile Include="CSS\Rules\MediaRule.cs" />
+    <Compile Include="CSS\Rules\NamespaceRule.cs" />
+    <Compile Include="CSS\Rules\PageRule.cs" />
+    <Compile Include="CSS\Rules\RuleSet.cs" />
+    <Compile Include="CSS\Rules\StyleDeclaration.cs" />
+    <Compile Include="CSS\Rules\StyleRule.cs" />
+    <Compile Include="CSS\Rules\SupportsRule.cs" />
+    <Compile Include="CSS\Selector\AggregateSelectorList.cs" />
+    <Compile Include="CSS\Selector\BaseSelector.cs" />
+    <Compile Include="CSS\Selector\CombinatorSelector.cs" />
+    <Compile Include="CSS\Selector\ComplexSelector.cs" />
+    <Compile Include="CSS\Selector\FirstChildSelector.cs" />
+    <Compile Include="CSS\Selector\LastChildSelector.cs" />
+    <Compile Include="CSS\Selector\MultipleSelectorList.cs" />
+    <Compile Include="CSS\Selector\NthChildSelector.cs" />
+    <Compile Include="CSS\Selector\NthFirstChildSelector.cs" />
+    <Compile Include="CSS\Selector\NthLastChildSelector.cs" />
+    <Compile Include="CSS\Selector\NthLastOfTypeSelector.cs" />
+    <Compile Include="CSS\Selector\NthOfTypeSelector.cs" />
+    <Compile Include="CSS\Selector\SelectorFactory.cs" />
+    <Compile Include="CSS\Selector\SelectorList.cs" />
+    <Compile Include="CSS\Selector\SimpleSelector.cs" />
+    <Compile Include="CSS\TextBlocks\Block.cs" />
+    <Compile Include="CSS\TextBlocks\BracketBlock.cs" />
+    <Compile Include="CSS\TextBlocks\CharacterBlock.cs" />
+    <Compile Include="CSS\TextBlocks\CommentBlock.cs" />
+    <Compile Include="CSS\TextBlocks\DelimiterBlock.cs" />
+    <Compile Include="CSS\TextBlocks\MatchBlock.cs" />
+    <Compile Include="CSS\TextBlocks\NumericBlock.cs" />
+    <Compile Include="CSS\TextBlocks\PipeBlock.cs" />
+    <Compile Include="CSS\TextBlocks\RangeBlock.cs" />
+    <Compile Include="CSS\TextBlocks\SpecialCharacter.cs" />
+    <Compile Include="CSS\TextBlocks\StringBlock.cs" />
+    <Compile Include="CSS\TextBlocks\SymbolBlock.cs" />
+    <Compile Include="CSS\TextBlocks\UnitBlock.cs" />
+    <Compile Include="CSS\Values\Comma.cs" />
+    <Compile Include="CSS\Values\EqualSign.cs" />
+    <Compile Include="CSS\Values\GenericFunction.cs" />
+    <Compile Include="CSS\Values\HtmlColor.cs" />
+    <Compile Include="CSS\Values\InheritTerm.cs" />
+    <Compile Include="CSS\Values\PrimitiveTerm.cs" />
+    <Compile Include="CSS\Values\Property.cs" />
+    <Compile Include="CSS\Values\Term.cs" />
+    <Compile Include="CSS\Values\TermList.cs" />
+    <Compile Include="CSS\Values\Whitespace.cs" />
+    <Compile Include="DOMString.cs" />
+    <Compile Include="Elements\Body.cs" />
+    <Compile Include="Elements\ClassList.cs" />
+    <Compile Include="Elements\Enumerations.cs" />
+    <Compile Include="Elements\FormattedElements\Abbreviation.cs" />
+    <Compile Include="Elements\FormattedElements\Address.cs" />
+    <Compile Include="Elements\FormattedElements\Big.cs" />
+    <Compile Include="Elements\FormattedElements\BlockQuote.cs" />
+    <Compile Include="Elements\FormattedElements\Bold.cs" />
+    <Compile Include="Elements\FormattedElements\DeletedText.cs" />
+    <Compile Include="Elements\FormattedElements\Emphasized.cs" />
+    <Compile Include="Elements\FormattedElements\FormattedElement.cs" />
+    <Compile Include="Elements\FormattedElements\InsertedText.cs" />
+    <Compile Include="Elements\FormattedElements\Italic.cs" />
+    <Compile Include="Elements\FormattedElements\Marked.cs" />
+    <Compile Include="Elements\FormattedElements\PlainText.cs" />
+    <Compile Include="Elements\FormattedElements\Quotation.cs" />
+    <Compile Include="Elements\FormattedElements\Small.cs" />
+    <Compile Include="Elements\FormattedElements\Strong.cs" />
+    <Compile Include="Elements\FormattedElements\Subscript.cs" />
+    <Compile Include="Elements\FormattedElements\Superscript.cs" />
+    <Compile Include="Elements\FormattedElements\Underline.cs" />
+    <Compile Include="Elements\Head.cs" />
+    <Compile Include="Elements\ImageElements.cs" />
+    <Compile Include="Elements\Interface\IParentElement.cs" />
+    <Compile Include="Elements\Interface\HeaderInterfaces.cs" />
+    <Compile Include="Elements\Interface\IElement.cs" />
+    <Compile Include="Elements\Interface\ImageInterfaces.cs" />
+    <Compile Include="Elements\Interface\ISVGInterfaces.cs" />
+    <Compile Include="Elements\Interface\LinkInterfaces.cs" />
+    <Compile Include="Elements\Interface\ListInterfaces.cs" />
+    <Compile Include="Elements\Interface\PageInterfaces.cs" />
+    <Compile Include="Elements\Interface\TableInterfaces.cs" />
+    <Compile Include="Elements\ListElements.cs" />
+    <Compile Include="Elements\PageElements.cs" />
+    <Compile Include="Elements\StyleList.cs" />
+    <Compile Include="Elements\SVGElements.cs" />
+    <Compile Include="Elements\SVGSupport.cs" />
+    <Compile Include="Elements\TableElements.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Chart\Interface\IChart.cs" />
+    <Compile Include="Export\IExporter.cs" />
+    <Compile Include="Export\PDFExporter.cs" />
+    <Compile Include="HtmlTidier.cs" />
+    <Compile Include="IDFactory.cs" />
+    <Compile Include="Loaders\StitchCssResourceLoader.cs" />
+    <Compile Include="StitchDocument.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Widgets\Margin.cs" />
+    <Compile Include="Widgets\PaperSize.cs" />
+    <Compile Include="Attributes\PaperSizeResourceAttribute.cs" />
+    <Compile Include="Attributes\ThemeResourceAttribute.cs" />
+    <Compile Include="Loaders\ThemeCssResourceLoader.cs" />
+    <Compile Include="Themes\Themes.cs" />
+    <Compile Include="Widgets\Page.cs" />
+    <Compile Include="Widgets\TableOfContents.cs" />
+    <Compile Include="Loaders\WidgetCssResourceLoader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+    <Compile Include="CSS\Parser\Parser.Blocks.cs" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CSS\README.txt" />
+    <Content Include="Export\DocumentFormat.OpenXml.dll" />
+    <Content Include="Export\HtmlToOpenXml.dll" />
+    <EmbeddedResource Include="stitch.css" />
+    <EmbeddedResource Include="Widgets\widgets.css" />
+    <EmbeddedResource Include="Export\wkhtmltopdf.exe" />
+    <EmbeddedResource Include="Themes\stitch-malachite.css" />
+    <EmbeddedResource Include="Themes\stitch-azure.css" />
+    <EmbeddedResource Include="Themes\stitch-bourbon.css" />
+    <EmbeddedResource Include="Themes\stitch-cabaret.css" />
+    <EmbeddedResource Include="Themes\stitch-flirt.css" />
+    <EmbeddedResource Include="Themes\stitch-governor-bay.css" />
+    <EmbeddedResource Include="Themes\stitch-jungle-green.css" />
+    <EmbeddedResource Include="Themes\stitch-la-palma.css" />
+    <EmbeddedResource Include="Themes\stitch-limeade.css" />
+    <EmbeddedResource Include="Themes\stitch-mango-tango.css" />
+    <EmbeddedResource Include="Themes\stitch-orange-peel.css" />
+    <EmbeddedResource Include="Themes\stitch-pacific-blue.css" />
+    <EmbeddedResource Include="Themes\stitch-plum.css" />
+    <EmbeddedResource Include="Themes\stitch-purple-heart.css" />
+    <EmbeddedResource Include="Themes\stitch-sahara.css" />
+    <EmbeddedResource Include="Themes\stitch-scarlet-gum.css" />
+    <EmbeddedResource Include="Themes\stitch-sea-green.css" />
+    <EmbeddedResource Include="Themes\stitch-tall-poppy.css" />
+    <EmbeddedResource Include="Themes\stitch-tia-maria.css" />
+    <EmbeddedResource Include="Themes\stitch-totem-pole.css" />
+    <EmbeddedResource Include="Themes\stitch-wedgewood.css" />
+    <EmbeddedResource Include="Themes\stitch-mariner.css" />
+    <EmbeddedResource Include="Themes\w3.css" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

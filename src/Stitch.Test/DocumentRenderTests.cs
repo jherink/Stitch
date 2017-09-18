@@ -10,14 +10,10 @@ using Stitch.Widgets;
 
 namespace Stitch.Tests
 {
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class DocumentRenderTests
     {
         [Fact( DisplayName = "LoadwkhtmlResource" )]
-        public void LoadwkhtmlResource()
-        {
-            Assert.NotNull( new Export.wkhtmltopdfWrapper() );
-        }
+        public void LoadwkhtmlResource() => Assert.NotNull( new Export.wkhtmltopdfWrapper() );
 
         [Fact( DisplayName = "HelloWorldTest" )]
         public void HelloWorldTest()
@@ -236,7 +232,11 @@ namespace Stitch.Tests
             rowClone = (ITableRowElement)row.Clone();
 
             // full path
+#if NETCOREAPP2_0
+            var fullPath = IntegrationHelpers.CreateLocalResource( "..\\..\\..\\Resources\\Images\\tiger.jpg" );
+#else
             var fullPath = IntegrationHelpers.CreateLocalResource( "..\\..\\Resources\\Images\\tiger.jpg" );
+#endif
             rowClone[0].Content = new DOMString( new ImageElement( fullPath ) );
             body.Children.Add( rowClone );
 
@@ -412,7 +412,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "W3CSSSampleTest", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void ExportTest01()
         {
             var doc = new StitchDocument();
@@ -433,7 +433,9 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportPdfToTemp( "ExportTest01", doc );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+#if !NETCOREAPP2_0
+
+        [Fact]
         public void ExportTest02()
         {
             var doc = new StitchDocument();
@@ -454,7 +456,7 @@ namespace Stitch.Tests
             IntegrationHelpers.ExportWordToTemp( "ExportTest02", doc, true );
         }
 
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]
+        [Fact]
         public void ExportTest03()
         {
             var doc = new StitchDocument();
@@ -505,6 +507,8 @@ namespace Stitch.Tests
 
             IntegrationHelpers.ExportWordToTemp( "ExportTest03", doc, true );
         }
+
+#endif
 
         [Fact( DisplayName = "PageTest" )]
         public void PageTest()

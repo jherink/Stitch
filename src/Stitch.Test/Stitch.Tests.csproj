@@ -1,266 +1,59 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8B6E0984-36ED-4E20-808D-8C809F9240FA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
     <RootNamespace>Stitch.Tests</RootNamespace>
-    <AssemblyName>Stitch.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.assert, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.assert.2.1.0\lib\dotnet\xunit.assert.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.core, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.extensibility.core.2.1.0\lib\dotnet\xunit.core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.extensibility.execution.2.1.0\lib\net45\xunit.execution.desktop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
+
   <ItemGroup>
-    <Compile Include="ContentStringTests.cs" />
-    <Compile Include="DocumentRenderTests.cs" />
-    <Compile Include="DOMStringTests.cs" />
-    <Compile Include="ElementTests.cs" />
-    <Compile Include="FormattedElementTests.cs" />
-    <Compile Include="IntegrationHelpers.cs" />
-    <Compile Include="SamplesGeneration.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SHA1Comparison.cs" />
-    <Compile Include="SVGTests.cs" />
-    <Compile Include="ChartTests.cs" />
-    <Compile Include="TickAlgorithmTests.cs" />
-    <Compile Include="ThemeTests.cs" />
-    <Compile Include="MathTests.cs" />
-    <Compile Include="PerformanceTest.cs" />
-    <Compile Include="FontTests.cs" />
-    <Compile Include="VectorTests.cs" />
+    <ProjectReference Include="..\Stitch\Stitch.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Content Include="Fonts\Roboto-Black.ttf" />
-    <None Include="Fonts\VERDANA.TTF" />
-    <None Include="packages.config" />
-    <None Include="Resources\ResourceResolutionResolve\css\testFont.eot" />
-    <None Include="Resources\ResourceResolutionResolve\fonts\testFont.eot" />
-    <None Include="Resources\ResourceResolutionResolve\testFont.eot" />
+    <None Update="Resources\Css3.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Css3Friendly.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Css3Min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Dark-Knight.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\tiger.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\ResourceResolutionResolve\css\regressiontest.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\ResourceResolutionResolve\css\testFont.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\ResourceResolutionResolve\fonts\testFont.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\ResourceResolutionResolve\testFont.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\tiger.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Stitch\Stitch.csproj">
-      <Project>{93ab75ef-24fb-4e01-b2b1-0f2456bf1f3f}</Project>
-      <Name>Stitch</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="Data\Northwind.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Northwind_Log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Master\2DPieTestLabelsLabel.html" />
-    <Content Include="Master\2DPieTestLabelsNone.html" />
-    <Content Include="Master\2DPieTestLabelsPercentage.html" />
-    <Content Include="Master\2DPieTestLabelsValue.html" />
-    <Content Include="Master\AxisRenderSizeTests.html" />
-    <Content Include="Master\BarChartLegendTestBottom.html" />
-    <Content Include="Master\BarChartLegendTestLeft.html" />
-    <Content Include="Master\BarChartLegendTestNone.html" />
-    <Content Include="Master\BarChartLegendTestRight.html" />
-    <Content Include="Master\BarChartLegendTestTop.html" />
-    <Content Include="Master\complexSamplePage.html" />
-    <Content Include="Master\CustomCSSRuleTest.html" />
-    <Content Include="Master\Default Themes Color Swatches.html" />
-    <Content Include="Master\DogsVsCatsScatterPlot.html" />
-    <Content Include="Master\ExplodeSliceTest.html" />
-    <Content Include="Master\ExportTest01.html" />
-    <Content Include="Master\headingLevelTests.html" />
-    <Content Include="Master\helloworld.html" />
-    <Content Include="Master\helloworldincolor.html" />
-    <Content Include="Master\HorizontalBarChartTest.html" />
-    <Content Include="Master\IceCreamVsSalesTempuratureScatterChart.html" />
-    <Content Include="Master\imageInTableTests.html" />
-    <Content Include="Master\Line-Chart-Sample.html" />
-    <Content Include="Master\LineChartLegendTestBottom.html" />
-    <Content Include="Master\LineChartLegendTestLeft.html" />
-    <Content Include="Master\LineChartLegendTestNone.html" />
-    <Content Include="Master\LineChartLegendTestRight.html" />
-    <Content Include="Master\LineChartLegendTestTop.html" />
-    <Content Include="Master\LineChartWithNumbersTest1.html" />
-    <Content Include="Master\linkTests.html" />
-    <Content Include="Master\MultiLinesChartTest.html" />
-    <Content Include="Master\MultipleBarChartTest2.html" />
-    <Content Include="Master\MultipleGroupScatterChartTest.html" />
-    <Content Include="Master\MultipleVerticalBarChartTest.html" />
-    <Content Include="Master\MultipleVerticalBarChartTest2.html" />
-    <Content Include="Master\NorthwindSalesByYearTest.html" />
-    <Content Include="Master\Page Test.html" />
-    <Content Include="Master\Pie2DLegendTestBottom.html" />
-    <Content Include="Master\Pie2DLegendTestLeft.html" />
-    <Content Include="Master\Pie2DLegendTestNone.html" />
-    <Content Include="Master\Pie2DLegendTestRight.html" />
-    <Content Include="Master\Pie2DLegendTestTop.html" />
-    <Content Include="Master\Pie2DTestPieHole0.html" />
-    <Content Include="Master\Pie2DTestPieHole10.html" />
-    <Content Include="Master\Pie2DTestPieHole100.html" />
-    <Content Include="Master\Pie2DTestPieHole25.html" />
-    <Content Include="Master\Pie2DTestPieHole50.html" />
-    <Content Include="Master\Pie2DTestPieHole75.html" />
-    <Content Include="Master\Pie2DTestPieHole90.html" />
-    <Content Include="Master\PieSliceContentRenderingTestEight.html" />
-    <Content Include="Master\PieSliceContentRenderingTestFour.html" />
-    <Content Include="Master\PieSliceContentRenderingTestOne.html" />
-    <Content Include="Master\PieSliceContentRenderingTestSixteen.html" />
-    <Content Include="Master\PieSliceContentRenderingTestTwelve.html" />
-    <Content Include="Master\PieSliceContentRenderingTestTwo.html" />
-    <Content Include="Master\PracticalAxisRenderSizeTests.html" />
-    <Content Include="Master\Samples\Dark-Knight-Custom-Theme-Sample.html" />
-    <Content Include="Master\Samples\Donut-Chart-Sample.html" />
-    <Content Include="Master\Samples\Horizontal-Bar-Chart-Sample.html" />
-    <Content Include="Master\Samples\Line-Chart-Sample.html" />
-    <Content Include="Master\Samples\Multiple-Bar-Groups-Chart-Sample.html" />
-    <Content Include="Master\Samples\Northwind-Report-Sample.html" />
-    <Content Include="Master\Samples\Pie-Chart-Exploded-Sample.html" />
-    <Content Include="Master\Samples\Pie-Chart-Rotation-Sample.html" />
-    <Content Include="Master\Samples\Pie-Chart-Sample.html" />
-    <Content Include="Master\Samples\Scatter-Chart-Sample.html" />
-    <Content Include="Master\Samples\Vertical-Bar-Chart-Sample.html" />
-    <Content Include="Master\ScatterChartLegendBottom.html" />
-    <Content Include="Master\ScatterChartLegendLeft.html" />
-    <Content Include="Master\ScatterChartLegendNone.html" />
-    <Content Include="Master\ScatterChartLegendRight.html" />
-    <Content Include="Master\ScatterChartLegendTop.html" />
-    <Content Include="Master\SingleGroupScatterChartTest.html" />
-    <Content Include="Master\SingleHorizontalBarChartTest.html" />
-    <Content Include="Master\SingleVerticalBarChartTest.html" />
-    <Content Include="Master\SVGCircleTest.html" />
-    <Content Include="Master\SVGEllipse1Test.html" />
-    <Content Include="Master\SVGEllipse2Test.html" />
-    <Content Include="Master\SVGEllipse3Test.html" />
-    <Content Include="Master\SVGLineTest.html" />
-    <Content Include="Master\SVGPath1Test.html" />
-    <Content Include="Master\SVGPath2Test.html" />
-    <Content Include="Master\SVGPolygon1Test.html" />
-    <Content Include="Master\SVGPolygon2Test.html" />
-    <Content Include="Master\SVGPolygon3Test.html" />
-    <Content Include="Master\SVGPolyLineTest.html" />
-    <Content Include="Master\SVGRectangle2Test.html" />
-    <Content Include="Master\SVGRectangle3Test.html" />
-    <Content Include="Master\SVGRectangleTest.html" />
-    <Content Include="Master\SVGStrokeTest.html" />
-    <Content Include="Master\SVGTextTest1.html" />
-    <Content Include="Master\SVGTextTest2.html" />
-    <Content Include="Master\SVGTextTest3.html" />
-    <Content Include="Master\tabletest1.html" />
-    <Content Include="Master\tablewithcaptiontest.html" />
-    <Content Include="Master\TemperaturesLineGraphTest.html" />
-    <Content Include="Master\Test2PieRotation100.html" />
-    <Content Include="Master\tiger.jpg" />
-    <Content Include="Master\unorderedListTest1.html" />
-    <Content Include="Master\VerticalBarChartTest.html" />
-    <Content Include="Master\W3CSSSampleTest.html" />
-    <Content Include="Resources\Css3.css" />
-    <Content Include="Resources\Css3Friendly.css" />
-    <Content Include="Resources\Css3Min.css" />
-    <Content Include="Resources\Dark-Knight.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Images\tiger.jpg" />
-    <Content Include="Resources\ResourceResolutionResolve\css\regressiontest.css" />
-    <Content Include="Resources\tiger.jpg" />
-  </ItemGroup>
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props'))" />
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)\Master&quot; &quot;%25temp%25\Stitch\Master&quot; /h/i/c/k/e/r/y&#xD;&#xA;xcopy &quot;$(ProjectDir)\Data&quot; &quot;%25temp%25\Stitch\Data&quot; /h/i/c/k/e/r/y&#xD;&#xA;xcopy &quot;$(ProjectDir)\Fonts&quot; &quot;%25temp%25\Stitch\Fonts&quot; /h/i/c/k/e/r/y" />
   </Target>
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)\Master" "%25temp%25\Stitch\Master" /h/i/c/k/e/r/y
-xcopy "$(ProjectDir)\Data" "%25temp%25\Stitch\Data" /h/i/c/k/e/r/y
-xcopy "$(ProjectDir)\Fonts" "%25temp%25\Stitch\Fonts" /h/i/c/k/e/r/y</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

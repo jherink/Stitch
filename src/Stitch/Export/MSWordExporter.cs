@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if! NETSTANDARD2_0
+using System;
 using System.IO;
 using System.IO.Packaging;
 using System.Reflection;
@@ -143,3 +144,4 @@ namespace Stitch.Export
         }
     }
 }
+#endif

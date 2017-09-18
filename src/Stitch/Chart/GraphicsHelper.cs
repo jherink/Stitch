@@ -68,17 +68,23 @@ namespace Stitch.Chart
             if (text == null) text = string.Empty;
 
             var size = new SizeF( Convert.ToSingle( text.Length * fontSize ), Convert.ToSingle( fontSize ) );
-            using (var g = Graphics.FromHwnd( IntPtr.Zero ))
-            {
-                size = g.MeasureString( text, new Font( fontName, (float)fontSize ) );
-            }
 
-            var font = LoadFont( fontName );
-            if (font != default( Fonts.Font ) )
+            // jherink 9/18/2017: Removed GDI+ call to measure string for .NET standard upgrade.
+            //using (var g = Graphics.FromHwnd( IntPtr.Zero ))
+            //{
+            //    size = g.MeasureString( text, new Font( fontName, (float)fontSize ) );
+            //}
+
+
+            lock ( FontCache )
             {
-                var _size = font.MeasureString( text, fontSize );
-                size.Width = _size.Item1;
-                size.Height = _size.Item2;
+                var font = LoadFont( fontName );
+                if ( font != default( Fonts.Font ) )
+                {
+                    var _size = font.MeasureString( text, fontSize );
+                    size.Width = _size.Item1;
+                    size.Height = _size.Item2;
+                }
             }
 
             return size;
