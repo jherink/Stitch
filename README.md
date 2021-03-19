@@ -11,11 +11,11 @@ Create highly customizable reports using HTML &amp; CSS in .NET
 
 <li>By creating reports in an HTML format they are easily embeddable in web pages.
 Also many UI frameworks provide browser controls for your applications
-allowing you to render HydraDoc reports without the need for third party viewers.</li>
+allowing you to render Stitch reports without the need for third party viewers.</li>
 
 <li>HTML can be exported to other document formats like PDF or DOCX.</li>
 
-<li>HTML is parsable using an XML parser, which many framworks support, allowing
+<li>HTML is parsable using an XML parser, which many frameworks support, allowing
 you to mine data from these reports if needed.</li>
 
 </ul>
